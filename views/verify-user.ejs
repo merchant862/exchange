@@ -1,0 +1,25 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/unauthenticated-menu.ejs') %>
+
+  <div class="error-page vh-100 d-flex justify-content-center text-center">
+    <div class="my-auto">
+      <div class="container">
+        <% if (typeof success != "undefined") { %>
+          <h2>Success!</h2>
+          <p><%= success %></p>
+        <% } %>
+        <% if (typeof error != "undefined") { %>
+          <h2>Error!</h2>
+          <p><%= error %></p>
+        <% } %>
+      </div>
+      <a href="/login" class="btn">Back to Login <i class="icon ion-md-home"></i></a>
+    </div>
+  </div>
+
+  <%- include('./partials/scripts.ejs') %>
+
+</body>
+
+</html>

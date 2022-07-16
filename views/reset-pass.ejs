@@ -1,0 +1,42 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/unauthenticated-menu.ejs') %>
+
+<br/>
+  <div class="container" style="width: 40%;">
+    <% if (typeof success != "undefined") { %>
+      <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> <%= success %>
+      </div>
+    <% } %>
+    <% if (typeof error != "undefined") { %>
+      <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Error!</strong> <%= error %>
+      </div>
+    <% } %>
+  </div>
+  <div class="vh-100 d-flex justify-content-center">
+    <div class="form-access my-auto">
+      <form action="/reset-pass" method="post">
+        <span>Reset Password</span>
+        <div class="form-group">
+          <input type="email" class="form-control" placeholder="Email Address" name="email">
+        </div>
+        <div class="col-12 mt-3">
+          <div class="g-recaptcha" data-sitekey="6LcWUO4gAAAAAJkJU1LnabFUbDbn-nN5-cOHUd1w"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Reset Link</button>
+      </form>
+      <h2>Remembered your password? <a href="/login">Sign in here</a></h2>
+    </div>
+  </div>
+  
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+
+  <%- include('./partials/scripts.ejs') %>
+
+</body>
+
+</html>

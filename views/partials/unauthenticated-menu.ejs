@@ -1,0 +1,29 @@
+<body id="dark">
+    <header class="dark-bb">
+      <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/"><img src="assets/img/logo-light.svg" alt="logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerMenu"
+          aria-controls="headerMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="icon ion-md-menu"></i>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="headerMenu">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/indices" role="button"  aria-haspopup="true" aria-expanded="false">
+                Indices (Markets)
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/heatmap" role="button" aria-haspopup="true" aria-expanded="false">
+                Heatmap
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            <% function returnValue() { return page.charAt(0).toUpperCase() + page.slice(1); } %>
+            <a href=<%= page %> class="btn-2"><%= returnValue() %></a>
+          </ul>
+        </div>
+      </nav>
+    </header>
