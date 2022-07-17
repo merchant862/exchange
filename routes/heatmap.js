@@ -7,11 +7,9 @@ var menu = require("../middleware/menu")
 
 dotenv.config();
 
-let title = process.env.TITLE;
-
 /* GET home page. */
 router.get('/', menu, async function(req, res, next) {
-    menu(req,res,next,"heatmap","heatmap");
+    menu(req,res,next,"heatmap","Heatmap");
 });
 
 module.exports =  router;

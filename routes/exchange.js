@@ -5,6 +5,8 @@ const atob = require("atob");
 
 var auth = require('../middleware/auth')
 
+var authMenu = require("../middleware/auth-menu")
+
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -16,8 +18,8 @@ app.use(cookieParser())
 let title = process.env.TITLE;
 
 /* GET home page. */
-router.get('/', auth, function(req, res, next) {
-    res.render('exchange',{title: title+" | "+"Exchange"});
+router.get('/', auth, authMenu, function(req, res, next) {
+    authMenu(req,res,next,"exchange","Exchange");
 });
 
 module.exports =  router;

@@ -1,0 +1,43 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/kyc-menu.ejs') %>
+
+
+<br/>
+<div class="container" style="width: 40%;">
+  <% if (typeof success != "undefined") { %>
+    <div class="alert alert-success alert-dismissible">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Success!</strong> <%= success %>
+    </div>
+  <% } %>
+  <% if (typeof error != "undefined") { %>
+    <div class="alert alert-danger alert-dismissible">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Error!</strong> <%= error %>
+    </div>
+  <% } %>
+</div>
+<div class="vh-100 d-flex justify-content-center">
+  <div class="form-access my-auto">
+    <form action="/kyc" method="post" enctype="multipart/form-data">
+      <span>KYC</span>
+      <div class="form-group">
+        <label for="file">ID Verification:</label><input type="file" class="form-control"  name="id">
+        <label for="file">Face Verification:</label><input type="file" class="form-control" name="face">
+      </div>
+      <div class="col-12 mt-3">
+        <div class="g-recaptcha" data-sitekey="6LcWUO4gAAAAAJkJU1LnabFUbDbn-nN5-cOHUd1w"></div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+  
+  <%- include('./partials/scripts.ejs') %>
+  
+</body>
+
+</html>

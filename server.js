@@ -18,6 +18,9 @@ var resetPassRouter = require('./routes/reset-pass');
 var updatePassRouter = require('./routes/update-pass')
 var verifyUserRouter = require('./routes/verify-user');
 var logoutRouter = require('./routes/logout');
+var kycRouter = require("./routes/kyc");
+
+var menu = require("./middleware/menu");
 
 const { NONE } = require('sequelize');
 
@@ -89,9 +92,10 @@ app.use('/indices', indicesRouter);
 app.use('/heatmap', heatmapRouter);
 app.use('/verify', verifyUserRouter);
 app.use('/logout', logoutRouter);
+app.use('/kyc', kycRouter);
 
 app.use((req, res, next) => {
-  res.status(404).render('404', {title: process.env.TITLE+" | "+"Not Found (404)"});
+  menu(req,res,next,"404","Not Found (404)");;
 })
 
 app.listen(process.env.PORT, () =>

@@ -4,11 +4,11 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-let title = process.env.TITLE;
+var menu = require("../middleware/menu")
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.render('404',{title: title+" | "+"Not Found (404)"});
+router.get('/', menu, function(req, res, next) {
+  menu(req,res,next,"404","Not Found (404)");
 });
 
 module.exports = router;

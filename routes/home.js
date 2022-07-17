@@ -5,14 +5,14 @@ var dotenv = require("dotenv");
 
 dotenv.config();
 
-var title = process.env.TITLE;
-
 const auth = require('./../middleware/auth');
+
+var authMenu = require("../middleware/auth-menu")
 
 /* GET users listing. */
 router.get('/', auth, function(req, res, next) 
 {
-    res.render('settings',{title: title+" | "+"Settings"});
+    authMenu(req,res,next,"settings","Settings");
 });
 
 
