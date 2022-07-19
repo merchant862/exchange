@@ -16,8 +16,20 @@ const deauth = async(req, res, next) => {
   
   if(token && token != "")
   {
-    res.redirect("/home");
-    res.end();
+    await jwt.verify(token, process.env.SECRET, (err,verifiedJWT) => 
+    {
+      if(!err)
+      {
+        res.redirect("/home");
+        res.end();
+      }
+
+      else
+      {
+        next();
+      }
+
+    })
   }
 
   else

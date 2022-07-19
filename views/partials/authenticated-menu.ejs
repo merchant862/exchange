@@ -24,6 +24,11 @@
                     Heatmap
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/deposit" role="button" aria-haspopup="true" aria-expanded="false">
+                    Deposit Funds
+                  </a>
+                </li>
          </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item header-custom-icon">
@@ -113,6 +118,11 @@
                     <p class="email text-muted mb-3">
                       <% if (typeof email != "undefined") { %>
                         <%= email %>
+                      <% } %>
+                    </p>
+                    <p class="email text-muted mb-3">
+                      <% if (typeof balance != "undefined") { %>
+                        Balance: <%= balance %> <img src="assets/img/icon/usdt.png" width="20" height="20">
                       <% } %>
                     </p>
                   </div>

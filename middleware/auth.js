@@ -13,7 +13,7 @@ var title = process.env.TITLE;
 const authorization = async(req, res, next) => {
  
   const token = await req.cookies.authorization;
- 
+
   if (!token) 
   {
     return res.redirect('/login');

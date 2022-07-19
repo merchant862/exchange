@@ -1,0 +1,280 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/authenticated-menu.ejs') %>
+
+  <div class="settings mtb15">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="settings-wallet" role="tabpanel" aria-labelledby="settings-wallet-tab">
+              <div class="wallet">
+                <div class="row">
+                  <div class="col-md-12 col-lg-4">
+                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
+                        href="#coinETH" role="tab" aria-selected="true">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/1.png" alt="btc">
+                          <div>
+                            <h2>ETHEREUM</h2>
+                            <p>MAINNET</p>
+                          </div>
+                        </div>  
+                      </a>
+                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
+                        href="#coinBNB" role="tab" aria-selected="false">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/9.png" alt="btc">
+                          <div>
+                            <h2>BINANCE SMART CHAIN</h2>
+                            <p>MAINNET</p>
+                          </div>
+                        </div>
+                      </a>
+                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
+                        href="#coinMATIC" role="tab" aria-selected="false">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/poly.png" width="400" height="400" alt="btc">
+                          <div>
+                            <h2>POLYGON NETWORK</h2>
+                            <p>MAINNET</p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-12 col-lg-8">
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="coinETH" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">USDT (ETH) Deposit Address</h5>
+                            <div class="row wallet-address">
+                              <div class="col-md-2" style="align-content: center;">
+                                <img src="assets/img/qr-code-light.svg" alt="qr-code">
+                              </div>
+                              <div class="col-md-10">
+                                <p>
+                                    <ol style="color: white; list-style-type: circle;">
+                                        <li>Only deposit <b>USDT</b> to this address.&nbsp;
+                                            Coins other than <b>USDT</b> will be lost.</li>
+                                        <li>Double check the address or QR code before deposting any amount.</li>
+                                    </ol>
+                                </p>
+                                <div class="input-group">
+                                  <input type="text" id="ethAddress" class="form-control" disabled value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
+                                  <div class="input-group-prepend">
+                                    <button class="btn btn-primary">COPY</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Transaction ID</h5>
+                            <div class="row wallet-address">
+                              <div class="col-md-12">
+                                <label>For security purposes, we double check transactions on the blockchain.
+                                       After depositing the funds please paste your Transaction ID below.
+                                </label>
+                                <form action="/deposit" method="post">
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" name="txID" placeholder="Enter Transaction ID">
+                                      <div class="input-group-prepend">
+                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                      </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Transactions</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>25-04-2019</td>
+                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                    <td>4.5454334</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="coinBNB" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">USDT (ETH) Deposit Address</h5>
+                            <div class="row wallet-address">
+                              <div class="col-md-2" style="align-content: center;">
+                                <img src="assets/img/qr-code-light.svg" alt="qr-code">
+                              </div>
+                              <div class="col-md-10">
+                                <p>
+                                    <ol style="color: white; list-style-type: circle;">
+                                        <li>Only deposit <b>USDT</b> to this address.&nbsp;
+                                            Coins other than <b>USDT</b> will be lost.</li>
+                                        <li>Double check the address or QR code before deposting any amount.</li>
+                                    </ol>
+                                </p>
+                                <div class="input-group">
+                                  <input type="text" class="form-control" disabled value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
+                                  <div class="input-group-prepend">
+                                    <button class="btn btn-primary">COPY</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Transaction ID</h5>
+                            <div class="row wallet-address">
+                              <div class="col-md-12">
+                                <label>For security purposes, we double check transactions on the blockchain.
+                                       After depositing the funds please paste your Transaction ID below.
+                                </label>
+                                <form action="/deposit" method="post">
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" name="txID" placeholder="Enter Transaction ID">
+                                      <div class="input-group-prepend">
+                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                      </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Transactions</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>25-04-2019</td>
+                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                    <td>4.5454334</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="coinMATIC" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">USDT (ETH) Deposit Address</h5>
+                            <div class="row wallet-address">
+                              <div class="col-md-2" style="align-content: center;">
+                                <img src="assets/img/qr-code-light.svg" alt="qr-code">
+                              </div>
+                              <div class="col-md-10">
+                                <p>
+                                    <ol style="color: white; list-style-type: circle;">
+                                        <li>Only deposit <b>USDT</b> to this address.&nbsp;
+                                            Coins other than <b>USDT</b> will be lost.</li>
+                                        <li>Double check the address or QR code before deposting any amount.</li>
+                                    </ol>
+                                </p>
+                                <div class="input-group">
+                                  <input type="text" class="form-control" disabled value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
+                                  <div class="input-group-prepend">
+                                    <button class="btn btn-primary">COPY</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Transaction ID</h5>
+                            <div class="row wallet-address">
+                              <div class="col-md-12">
+                                <label>For security purposes, we double check transactions on the blockchain.
+                                       After depositing the funds please paste your Transaction ID below.
+                                </label>
+                                <form action="/deposit" method="post">
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" name="txID" placeholder="Enter Transaction ID">
+                                      <div class="input-group-prepend">
+                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                      </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Transactions</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>25-04-2019</td>
+                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                    <td>4.5454334</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('./partials/scripts.ejs') %>
+  
+</body>
+
+</html>

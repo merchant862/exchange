@@ -51,7 +51,7 @@ router.post('/', deauth, async(req, res, next)=>{
             {   
 
               token = jwt.sign({ "id" : user.id,"email" : user.email,"name":user.full_name },process.env.SECRET,{
-                expiresIn: '2h'
+                expiresIn: '30d'
               });
 
               fetch(url, {
@@ -65,7 +65,7 @@ router.post('/', deauth, async(req, res, next)=>{
                       {sameSite:'lax',httpOnly: true}
                       )
                       .status(200);
-                      res.redirect("/home");
+                      res.redirect("/");
                     }
 
                     else

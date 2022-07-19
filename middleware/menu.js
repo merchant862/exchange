@@ -2,6 +2,8 @@ var express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
 const atob = require("atob");
+const Models = require('./../models');
+const User = Models.User;
 
 //var auth = require('./auth');
 const app = express();
@@ -23,7 +25,36 @@ async function menu(req, res, next,_route,_title)
 
     var d = JSON.parse(atob(base64Url))
 
-    res.render(_route,{title: title+" | "+_title,name: d.name,email: d.email,status:"loggedIn"});
+    var balance = await User.findAll(
+      {
+          attributes: ['USDT_balance']
+      },
+      {
+          where: {email: d.email }
+      }).then((results) => 
+      {
+         var json =  JSON.stringify(results);
+  
+         
+         var jsonParsedData = JSON.parse(json);
+         for(var i = 0; i < jsonParsedData.length; i++)
+         {
+            var data = jsonParsedData[i]['USDT_balance'];
+            
+            if(data!="")
+            {
+              return Math.round((data + Number.EPSILON) * 100) / 100;
+            }
+  
+            else
+            {
+              return "00.00";
+            }
+         }
+  
+      });
+
+    res.render(_route,{title: title+" | "+_title,name: d.name,email: d.email,status:"loggedIn",balance:balance});
     
     next();
   }
