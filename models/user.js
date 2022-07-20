@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.transactionIds,
         {
           foreignKey:'id'
-        })
+        });
     }
   }
   User.init({
@@ -24,7 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     verified: DataTypes.STRING,
     verification_token: DataTypes.STRING,
     password_reset_token: DataTypes.STRING,
-    USDT_balance: DataTypes.FLOAT
+    USDT_balance: DataTypes.FLOAT,
+    address: DataTypes.TEXT,
+    privateKey: DataTypes.TEXT,
+    isKYCDone: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

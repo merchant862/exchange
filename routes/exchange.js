@@ -7,6 +7,8 @@ var auth = require('../middleware/auth')
 
 var authMenu = require("../middleware/auth-menu")
 
+var KYCChecker = require("../middleware/KYChecker");
+
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -18,7 +20,7 @@ app.use(cookieParser())
 let title = process.env.TITLE;
 
 /* GET home page. */
-router.get('/', auth, authMenu, function(req, res, next) {
+router.get('/', auth, authMenu, KYCChecker , function(req, res, next) {
     authMenu(req,res,next,"exchange","Exchange");
 });
 

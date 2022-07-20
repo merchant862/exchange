@@ -23,10 +23,7 @@ async function authMenu(req, res, next,_route,_title)
 
   var d = JSON.parse(atob(base64Url))
 
-  var balance = await User.findAll(
-    {
-        attributes: ['USDT_balance']
-    },
+  var userData = await User.findAll(
     {
         where: {email: d.email }
     }).then((results) => 
@@ -37,21 +34,21 @@ async function authMenu(req, res, next,_route,_title)
        var jsonParsedData = JSON.parse(json);
        for(var i = 0; i < jsonParsedData.length; i++)
        {
-          var data = jsonParsedData[i]['USDT_balance'];
-          if(data!="")
-          {
-            return Math.round((data + Number.EPSILON) * 100) / 100;
-          }
-
-          else
-          {
-            return "00.00";
-          }
+          var data = jsonParsedData[i];
+          
+          return data;  
        }
 
     });
 
-  res.render(_route,{title: title+" | "+_title,name: d.name,email: d.email,balance:balance});
+  res.render(_route,
+    {
+      title: title+" | "+_title,
+      name: d.name,
+      email: d.email,
+      balance:userData.USDT_balance,
+      address:userData.address,
+    });
 
 };
 

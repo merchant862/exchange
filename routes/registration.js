@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const Models = require('./../models');
 const bcrypt = require("bcrypt");
-//const jwt = require('jsonwebtoken');
 var validator = require("node-email-validation");
 var randtoken = require('rand-token');
 
@@ -13,11 +12,16 @@ const fetch = require("isomorphic-fetch");
 
 var deauth = require('../middleware/deauth');
 
+var web3 = require('../middleware/web3');
+
 const User = Models.User;
+const Keys = Models.Keys;
 
 dotenv.config();
 
 var title = process.env.TITLE;
+
+var seed = process.env.SEED;
 
 /* GET users listing. */
 router.get('/', deauth,function(req, res, next) 
@@ -40,6 +44,9 @@ router.post('/', deauth, async(req, res, next)=>{
    var password2 = req.body.password2;
    var phone = req.body.phone;
    var verified = "NO";
+   var isKYCDone = "NO";
+   var key = await web3.eth.accounts.create(seed).privateKey;
+   var address = await web3.eth.accounts.privateKeyToAccount(key).address;
 
    //-------------
    
@@ -74,11 +81,15 @@ router.post('/', deauth, async(req, res, next)=>{
               password : await bcrypt.hash(password,salt),
               verified: verified,
               verification_token:token,
-              phone: phone
+              phone: phone,
+              USDT_balance: 0,
+              isKYCDone: isKYCDone,
+              address: address,
+              privateKey: key
             };
         
             created_user = await User.create(usr);
-            
+        
             send(from,email,subject,html);
 
             fetch(url, {
