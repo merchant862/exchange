@@ -43,7 +43,9 @@ app.use(logger('tiny'));
 app.use(cookieParser());
 app.use('/assets', express.static('assets'));
 
+app.disable('x-powered-by');
 app.use(helmet.hidePoweredBy());
+
 app.use(helmet.xssFilter());
 app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
 app.use(helmet.noSniff());
@@ -81,6 +83,29 @@ app.use(helmet.contentSecurityPolicy({
     reportOnly: false,
   }));
 
+const requestTime = function (req, res, next) 
+{
+    var agents = 
+    [
+      "Microsoft IIS",
+      "nginx",
+      "Apache (Arch)",
+      "Apache Tomcat",
+      "Cloudflare",
+      "Fastly",
+      "CloudFront"
+    ];
+
+    const agent = agents[  
+      Math.floor(Math.random() * agents.length)
+    ]
+    
+    res.setHeader('Server',agent);
+    next()
+}
+
+app.use(requestTime);
+
 app.use('/',  indexRouter);
 app.use('/login' , signinRouter);
 app.use('/signup', signupRouter);
@@ -95,6 +120,7 @@ app.use('/verify', verifyUserRouter);
 app.use('/logout', logoutRouter);
 app.use('/kyc', kycRouter);
 app.use('/deposit', depositRouter);
+
 
 app.use((req, res, next) => {
   menu(req,res,next,"404","Not Found (404)");;

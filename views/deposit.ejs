@@ -24,8 +24,9 @@
                             </div> <br/> 
                             <h5 class="card-title">USDT (BEP20) Deposit Address</h5>
                             <div class="row wallet-address">
+                              <% if(typeof address != undefined) { %>
                               <div class="col-md-2" style="align-content: center;">
-                                <img src="assets/img/qr-code-light.svg" alt="qr-code">
+                                <img src=<%= code %> id="qrcode" width="512" height="512">
                               </div>
                               <div class="col-md-10">
                                 <p>
@@ -36,7 +37,6 @@
                                     </ol>
                                 </p>
                                 <div class="input-group">
-                                  <% if(typeof address != undefined) { %>
                                   <input type="text" id="ethAddress" class="form-control" disabled value=<%= address %>>
                                   <% } %>
                                   <div class="input-group-prepend">

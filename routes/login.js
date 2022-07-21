@@ -62,10 +62,10 @@ router.post('/', deauth, async(req, res, next)=>{
                     if (google_response.success == true)
                     {
                       res.cookie('authorization',token,
-                      {sameSite:'lax',httpOnly: true}
-                      )
-                      .status(200);
-                      res.redirect("/");
+                        {sameSite:'lax',httpOnly: true}
+                        )
+                        .status(200);
+                        res.redirect("/home");
                     }
 
                     else

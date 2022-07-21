@@ -20,17 +20,32 @@
 </div>
 <div class="vh-100 d-flex justify-content-center">
   <div class="form-access my-auto">
-    <form action="/kyc" method="post" enctype="multipart/form-data">
-      <span>KYC</span>
-      <div class="form-group">
-        <label for="file">ID Verification:</label><input type="file" class="form-control"  name="id">
-        <label for="file">Face Verification:</label><input type="file" class="form-control" name="face">
-      </div>
-      <div class="col-12 mt-3">
-        <div class="g-recaptcha" data-sitekey="6LcWUO4gAAAAAJkJU1LnabFUbDbn-nN5-cOHUd1w"></div>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <% if (typeof state != "undefined") { %>
+      <% if (state == "PENDING") { %>
+        <form>
+          <span>KYC Status:&nbsp;<%= state %></span>
+        </form>
+      <% } %>
+      <% if (state == "NO") { %>
+        <form action="/kyc" method="post" enctype="multipart/form-data">
+          <span>KYC</span>
+          <div class="form-group">
+            <h2>Status: Not Applied</h2>
+            <label for="file">ID Verification:</label><input type="file" class="form-control"  name="id">
+            <label for="file">Face Verification:</label><input type="file" class="form-control" name="face">
+          </div>
+          <div class="col-12 mt-3">
+            <div class="g-recaptcha" data-sitekey="6LcWUO4gAAAAAJkJU1LnabFUbDbn-nN5-cOHUd1w"></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      <% } %>
+      <% if(state == "YES") { %>
+        <script type="text/javascript">
+            window.location.assign("/deposit");
+        </script>
+      <% } %>
+    <% } %>
   </div>
 </div>
 

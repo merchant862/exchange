@@ -5,8 +5,12 @@ const cookieParser = require("cookie-parser");
 const atob = require("atob");
 const multer  = require('multer');
 const auth = require('./../middleware/auth');
+const authMenu = require("../middleware/auth-menu");
+var send = require("../middleware/mail");
 const app = express();
 var dotenv = require("dotenv");
+const Models = require('./../models');
+const User = Models.User;
 
 dotenv.config();
 
@@ -31,7 +35,7 @@ router.get('/', auth, function(req, res, next)
     var base64Url = jwt.split('.')[1];
     var d = JSON.parse(atob(base64Url))
 
-    res.render("kyc",{title:title+" | "+"KYC",name:d.name,email:d.email})
+    authMenu(req,res,next,'kyc',title+" | "+"KYC");
 
 });
 
@@ -40,10 +44,18 @@ router.post('/', auth, upload, function(req,res,next)
     let jwt = req.cookies.authorization;
     var base64Url = jwt.split('.')[1];
     var d = JSON.parse(atob(base64Url))
+    
+
 
     const resKey = req.body['g-recaptcha-response']
     const secretKey = process.env.CAPTCHA_SECRET_KEY;
     const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${resKey}`
+
+    var from = 'Tech Team';
+    var subject = 'KYC Documents';
+    var html = 'Welcome&nbsp;<b>' 
+               + d.name + 
+              '</b><br/><p>We have received your documents.</p></br><p>You will be nofified once we get you approved.</p>';
     
     fetch(url, {method: 'post',})
                 .then((response) => response.json())
@@ -51,24 +63,22 @@ router.post('/', auth, upload, function(req,res,next)
                 {
                     if (google_response.success == true)
                     {
-                        res.render("kyc",
-                        {
-                            title:title
-                            ,name:d.name
-                            ,email:d.email
-                            ,success:"We have received your documents, you will get notified once we review them!"
-                        });
+                        User.update(
+                            { 
+                               isKYCDone: 'PENDING', 
+                            },
+                            {
+                               where: {email: d.email}    
+                            });
+                        
+                        send(from,d.email,subject,html);
+
+                        authMenu(req,res,next,'kyc',title+" | "+"KYC","success","We have received your documents, you will get notified once we review them!");
                     }
     
                     else
                     {
-                        res.render("kyc",
-                        {
-                            title:title
-                            ,name:d.name
-                            ,email:d.email
-                            ,error:"Captcha verification failed!"
-                        });                    
+                        authMenu(req,res,next,'kyc',title+" | "+"KYC","error","Captcha verification failed!");
                     }
                 });       
 })

@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const atob = require("atob");
 const Models = require('./../models');
 const User = Models.User;
+var QRCode = require('qrcode')
 
 //var auth = require('./auth');
 const app = express();
@@ -15,7 +16,7 @@ app.use(cookieParser())
 var title = process.env.TITLE;
 
 /* GET users listing. */
-async function authMenu(req, res, next,_route,_title)
+async function authMenu(req, res, next,_route,_title,_msg_type,_msg)
 {   
   let jwt = req.cookies.authorization;
   
@@ -41,6 +42,20 @@ async function authMenu(req, res, next,_route,_title)
 
     });
 
+    
+var opts = 
+    {
+      type: 'image/jpeg',
+      quality: 0.3,
+      margin: 0.5,
+      color: {
+        dark:"#000000",
+        light:"#FFFFFF"
+      }
+    }
+
+    var code = await QRCode.toDataURL(userData.address, opts)
+
   res.render(_route,
     {
       title: title+" | "+_title,
@@ -48,6 +63,9 @@ async function authMenu(req, res, next,_route,_title)
       email: d.email,
       balance:userData.USDT_balance,
       address:userData.address,
+      state:userData.isKYCDone,
+      _msg_type,_msg,
+      code:code,
     });
 
 };
