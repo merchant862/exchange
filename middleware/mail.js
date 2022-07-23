@@ -1,4 +1,4 @@
-const {service,user,pass} = require('./email-config.json');
+const {service,user,pass} = require('../config/email-config.json');
 
 var nodemailer = require("nodemailer");
 

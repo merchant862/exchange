@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Transactions</h5>
+      <div class="wallet-history">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Tx Hash</th>
+            </tr>
+          </thead>
+          <% if(typeof data != undefined && typeof txHash != undefined) { %>
+            <tbody>
+                
+                  <% for(i = 0; i < data.length; i++) { %>
+                    <tr>
+                        <td><%= i+1 %></td>
+                        <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                        <td><%= data[i] %>
+                            <img src="assets/img/icon/usdt.png" width="15" height="15">
+                        </td>
+                        <td><%= txHash[i] %></td>
+                    </tr>
+                  <% } %>
+                
+              </tbody>
+          <% } %>
+        </table>
+      </div>
+    </div>
+  </div>

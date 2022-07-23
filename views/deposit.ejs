@@ -26,7 +26,7 @@
                             <div class="row wallet-address">
                               <% if(typeof address != undefined) { %>
                               <div class="col-md-2" style="align-content: center;">
-                                <img src=<%= code %> id="qrcode" width="512" height="512">
+                                <img src=<%= code %> id="qrcode" width="512" height="512" alt="QRCode">
                               </div>
                               <div class="col-md-10">
                                 <p>
@@ -47,31 +47,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
+                        <%- include('./partials/transactions.ejs') %>
                       </div>
                     </div>
                   </div>

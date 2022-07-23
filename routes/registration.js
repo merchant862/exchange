@@ -12,7 +12,7 @@ const fetch = require("isomorphic-fetch");
 
 var deauth = require('../middleware/deauth');
 
-var web3 = require('../middleware/web3');
+var web3 = require('../config/web3');
 
 const User = Models.User;
 const Keys = Models.Keys;
