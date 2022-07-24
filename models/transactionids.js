@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   transactionIds.init({
     f_key: DataTypes.INTEGER,
     transactionID: DataTypes.STRING,
+    amount:DataTypes.STRING,
     isUsed: DataTypes.STRING
   }, {
     sequelize,

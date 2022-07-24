@@ -32,6 +32,15 @@
          </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item header-custom-icon">
+              <a class="nav-link">
+                <% if (typeof balance != "undefined") { %>
+                  <span>
+                    Balance: <%= balance %>&nbsp;<img src="assets/img/icon/usdt.png" width="20" height="20">
+                  </span>
+                <% } %>
+              </a>
+            </li>
+            <li class="nav-item header-custom-icon">
               <a class="nav-link" href="#" id="clickFullscreen">
                 <i class="icon ion-md-expand"></i>
               </a>
@@ -120,11 +129,11 @@
                         <%= email %>
                       <% } %>
                     </p>
-                    <p class="email font-weight-bold mb-0">
+                    <!-- <p class="email font-weight-bold mb-0">
                       <% if (typeof balance != "undefined") { %>
                         Balance: <%= balance %> <img src="assets/img/icon/usdt.png" width="30" height="30">
                       <% } %>
-                    </p>
+                    </p> -->
                   </div>
                 </div>
                 <div class="dropdown-body">

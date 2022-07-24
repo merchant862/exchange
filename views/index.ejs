@@ -6,9 +6,13 @@
     
     <%- include('./partials/authenticated-menu.ejs') %>
 
+    <% var link='/exchange'; var data='Start Trading'; %>
+
   <% } else {%>
    
     <%- include('./partials/unauthenticated-menu.ejs') %>
+
+    <% var link='/signup'; var data='Get Started'; %>
 
   <% } %>
 
@@ -25,7 +29,7 @@
             <!-- <input type="text" class="form-control" placeholder="Enter Your Email" aria-label="Enter Your Email"
               aria-describedby="button-addon2"> -->
             <div style="align-self: center;">
-              <a href="/signup"><button class="btn btn-primary" type="button" id="button-addon2">Get Started</button></a>
+              <a href=<%= link %>><button class="btn btn-primary" type="button" id="button-addon2"><%= data %></button></a>
             </div>
          
         </div>

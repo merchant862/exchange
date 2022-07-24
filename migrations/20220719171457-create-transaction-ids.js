@@ -16,6 +16,7 @@ module.exports = {
            key:'id'
         },
         onDelete:'CASCADE',
+        onUpdate:'CASCADE',
         type: Sequelize.INTEGER
       },
       transactionID: {

@@ -2,7 +2,7 @@
 
 <%- include('./partials/authenticated-menu.ejs') %>
 
-  <div class="settings mtb15 m-5">
+  <div class="settings mtb15 m-3">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 col-lg-12">
@@ -40,8 +40,25 @@
                                   <input type="text" id="ethAddress" class="form-control" disabled value=<%= address %>>
                                   <% } %>
                                   <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
+                                    <button class="btn btn-primary" onclick="copy();">
+                                      Copy
+                                    </button>
                                   </div>
+                                  <script>
+                                    function copy() 
+                                    {
+                                      /* Get the text field */
+                                      var copyText = document.getElementById("ethAddress");
+                                   
+                                     /* Select the text field */
+                                      copyText.select();
+                                       copyText.setSelectionRange(0, 99999); /* For mobile devices */
+                                   
+                                      /* Copy the text inside the text field */
+                                      navigator.clipboard.writeText(copyText.value);
+                                   
+                                    }
+                                   </script>
                                 </div>
                               </div>
                             </div>

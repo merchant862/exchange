@@ -4,6 +4,8 @@ var dotenv = require("dotenv");
 var auth = require('../middleware/auth')
 var authMenu = require("../middleware/auth-menu")
 var KYCChecker = require("../middleware/KYChecker");
+const e = require('express');
+
 
 dotenv.config();
 

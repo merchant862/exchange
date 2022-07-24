@@ -1,18 +1,14 @@
 const web3 = require('../config/web3');
-
 var dotenv = require("dotenv");
 
 dotenv.config();
 
 var USDT = process.env.USDT_ADDRESS;
-
 var abi = require("../abis/abi.json");
-
 var USDT_interface = new web3.eth.Contract(abi, USDT);
 
 module.exports = async function call(req,res,_param,_address)
 {
-        
         let options = {
             filter: {
                 to: _address,
@@ -25,7 +21,7 @@ module.exports = async function call(req,res,_param,_address)
         var txHash = [];
     ;
         await USDT_interface.getPastEvents("Transfer", options)
-        .then((results) =>
+        .then(async(results) =>
         {
             var json =  JSON.stringify(results);
        
