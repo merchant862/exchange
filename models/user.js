@@ -14,6 +14,15 @@ module.exports = (sequelize, DataTypes) => {
         {
           foreignKey:'id'
         });
+      
+      User.hasMany(models.wallet,
+          {
+            foreignKey:'id'
+          });
+      User.hasMany(models.orders,
+          {
+            foreignKey:'id'
+          });
     }
   }
   User.init({

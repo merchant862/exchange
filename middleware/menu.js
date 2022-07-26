@@ -43,7 +43,7 @@ async function menu(req, res, next,_route,_title)
             
             if(data!="")
             {
-              return Math.round((data + Number.EPSILON) * 100) / 100;
+              return data.toFixed(2);
             }
   
             else

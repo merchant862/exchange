@@ -20,6 +20,7 @@ var verifyUserRouter = require('./routes/verify-user');
 var logoutRouter = require('./routes/logout');
 var kycRouter = require("./routes/kyc");
 var depositRouter = require("./routes/deposit");
+var walletRouter = require("./routes/wallet");
 
 var menu = require("./middleware/menu");
 
@@ -120,7 +121,7 @@ app.use('/verify', verifyUserRouter);
 app.use('/logout', logoutRouter);
 app.use('/kyc', kycRouter);
 app.use('/deposit', depositRouter);
-
+app.use('/wallet', walletRouter);
 
 app.use((req, res, next) => {
   menu(req,res,next,"404","Not Found (404)");;

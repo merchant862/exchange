@@ -57,8 +57,8 @@ router.post('/', deauth, async(req, res, next)=>{
               fetch(url, {
                 method: 'post',
               })
-                .then((response) => response.json())
-                .then((google_response) => {
+                .then(async(response) => response.json())
+                .then(async(google_response) => {
                     if (google_response.success == true)
                     {
                       res.cookie('authorization',token,

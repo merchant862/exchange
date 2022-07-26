@@ -71,6 +71,8 @@ router.post('/', auth, upload, function(req,res,next)
                                where: {email: d.email}    
                             });
                         
+                        
+                        
                         send(from,d.email,subject,html);
 
                         authMenu(req,res,next,'kyc',title+" | "+"KYC","success","We have received your documents, you will get notified once we review them!");

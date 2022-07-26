@@ -1,0 +1,232 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/authenticated-menu.ejs') %>
+  
+  <div class="settings mtb15">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="settings-wallet" role="tabpanel" aria-labelledby="settings-wallet-tab">
+              <div class="wallet">
+                <div class="row">
+                  <div class="col-md-12 col-lg-4">
+                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                      <a class="nav-link d-flex justify-content-between align-items-center active" data-toggle="pill"
+                        href="#coinBTC" role="tab" aria-selected="true">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/18.png" alt="btc">
+                          <div>
+                            <h2>BTC</h2>
+                            <p>Bitcoin</p>
+                          </div>
+                        </div>
+                        <div>
+                          <% if(typeof BTC != "undefined") { %>
+                            <% if(BTC != 0) { %>
+                              <h3><%= BTC %></h3>
+                            <% } else {%>
+                              <h3>0.00000</h3>
+                            <% } %>
+                          <% } %>
+                          
+                        </div>
+                      </a>
+                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
+                        href="#coinETH" role="tab" aria-selected="true">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/1.png" alt="btc">
+                          <div>
+                            <h2>ETH</h2>
+                            <p>Ethereum</p>
+                          </div>
+                        </div>
+                        <div>
+                          <% if(typeof ETH != "undefined") { %>
+                            <% if(ETH != 0) { %>
+                              <h3><%= ETH %></h3>
+                            <% } else {%>
+                              <h3>0.00000</h3>
+                            <% } %>
+                          <% } %>
+                          
+                        </div>
+                      </a>
+                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
+                        href="#coinBNB" role="tab" aria-selected="true">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/9.png" alt="btc">
+                          <div>
+                            <h2>BNB</h2>
+                            <p>Binance</p>
+                          </div>
+                        </div>
+                        <div>
+                          <% if(typeof BNB != "undefined") { %>
+                            <% if(BNB != 0) { %>
+                              <h3><%= BNB %></h3>
+                            <% } else {%>
+                              <h3>0.00000</h3>
+                            <% } %>
+                          <% } %>
+                          
+                        </div>
+                      </a>
+                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
+                        href="#coinTRX" role="tab" aria-selected="true">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/sol.png" alt="btc">
+                          <div>
+                            <h2>SOL</h2>
+                            <p>Solana</p>
+                          </div>
+                        </div>
+                        <div>
+                          <% if(typeof SOL != "undefined") { %>
+                            <% if(SOL != 0) { %>
+                              <h3><%= SOL %></h3>
+                            <% } else {%>
+                              <h3>0.00000</h3>
+                            <% } %>
+                          <% } %>
+                          
+                        </div>
+                      </a>
+                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
+                        href="#coinEOS" role="tab" aria-selected="true">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/dot.png" alt="btc">
+                          <div>
+                            <h2>DOT</h2>
+                            <p>Polkadot</p>
+                          </div>
+                        </div>
+                        <div>
+                          <% if(typeof DOT != "undefined") { %>
+                            <% if(DOT != 0) { %>
+                              <h3><%= DOT %></h3>
+                            <% } else {%>
+                              <h3>0.00000</h3>
+                            <% } %>
+                          <% } %>
+                          
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-12 col-lg-8">
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="coinBTC" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Balances</h5>
+                            <ul>
+                              <li class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="icon ion-md-cash"></i>
+                                  <h2>Total Equity</h2>
+                                </div>
+                                <div>
+                                  <h3>5.5894 BTC</h3>
+                                </div>
+                              </li>
+                              
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="coinETH" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Balances</h5>
+                            <ul>
+                              <li class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="icon ion-md-cash"></i>
+                                  <h2>Total Equity</h2>
+                                </div>
+                                <div>
+                                  <h3>4.1542 ETH</h3>
+                                </div>
+                              </li>
+                              
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="coinBNB" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Balances</h5>
+                            <ul>
+                              <li class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="icon ion-md-cash"></i>
+                                  <h2>Total Equity</h2>
+                                </div>
+                                <div>
+                                  <h3>7.342 BNB</h3>
+                                </div>
+                              </li>
+                              
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="coinTRX" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Balances</h5>
+                            <ul>
+                              <li class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="icon ion-md-cash"></i>
+                                  <h2>Total Equity</h2>
+                                </div>
+                                <div>
+                                  <h3>4.3344 TRX</h3>
+                                </div>
+                              </li>
+                              
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="coinEOS" role="tabpanel">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Balances</h5>
+                            <ul>
+                              <li class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  <i class="icon ion-md-cash"></i>
+                                  <h2>Total Equity</h2>
+                                </div>
+                                <div>
+                                  <h3>33.35 EOS</h3>
+                                </div>
+                              </li>
+                              
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('./partials/scripts.ejs') %>
+
+  <script src="assets/js/ajax/updateMOB.js"></script>
+  <script src="assets/js/ajax/updatePASS.js"></script>
+  
+</body>
+
+</html>
