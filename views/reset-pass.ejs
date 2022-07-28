@@ -2,24 +2,12 @@
 
 <%- include('./partials/unauthenticated-menu.ejs') %>
 
-<br/>
-  <div class="container" style="width: 40%;">
-    <% if (typeof success != "undefined") { %>
-      <div class="alert alert-success alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Success!</strong> <%= success %>
-      </div>
-    <% } %>
-    <% if (typeof error != "undefined") { %>
-      <div class="alert alert-danger alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Error!</strong> <%= error %>
-      </div>
-    <% } %>
-  </div>
   <div class="vh-100 d-flex justify-content-center">
     <div class="form-access my-auto">
-      <form action="/reset-pass" method="post">
+      <div id="resetRes" style="display: all;">
+     
+      </div>
+      <form method="post" id="resPass">
         <span>Reset Password</span>
         <div class="form-group">
           <input type="email" class="form-control" placeholder="Email Address" name="email">
@@ -36,6 +24,8 @@
   <script src="https://www.google.com/recaptcha/api.js"></script>
 
   <%- include('./partials/scripts.ejs') %>
+
+  <script src="assets/js/ajax/resetPass.js"></script>
 
 </body>
 

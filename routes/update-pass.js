@@ -14,7 +14,25 @@ var title = process.env.TITLE;
 
 router.get('/', deauth, function(req, res, next) 
 {
-    res.render('update-pass',{title:title+" | "+"Password Updation",page:"login"});
+    var token = req.query.token;
+
+    if(req.url.includes('?'))
+    {
+        if(token != "")
+        {
+            res.render('update-pass',{title:title+" | "+"Password Updation",page:"login"});    
+        }
+
+        else
+        {
+            res.status(404).redirect('404');
+        }
+    }
+
+    else
+    {
+        res.status(404).redirect('404');
+    }
 });
 
 
@@ -26,7 +44,7 @@ router.post('/', deauth, async function(req, res, next)
 
     let pass1 = req.body.password1;
     let pass2 = req.body.password2;
-    let token = req.body.token;
+    let token = req.query.token;
     
     if(token != "")
     {
@@ -36,13 +54,13 @@ router.post('/', deauth, async function(req, res, next)
             });
 
         if(!user)
-        { 
-            res.status(400).render("update-pass",{title:title+" | "+"Password Updation",page:"login",error:"Invalid link"});
+        {   
+            res.status(401).json({"msg":"Invalid link"});
         } 
 
         else
         {
-            if(pass1 != "" && pass2 != "" && token != "")
+            if(pass1 != "" && pass2 != "")
             {  
                 if(pass1 == pass2)
                 {
@@ -69,12 +87,14 @@ router.post('/', deauth, async function(req, res, next)
                                             where: {email: user.email}    
                                         });
                                 
-                                        res.status(200).render("update-pass",{title:title+" | "+"Password Updation",page:"login",success:"Password updated!"});
+                                        res.status(200).json({"msg":"Password updated!"});
+                                        res.end();
                                     }
 
                                     else
                                     {
-                                        res.status(403).render("update-pass",{title:title+" | "+"Password Updation",page:"login",error:"Token expired!"});
+                                        res.status(401).json({"msg":"Token expired!"});
+                                        res.end();
                                     }
                                 });
 
@@ -82,8 +102,8 @@ router.post('/', deauth, async function(req, res, next)
     
                             else
                             {
-                            res.status(403).
-                            render("update-pass",{title:title+" | "+"Password Updation",page:"login",error:"Captcha verification failed!"});
+                                res.status(401).json({"msg":"Captcha verification failed!"});
+                                res.end();
                             }
     
                         });
@@ -91,20 +111,23 @@ router.post('/', deauth, async function(req, res, next)
     
                 else
                 {
-                    res.status(400).render("update-pass",{title:title+" | "+"Password Updation",page:"login",error:"Passwords don't match!"});   
+                    res.status(401).json({"msg":"Passwords don't match!"});
+                    res.end();   
                 }
             }
 
             else
             {
-                res.status(400).render("update-pass",{title:title+" | "+"Password Updation",page:"login",error:"Fields can't be empty!"});
+                res.status(401).json({"msg":"Fields can't be empty!"});
+                res.end();
             }
         }
     }
 
     else
     {
-      res.status(400).render("update-pass",{title:title+" | "+"Password Updation",page:"login",error:"Invalid token"});
+        res.status(401).json({"msg":"Invalid token"});
+        res.end(); 
     }
 });
 

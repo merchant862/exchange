@@ -18,7 +18,7 @@ $(document).ready(function()
                   success: function (data, textStatus, errorThrown) 
                   {
                     console.log(data,textStatus);
-                    $("#passRes").html('<div class="alert btn-primary"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
+                    $("#passRes").html('<div class="alert btn-success"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
                     $("#passRes").show().delay(2000).fadeOut();
                   },
                   error: function(jqXHR, textStatus, errorThrown) 

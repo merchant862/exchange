@@ -1,7 +1,6 @@
 <%- include('./partials/header.ejs') %>
 
 <%- include('./partials/authenticated-menu.ejs') %>
-  
   <div class="settings mtb15">
     <div class="container-fluid">
       <div class="row">
@@ -12,6 +11,26 @@
                 <div class="row">
                   <div class="col-md-12 col-lg-4">
                     <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                      <a class="d-flex justify-content-between align-items-center"
+                        role="tab" aria-selected="true">
+                        <div class="d-flex">
+                          <img src="assets/img/icon/usdt.png" alt="btc">
+                          <div>
+                            <h2>USDT</h2>
+                            <p>Tether USD</p>
+                          </div>
+                        </div>
+                        <div>
+                          <% if(typeof balance != "undefined") { %>
+                            <% if(balance != 0) { %>
+                              <h3><%= balance %></h3>
+                            <% } else {%>
+                              <h3>0.00000</h3>
+                            <% } %>
+                          <% } %>
+                          
+                        </div>
+                      </a>
                       <a class="nav-link d-flex justify-content-between align-items-center active" data-toggle="pill"
                         href="#coinBTC" role="tab" aria-selected="true">
                         <div class="d-flex">
@@ -73,7 +92,7 @@
                         </div>
                       </a>
                       <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
-                        href="#coinTRX" role="tab" aria-selected="true">
+                        href="#coinSOL" role="tab" aria-selected="true">
                         <div class="d-flex">
                           <img src="assets/img/icon/sol.png" alt="btc">
                           <div>
@@ -93,7 +112,7 @@
                         </div>
                       </a>
                       <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill"
-                        href="#coinEOS" role="tab" aria-selected="true">
+                        href="#coinDOT" role="tab" aria-selected="true">
                         <div class="d-flex">
                           <img src="assets/img/icon/dot.png" alt="btc">
                           <div>
@@ -127,11 +146,49 @@
                                   <h2>Total Equity</h2>
                                 </div>
                                 <div>
-                                  <h3>5.5894 BTC</h3>
+                                  <% if(BTC!="") { %>
+                                    <h3><%= BTC %> BTC</h3>
+                                  <% } else { %>
+                                    <h3>0.00000 BTC</h3>
+                                  <% } %>
                                 </div>
                               </li>
-                              
+                              <a href="/exchange?asset=BTC" target="_blank">
+                                <button class="btn green">BUY</button>
+                              </a>
+                              <a href="/exchange?asset=BTC" target="_blank">
+                                <button class="btn red">SELL</button>
+                              </a>
                             </ul>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Orders</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Order ID.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% for(i = 0; i < order_no.length; i++) { %>
+                                    <tr>    
+                                      <td><%= i+1 %></td>
+                                      <td><%= order_no[i] %></td>
+                                      <td><%= date[i] %></td>
+                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                      <td><%= amount[i] %> BTC</td>
+                                    </tr>
+                                <% } %>
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -146,11 +203,48 @@
                                   <h2>Total Equity</h2>
                                 </div>
                                 <div>
-                                  <h3>4.1542 ETH</h3>
+                                  <% if(ETH!="") { %>
+                                    <h3><%= ETH %> ETH</h3>
+                                  <% } else { %>
+                                    <h3>0.00000 ETH</h3>
+                                  <% } %>
                                 </div>
                               </li>
-                              
-                            </ul>
+                              <a href="/exchange?asset=ETH" target="_blank">
+                                <button class="btn green">BUY</button>
+                              </a>
+                              <a href="/exchange?asset=ETH" target="_blank">
+                                <button class="btn red">SELL</button>
+                              </a>
+                            </ul>  
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Orders</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% for(i = 0; i < order_no.length; i++) { %>
+                                    <tr>    
+                                      <td><%= i+1 %></td>
+                                      <td><%= order_no[i] %></td>
+                                      <td><%= date[i] %></td>
+                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                      <td><%= amount[i] %> BTC</td>
+                                    </tr>
+                                <% } %>
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -165,15 +259,52 @@
                                   <h2>Total Equity</h2>
                                 </div>
                                 <div>
-                                  <h3>7.342 BNB</h3>
+                                  <% if(BNB!="") { %>
+                                    <h3><%= BNB %> BNB</h3>
+                                  <% } else { %>
+                                    <h3>0.00000 BNB</h3>
+                                  <% } %>
                                 </div>
                               </li>
-                              
+                              <a href="/exchange?asset=BNB" target="_blank">
+                                <button class="btn green">BUY</button>
+                              </a>
+                              <a href="/exchange?asset=BNB" target="_blank">
+                                <button class="btn red">SELL</button>
+                              </a>
                             </ul>
                           </div>
                         </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Orders</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% for(i = 0; i < order_no.length; i++) { %>
+                                    <tr>    
+                                      <td><%= i+1 %></td>
+                                      <td><%= order_no[i] %></td>
+                                      <td><%= date[i] %></td>
+                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                      <td><%= amount[i] %> BTC</td>
+                                    </tr>
+                                <% } %>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="tab-pane fade" id="coinTRX" role="tabpanel">
+                      <div class="tab-pane fade" id="coinSOL" role="tabpanel">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">Balances</h5>
@@ -184,15 +315,52 @@
                                   <h2>Total Equity</h2>
                                 </div>
                                 <div>
-                                  <h3>4.3344 TRX</h3>
+                                  <% if(SOL!="") { %>
+                                    <h3><%= SOL %> SOL</h3>
+                                  <% } else { %>
+                                    <h3>0.00000 ETH</h3>
+                                  <% } %>
                                 </div>
                               </li>
-                              
+                              <a href="/exchange?asset=SOL" target="_blank">
+                                <button class="btn green">BUY</button>
+                              </a>
+                              <a href="/exchange?asset=SOL" target="_blank">
+                                <button class="btn red">SELL</button>
+                              </a>
                             </ul>
                           </div>
                         </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Orders</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% for(i = 0; i < order_no.length; i++) { %>
+                                    <tr>    
+                                      <td><%= i+1 %></td>
+                                      <td><%= order_no[i] %></td>
+                                      <td><%= date[i] %></td>
+                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                      <td><%= amount[i] %> BTC</td>
+                                    </tr>
+                                <% } %>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="tab-pane fade" id="coinEOS" role="tabpanel">
+                      <div class="tab-pane fade" id="coinDOT" role="tabpanel">
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">Balances</h5>
@@ -203,11 +371,48 @@
                                   <h2>Total Equity</h2>
                                 </div>
                                 <div>
-                                  <h3>33.35 EOS</h3>
+                                  <% if(DOT!="") { %>
+                                    <h3><%= DOT %> DOT</h3>
+                                  <% } else { %>
+                                    <h3>0.00000 DOT</h3>
+                                  <% } %>
                                 </div>
                               </li>
-                              
+                              <a href="/exchange?asset=DOT" target="_blank">
+                                <button class="btn green">BUY</button>
+                              </a>
+                              <a href="/exchange?asset=DOT" target="_blank">
+                                <button class="btn red">SELL</button>
+                              </a>
                             </ul>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Latest Orders</h5>
+                            <div class="wallet-history">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>No.</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% for(i = 0; i < order_no.length; i++) { %>
+                                    <tr>    
+                                      <td><%= i+1 %></td>
+                                      <td><%= order_no[i] %></td>
+                                      <td><%= date[i] %></td>
+                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                      <td><%= amount[i] %> BTC</td>
+                                    </tr>
+                                <% } %>
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -223,9 +428,6 @@
   </div>
   
   <%- include('./partials/scripts.ejs') %>
-
-  <script src="assets/js/ajax/updateMOB.js"></script>
-  <script src="assets/js/ajax/updatePASS.js"></script>
   
 </body>
 

@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
 const atob = require("atob");
 const Models = require('./../models');
+var getWalletBalance = require('./walletBalance');
 const User = Models.User;
 
 //var auth = require('./auth');
@@ -54,7 +55,49 @@ async function menu(req, res, next,_route,_title)
   
       });
 
-    res.render(_route,{title: title+" | "+_title,name: d.name,email: d.email,status:"loggedIn",balance:balance});
+      var getCoinBalance = await getWalletBalance(req,res);
+      
+      /* var getCoinPrices = async(_coin) =>
+        {
+                var price = await fetch('https://api.binance.com/api/v3/ticker/price?symbol='+_coin+'USDT', 
+                {
+                    method: 'GET',
+                })
+                .then(async(response) => response.json())
+                .then(async(data) => 
+                {
+                    return (parseFloat(data['price']));
+                })
+    
+                return price;
+        }
+     
+    
+        var finalBalance =
+    
+        (parseFloat((await getCoinPrices("BTC")).toFixed(1))*getCoinBalance.BTC.toFixed(1))+
+        (parseFloat((await getCoinPrices("ETH")).toFixed(1))*getCoinBalance.ETH.toFixed(1))+
+        (parseFloat((await getCoinPrices("BNB")).toFixed(1))*getCoinBalance.BNB.toFixed(1))+
+        (parseFloat((await getCoinPrices("SOL")).toFixed(1))*getCoinBalance.SOL.toFixed(1))+
+        (parseFloat((await getCoinPrices("DOT")).toFixed(1))*getCoinBalance.DOT.toFixed(1)) */
+    
+        var finalBalance = 
+        getCoinBalance.BTC+
+        getCoinBalance.ETH+
+        getCoinBalance.BNB+
+        getCoinBalance.SOL+
+        getCoinBalance.DOT
+
+    res.render(
+      _route,
+      {
+        title: title+" | "+_title,
+        name: d.name,
+        email: d.email,
+        status:"loggedIn",
+        balance:balance,
+        wallet_bal:finalBalance
+      });
     
     next();
   }

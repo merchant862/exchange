@@ -1,6 +1,6 @@
 $(document).ready(function()
       {
-            $("#updateMOB").submit(function(event)
+            $("#signupForm").submit(function(event)
             {
                 // Stop form from submitting normally
                 event.preventDefault();
@@ -12,20 +12,20 @@ $(document).ready(function()
 
                 $.ajax(
                 {
-                  url: "/settings/mob",
+                  url: "/signup/",
                   type: "POST",
                   data: formValues ,
                   success: function (data, textStatus, errorThrown) 
                   {
                     console.log(data,textStatus);
-                    $("#mobRes").html('<div class="alert btn-success"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
-                    $("#mobRes").show().delay(2000).fadeOut();
+                    $("#regRes").html('<div class="alert btn-success"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
+                    $("#regRes").show().delay(5000).fadeOut();
                   },
                   error: function(jqXHR, textStatus, errorThrown) 
                   {
                     console.log(textStatus, jqXHR.responseJSON);
-                    $("#mobRes").html('<div class="alert btn-danger"><strong>Error!</strong>&nbsp;'+jqXHR.responseJSON.msg+'</div>')
-                    $("#mobRes").show().delay(2000).fadeOut();
+                    $("#regRes").html('<div class="alert btn-danger"><strong>Error!</strong>&nbsp;'+jqXHR.responseJSON.msg+'</div>')
+                    $("#regRes").show().delay(5000).fadeOut();
                   }
                 });
             });

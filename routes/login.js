@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 var validator = require("node-email-validation");
 const dotenv = require('dotenv');
 const fetch = require("isomorphic-fetch");
+var randToken = require('rand-token');
 
 var deauth = require('../middleware/deauth');
 
@@ -15,7 +16,7 @@ dotenv.config();
 let title = process.env.TITLE;
 
 /* GET users listing. */
-router.get('/', deauth,function(req, res, next) 
+router.get('/', deauth,async(req, res, next)=>
 {
     res.render('login', { page:"signup",title: title+" | "+"Login"});
 });
@@ -49,8 +50,7 @@ router.post('/', deauth, async(req, res, next)=>{
           {
             if(user.verified == "YES")
             {   
-
-              token = jwt.sign({ "id" : user.id,"email" : user.email,"name":user.full_name },process.env.SECRET,{
+              token = jwt.sign({"tryToGuess":randToken.generate(15), "id" : user.id,"email" : user.email,"name":user.full_name },process.env.SECRET,{
                 expiresIn: '30d'
               });
 
@@ -70,8 +70,8 @@ router.post('/', deauth, async(req, res, next)=>{
 
                     else
                     {
-                      res.status(403).
-                      render("login",{page:"signup",title: title+" | "+"Login",error:"Captcha verification failed!"});
+                      res.status(403).json({"msg":"Captcha verification failed!"});
+                      res.end();
                     }
 
                   });
@@ -80,31 +80,36 @@ router.post('/', deauth, async(req, res, next)=>{
 
             else
             {
-              res.status(403).render("login",{page:"signup", title: title+" | "+"Login","error":"Your email is unverified, please verify it to access your account!"})
+              res.status(403).json({"msg":"Your email is unverified, please verify it to access your account!"})
+              res.end();
             }
           }
 
           else
           {
-             res.status(401).render("login",{page:"signup",title: title+" | "+"Login","error":"Wrong Email format!"});
+             res.status(401).json({"msg":"Wrong Email format!"});
+             res.end();
           }
        }
 
        else
        {
-          res.status(401).render("login",{page:"signup",title: title+" | "+"Login","error":"Email or Password is wrong!"});
+          res.status(401).json({"msg":"Email or Password is wrong!"});
+          res.end();
        }
     }
 
     else
     {
-        res.status(404).render("login",{page:"signup",title: title+" | "+"Login","error":"User doesn't exist, signup to access!"});
+        res.status(404).json({"msg":"User doesn't exist, signup to access!"});
+        res.end();
     }
   }
 
   else
   {
-      res.status(201).render("login",{page:"signup",title: title+" | "+"Login","error":"Fields can't be empty!"});
+      res.status(201).json({"msg":"Fields can't be empty!"});
+      res.end();
   }
   
 });

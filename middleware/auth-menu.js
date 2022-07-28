@@ -10,20 +10,64 @@ dotenv.config();
 
 var title = process.env.TITLE;
 
-module.exports =  async function authMenu(req, res, next,_route,_title,_msg_type,_msg)
+module.exports =  async function authMenu(
+  req, 
+  res, 
+  next,
+  _route,
+  _title,
+  _msg_type,
+  _msg,
+  _asset,
+  _order_no,
+  _amount,
+  _coin,
+  _date)
+
 {   
   
   var data = await userData(req)
 
   var AsyncUpdateData = async()=> {await asyncUpdateData(req,res)};
 
-  setInterval(AsyncUpdateData,10000);
+  setInterval(AsyncUpdateData,100000);
   
   await createWallet(req,res);
 
   var getCoinBalance = await getWalletBalance(req,res);
 
   var balance = (data.USDT_balance != 0) ? (await data.USDT_balance.toFixed(2)) : "00.00";
+
+  var getCoinPrices = async(_coin) =>
+    {
+            var price = await fetch('https://api.binance.com/api/v3/ticker/price?symbol='+_coin+'USDT', 
+            {
+                method: 'GET',
+            })
+            .then(async(response) => response.json())
+            .then(async(data) => 
+            {
+                return ((parseFloat(data['price'])/100)*70);
+            })
+
+            return price;
+    }
+ 
+
+    var finalBalance =
+
+    (parseFloat((await getCoinPrices("BTC")).toFixed(1))*getCoinBalance.BTC.toFixed(1))+
+    (parseFloat((await getCoinPrices("ETH")).toFixed(1))*getCoinBalance.ETH.toFixed(1))+
+    (parseFloat((await getCoinPrices("BNB")).toFixed(1))*getCoinBalance.BNB.toFixed(1))+
+    (parseFloat((await getCoinPrices("SOL")).toFixed(1))*getCoinBalance.SOL.toFixed(1))+
+    (parseFloat((await getCoinPrices("DOT")).toFixed(1))*getCoinBalance.DOT.toFixed(1))
+
+    /* var finalBalance = 
+    getCoinBalance.BTC+
+    getCoinBalance.ETH+
+    getCoinBalance.BNB+
+    getCoinBalance.SOL+
+    getCoinBalance.DOT */ 
   
 
   res.render(_route,
@@ -43,6 +87,12 @@ module.exports =  async function authMenu(req, res, next,_route,_title,_msg_type
       BNB:getCoinBalance.BNB,
       SOL:getCoinBalance.SOL,
       DOT:getCoinBalance.DOT,
+      asset:_asset,
+      wallet_bal:finalBalance,
+      order_no:_order_no,
+      amount:_amount,
+      coin:_coin,
+      date:_date
     });
 
     next();

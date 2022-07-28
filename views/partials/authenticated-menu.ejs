@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="headerMenu">
          <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                  <a class="nav-link" href="/exchange" role="button"  aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link" href="/exchange?asset=BTC" role="button"  aria-haspopup="true" aria-expanded="false">
                     Exchange
                   </a>
                 </li>
@@ -38,9 +38,18 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item header-custom-icon">
               <a class="nav-link">
+                <% if (typeof wallet_bal != "undefined") { %>
+                  <span>
+                    Wallet Balance: <b class="text-success">$</b><%= wallet_bal %>&nbsp;<img style="visibility:hidden;" src="assets/img/icon/usdt.png" width="20" height="20">
+                  </span>
+                <% } %>
+              </a>
+            </li>
+            <li class="nav-item header-custom-icon">
+              <a class="nav-link">
                 <% if (typeof balance != "undefined") { %>
                   <span>
-                    Balance: <%= balance %>&nbsp;<img src="assets/img/icon/usdt.png" width="20" height="20">
+                    Total USDT: <%= balance %>&nbsp;<img src="assets/img/icon/usdt.png" width="20" height="20">
                   </span>
                 <% } %>
               </a>

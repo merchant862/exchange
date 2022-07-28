@@ -1,18 +1,22 @@
 var express = require('express');
 var router = express.Router();
 const cookieParser = require("cookie-parser");
+var randToken = require("rand-token");
 var fetch = require("isomorphic-fetch")
 var userData = require('../middleware/auth-data');
 const Models = require('../models');
 const Wallets = Models.wallet;
-
+const Orders = Models.orders;
 var auth = require('../middleware/auth')
 
 var authMenu = require("../middleware/auth-menu")
 
 var KYCChecker = require("../middleware/KYChecker");
 
+var getOrders = require("../middleware/orders");
+
 const dotenv = require('dotenv');
+const { parse } = require('path');
 
 dotenv.config();
 
@@ -23,8 +27,54 @@ app.use(cookieParser())
 let title = process.env.TITLE;
 
 /* GET home page. */
-router.get('/', auth, authMenu, KYCChecker , async function(req, res, next) {
-    authMenu(req,res,next,"exchange","Exchange");
+router.get('/', auth, authMenu, KYCChecker , async function(req, res, next) 
+{
+    var asset = req.query.asset;
+
+    if(req.url.includes('?'))
+    {
+        if(asset != "")
+        {
+            if(
+                asset == "BTC" || 
+                asset == "ETH" || 
+                asset == "BNB" || 
+                asset == "SOL" || 
+                asset == "DOT"
+            )
+            {
+                authMenu(
+                    req,
+                    res,
+                    next,
+                    "exchange",
+                    "Exchange",
+                    "",
+                    "",
+                    asset,
+                    await getOrders(req,res,asset,"serial"),
+                    await getOrders(req,res,asset,"amount"),
+                    await getOrders(req,res,asset,"coin"),
+                    await getOrders(req,res,asset,"date"))
+            }
+            
+            else
+            {
+                res.status(404).redirect('404');
+            }
+        }
+
+        else
+        {
+            res.status(404).redirect('404');
+        }
+    }
+
+    else
+    {
+        res.status(404).redirect('404');
+    }
+
 });
 
 router.post('/:coin', auth, authMenu, KYCChecker , async function(req, res, next) {
@@ -34,6 +84,8 @@ router.post('/:coin', auth, authMenu, KYCChecker , async function(req, res, next
     var coin = req.params.coin;
 
     var amount = req.body.amount;
+
+    var token = "BUY"+coin+randToken.generate(15);
 
     var coinWalletBalance = await Wallets.findAll(
     {
@@ -51,13 +103,13 @@ router.post('/:coin', auth, authMenu, KYCChecker , async function(req, res, next
             
             for(var i = 0; i < jsonParsedData.length; i++)
             {
-                return (jsonParsedData[i][coin]) 
+                return parseFloat(jsonParsedData[i][coin]) 
             }
         }
 
         else
         {
-            return 0;
+            return 0.00;
         }
 
     })
@@ -71,54 +123,90 @@ router.post('/:coin', auth, authMenu, KYCChecker , async function(req, res, next
             .then(async(response) => response.json())
             .then(async(data) => 
             {
-                var price = parseFloat(data['price']);
-                
-                return price;
+                return ((parseFloat(data['price'])/100)*70);
             })
 
             return price;
     }
 
-    if(amount <= authData.USDT_balance)
+    if(amount != "")
     {
-        var liveCoinPrice = await getCoinPrices(coin);
-
-        var finalAmount = amount/liveCoinPrice;
-  
-            await Models.sequelize.query(`UPDATE users SET USDT_balance=:USDT_balance WHERE id = ${authData.id}`,
+        if(!Math.sign(amount) === -1)
+        {
+            if(amount <= authData.USDT_balance)
+            {
+                var liveCoinPrice = await getCoinPrices(coin);
+        
+                var finalAmount = (parseFloat(amount/liveCoinPrice) + coinWalletBalance);
+        
+                await Models.sequelize.query(`UPDATE wallets SET ${coin}=:amount WHERE f_key = ${authData.id}`,
                 {
                     replacements: {
-                        USDT_balance:[authData.USDT_balance-amount]
+                        amount: finalAmount.toFixed(5)
                     },
                     type: Models.sequelize.QueryTypes.UPDATE
                 }).then(async()=>
-                {
-                    await Models.sequelize.query(`UPDATE wallets SET ${coin}=:amount WHERE f_key = ${authData.id}`,
-                    {
-                        replacements: {
-                            amount: [parseFloat(coinWalletBalance)+finalAmount.toFixed(5)]
-                        },
-                        type: Models.sequelize.QueryTypes.UPDATE
-                    })
-                    .then(async()=>
                         {
-                            res.status(200).json({"msg":finalAmount.toFixed(5)+"  "+coin+" purchased!"});
-                            res.end;
+                            await Models.sequelize.query(`UPDATE users SET USDT_balance=:USDT_balance WHERE id = ${authData.id}`,
+                            {
+                                replacements: {
+                                    USDT_balance:[authData.USDT_balance-amount]
+                                },
+                                type: Models.sequelize.QueryTypes.UPDATE
+                            }
+                            )
+                            .then(async()=>
+                                {
+                                    var orderData = 
+                                    {
+                                        f_key: authData.id,
+                                        serial: token,
+                                        amount: parseFloat(amount/liveCoinPrice).toFixed(5),
+                                        coin: coin
+                                    }
+    
+                                    await Orders.create(orderData)
+                                    .then(async()=>
+                                    {
+                                        res.status(200).json(
+                                        {
+                                            "msg":parseFloat(amount/liveCoinPrice).toFixed(5)+"  "+coin+" purchased! with OrderID: "+token
+                                        });
+                                        res.end;
+                                    })
+                                    .catch(async()=>
+                                    {
+                                        res.status(400).json({"msg":"Order cancelled!"});
+                                        res.end;
+                                    })
+                                }).catch(async()=>
+                                {
+                                    res.status(400).json({"msg":"Purchase failed"});
+                                    res.end;
+                                })
                         }).catch(async()=>
                         {
-                            res.status(400).json({"msg":"Purchase failed"});
+                            res.status(400).json({"msg":"Error occured"});
                             res.end;
                         })
-                }).catch(async()=>
-                {
-                    res.status(400).json({"msg":"Error occured"});
-                    res.end;
-                })
+            }
+        
+            else
+            {
+                res.status(400).json({"msg":"Insufficient balance!"});
+                res.end;
+            }
+        }
+        else
+        {
+            res.status(400).json({"msg":"Negative values are not allowed!"});
+            res.end;
+        }
     }
 
     else
     {
-        res.status(400).json({"msg":"Insufficient balance!"});
+        res.status(400).json({"msg":"Amount can't be empty!"});
         res.end;
     }
     

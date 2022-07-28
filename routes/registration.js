@@ -99,14 +99,14 @@ router.post('/', deauth, async(req, res, next)=>{
               .then((google_response) => {
                   if (google_response.success == true)
                   {
-                    res.status(200).
-                    render('signup',{title: title+" | "+"Signup",page:"login", success:'Registration done, check your Email for verification code!' });
+                    res.status(200).json({"msg":"Registration done, check your Email for verification code!"});
+                    res.end();
                   }
 
                   else
                   {
-                    res.status(403).
-                    render("signup",{title: title+" | "+"Signup",page:"login",error:"Captcha verification failed!"});
+                    res.status(401).json({"msg":"Captcha verification failed!"});
+                    res.end();
                   }
 
                 });
@@ -116,25 +116,29 @@ router.post('/', deauth, async(req, res, next)=>{
 
           else
           {
-             res.status(201).render("signup",{title: title+" | "+"Signup",page:"login",error:"Wrong Email format!"});
+            res.status(403).json({"msg":"Wrong Email format!"});
+            res.end();
           }
        }
 
        else
        {
-          res.status(201).render("signup",{title: title+" | "+"Signup",page:"login",error:"Passwords don't match!"});
+          res.status(401).json({"msg":"Passwords don't match!"});
+          res.end();
        }
     }
 
     else
     {
-        res.status(201).render("signup",{title: title+" | "+"Signup",page:"login",error:"User with this email already exists, try another one!"});
+      res.status(401).json({"msg":"User with this email already exists, try another one!"});
+      res.end();
     }
   }
 
   else
   {
-      res.status(201).render("signup",{title: title+" | "+"Signup",page:"login",error:"Fields can't be empty!"});
+      res.status(401).json({"msg":"Fields can't be empty!"});
+      res.end();
   }
   
 });

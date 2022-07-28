@@ -58,11 +58,11 @@ router.post('/', deauth, async(req, res, next)=>{
 
                         let hashedToken = bcrypt.hashSync(token,salt);
 
-                        final_token = jwt.sign({ hashedToken },process.env.SECRET,{expiresIn: '15m'});
+                        final_token = jwt.sign({ "tryToGuess":hashedToken },process.env.SECRET,{expiresIn: '15m'});
 
                         var from = 'Tech Team';
                         var subject = 'Reset Password';
-                        var html = 'Dear&nbsp;User<br/><p>We received your request to change the password!</p></br>Please visit this link: <a href="http://localhost:3000/update-pass">http://localhost:3000/update-pass</a> </br> Copy this token and paste there to reset your password: <p>'+final_token;
+                        var html = 'Dear&nbsp;User<br/><p>We received your request to change the password!</p></br>Please visit this <a href="http://localhost:3000/update-pass?token='+final_token+'">Link to reset your password.</a><p>';
                         
                         User.update(
                           { 
@@ -74,14 +74,14 @@ router.post('/', deauth, async(req, res, next)=>{
                           
                           send(from,email,subject,html);
 
-                          res.status(200).
-                          render("reset-pass",{page:"login",title: title+" | "+"Reset Password",success:"Email sent, please check your inbox for password reset link!"});
+                          res.status(200).json({"msg":"Email sent, please check your inbox for password reset link!"});
+                          res.end();
                     }
 
                     else
                     {
-                      res.status(403).
-                      render("reset-pass",{page:"login",title: title+" | "+"Reset Password",error:"Captcha verification failed!"});
+                      res.status(401).json({"msg":"Captcha verification failed!"});
+                      res.end();
                     }
 
                   });
@@ -90,20 +90,23 @@ router.post('/', deauth, async(req, res, next)=>{
 
           else
           {
-             res.status(401).render("reset-pass",{page:"login",title: title+" | "+"Reset Password","error":"Wrong Email format!"});
+             res.status(403).json({"msg":"Wrong Email format!"});
+             res.end();
           }
        
     }
 
     else
     {
-        res.status(404).render("reset-pass",{page:"login",title: title+" | "+"Reset Password","error":"User doesn't exist!"});
+        res.status(401).json({"msg":"User doesn't exist!"});
+        res.end();
     }
   }
 
   else
   {
-      res.status(201).render("reset-pass",{page:"login",title: title+" | "+"Reset Password","error":"Fields can't be empty!"});
+      res.status(401).json({"msg":"Fields can't be empty!"});
+      res.end();
   }
   
 });
