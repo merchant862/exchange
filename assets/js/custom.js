@@ -1,10 +1,15 @@
 (function ($) {
   'use strict';
   // Depth Chart
+
+  const params = new URLSearchParams(window.location.search)
+
+  var asset = params.get('asset')
+
   function DepthChart() {
     // Add data
     chart.dataSource.url =
-      'https://poloniex.com/public?command=returnOrderBook&currencyPair=BTC_ETH&depth=50';
+      'https://poloniex.com/public?command=returnOrderBook&currencyPair=USDT_'+asset+'&depth=1000';
     chart.dataSource.reloadFrequency = 30000;
     chart.dataSource.adapter.add('parsedData', function (data) {
       // Function to process (sort and calculate cummulative volume)
@@ -72,8 +77,8 @@
     // Create axes
     var xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     xAxis.dataFields.category = 'value';
-    //xAxis.renderer.grid.template.location = 0;
-    xAxis.renderer.minGridDistance = 50;
+    xAxis.renderer.grid.template.location = 0;
+    xAxis.renderer.minGridDistance = 100;
     xAxis.tooltip.disabled = true;
     xAxis.renderer.grid.template.disabled = true;
     xAxis.renderer.paddingBottom = 10;

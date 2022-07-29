@@ -169,23 +169,25 @@
                               <table class="table">
                                 <thead>
                                   <tr>
-                                    <th>No.</th>
                                     <th>Order ID.</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Amount</th>
+                                    <th>Asset</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <% for(i = 0; i < order_no.length; i++) { %>
-                                    <tr>    
-                                      <td><%= i+1 %></td>
-                                      <td><%= order_no[i] %></td>
-                                      <td><%= date[i] %></td>
-                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                      <td><%= amount[i] %> BTC</td>
-                                    </tr>
-                                <% } %>
+                                    <% if(coin[i] == "BTC") { %>
+                                      <tr>
+                                        <td><%= order_no[i] %></td>
+                                        <td><%= date[i] %></td>
+                                        <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                        <td><%= amount[i] %></td>
+                                        <td><%= coin[i] %></td>
+                                      </tr>
+                                    <% } %>
+                                  <% } %>
                                 </tbody>
                               </table>
                             </div>
@@ -226,22 +228,25 @@
                               <table class="table">
                                 <thead>
                                   <tr>
-                                    <th>No.</th>
+                                    <th>Order ID.</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Amount</th>
+                                    <th>Asset</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <% for(i = 0; i < order_no.length; i++) { %>
-                                    <tr>    
-                                      <td><%= i+1 %></td>
-                                      <td><%= order_no[i] %></td>
-                                      <td><%= date[i] %></td>
-                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                      <td><%= amount[i] %> BTC</td>
-                                    </tr>
-                                <% } %>
+                                    <% if(coin[i] == "ETH") { %>
+                                      <tr>
+                                        <td><%= order_no[i] %></td>
+                                        <td><%= date[i] %></td>
+                                        <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                        <td><%= amount[i] %></td>
+                                        <td><%= coin[i] %></td>
+                                      </tr>
+                                    <% } %>
+                                  <% } %>
                                 </tbody>
                               </table>
                             </div>
@@ -282,22 +287,25 @@
                               <table class="table">
                                 <thead>
                                   <tr>
-                                    <th>No.</th>
+                                    <th>Order ID.</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Amount</th>
+                                    <th>Asset</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <% for(i = 0; i < order_no.length; i++) { %>
-                                    <tr>    
-                                      <td><%= i+1 %></td>
-                                      <td><%= order_no[i] %></td>
-                                      <td><%= date[i] %></td>
-                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                      <td><%= amount[i] %> BTC</td>
-                                    </tr>
-                                <% } %>
+                                    <% if(coin[i] == "BNB") { %>
+                                      <tr>
+                                        <td><%= order_no[i] %></td>
+                                        <td><%= date[i] %></td>
+                                        <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                        <td><%= amount[i] %></td>
+                                        <td><%= coin[i] %></td>
+                                      </tr>
+                                    <% } %>
+                                  <% } %>
                                 </tbody>
                               </table>
                             </div>
@@ -338,22 +346,25 @@
                               <table class="table">
                                 <thead>
                                   <tr>
-                                    <th>No.</th>
+                                    <th>Order ID.</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Amount</th>
+                                    <th>Asset</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <% for(i = 0; i < order_no.length; i++) { %>
-                                    <tr>    
-                                      <td><%= i+1 %></td>
-                                      <td><%= order_no[i] %></td>
-                                      <td><%= date[i] %></td>
-                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                      <td><%= amount[i] %> BTC</td>
-                                    </tr>
-                                <% } %>
+                                    <% if(coin[i] == "SOL") { %>
+                                      <tr>
+                                        <td><%= order_no[i] %></td>
+                                        <td><%= date[i] %></td>
+                                        <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                        <td><%= amount[i] %></td>
+                                        <td><%= coin[i] %></td>
+                                      </tr>
+                                    <% } %>
+                                  <% } %>
                                 </tbody>
                               </table>
                             </div>
@@ -394,22 +405,27 @@
                               <table class="table">
                                 <thead>
                                   <tr>
-                                    <th>No.</th>
+                                    <th>Order ID.</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Amount</th>
+                                    <th>Asset</th>
                                   </tr>
                                 </thead>
                                 <tbody>
+                                
                                   <% for(i = 0; i < order_no.length; i++) { %>
-                                    <tr>    
-                                      <td><%= i+1 %></td>
-                                      <td><%= order_no[i] %></td>
-                                      <td><%= date[i] %></td>
-                                      <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                      <td><%= amount[i] %> BTC</td>
-                                    </tr>
-                                <% } %>
+                                    <% if(coin[i] == "DOT") { %>
+                                      <tr>    
+                                        <td><%= order_no[i] %></td>
+                                        <td><%= date[i] %></td>
+                                        <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
+                                        <td><%= amount[i] %></td>
+                                        <td><%= coin[i] %></td>
+                                      </tr>
+                                    <% } %>
+                                  <% } %>
+                                
                                 </tbody>
                               </table>
                             </div>

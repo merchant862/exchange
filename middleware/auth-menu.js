@@ -22,6 +22,7 @@ module.exports =  async function authMenu(
   _order_no,
   _amount,
   _coin,
+  _price,
   _date)
 
 {   
@@ -56,11 +57,11 @@ module.exports =  async function authMenu(
 
     var finalBalance =
 
-    (parseFloat((await getCoinPrices("BTC")).toFixed(1))*getCoinBalance.BTC.toFixed(1))+
-    (parseFloat((await getCoinPrices("ETH")).toFixed(1))*getCoinBalance.ETH.toFixed(1))+
-    (parseFloat((await getCoinPrices("BNB")).toFixed(1))*getCoinBalance.BNB.toFixed(1))+
-    (parseFloat((await getCoinPrices("SOL")).toFixed(1))*getCoinBalance.SOL.toFixed(1))+
-    (parseFloat((await getCoinPrices("DOT")).toFixed(1))*getCoinBalance.DOT.toFixed(1))
+        (parseFloat((await getCoinPrices("BTC")))*getCoinBalance.BTC)+
+        (parseFloat((await getCoinPrices("ETH")))*getCoinBalance.ETH)+
+        (parseFloat((await getCoinPrices("BNB")))*getCoinBalance.BNB)+
+        (parseFloat((await getCoinPrices("SOL")))*getCoinBalance.SOL)+
+        (parseFloat((await getCoinPrices("DOT")))*getCoinBalance.DOT)
 
     /* var finalBalance = 
     getCoinBalance.BTC+
@@ -88,10 +89,11 @@ module.exports =  async function authMenu(
       SOL:getCoinBalance.SOL,
       DOT:getCoinBalance.DOT,
       asset:_asset,
-      wallet_bal:finalBalance,
+      wallet_bal:finalBalance.toFixed(2),
       order_no:_order_no,
       amount:_amount,
       coin:_coin,
+      price:_price,
       date:_date
     });
 

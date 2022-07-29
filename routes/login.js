@@ -65,7 +65,7 @@ router.post('/', deauth, async(req, res, next)=>{
                         {sameSite:'lax',httpOnly: true}
                         )
                         .status(200);
-                        res.redirect("/home");
+                        res.json({"msg":"/home"});
                     }
 
                     else
@@ -108,7 +108,7 @@ router.post('/', deauth, async(req, res, next)=>{
 
   else
   {
-      res.status(201).json({"msg":"Fields can't be empty!"});
+      res.status(401).json({"msg":"Fields can't be empty!"});
       res.end();
   }
   

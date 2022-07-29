@@ -1,6 +1,6 @@
 $(document).ready(function()
       {
-            $("#loginForm").submit(function(event)
+            $("#kycForm").submit(function(event)
             {
                 // Stop form from submitting normally
                 event.preventDefault();
@@ -8,22 +8,22 @@ $(document).ready(function()
                 /* Serialize the submitted form control values to be sent to the web server with the request */
                 var formValues = $(this).serialize();
                 
-                
-
                 $.ajax(
                 {
-                  url: "/login/",
+                  url: "/kyc/",
                   type: "POST",
-                  data: formValues ,
+                  data: formValues,
                   success: function (data, textStatus, errorThrown) 
                   {
-                    window.location.assign(data.msg);
+                    console.log(data,textStatus);
+                    $("#kycRes").html('<div class="alert btn-success"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
+                    $("#kycRes").show().delay(5000).fadeOut();
                   },
                   error: function(jqXHR, textStatus, errorThrown) 
                   {
                     console.log(textStatus, jqXHR.responseJSON);
-                    $("#logRes").html('<div class="alert btn-danger"><strong>Error!</strong>&nbsp;'+jqXHR.responseJSON.msg+'</div>')
-                    $("#logRes").show().delay(5000).fadeOut();
+                    $("#kycRes").html('<div class="alert btn-danger"><strong>Error!</strong>&nbsp;'+jqXHR.responseJSON.msg+'</div>')
+                    $("#kycRes").show().delay(5000).fadeOut();
                   }
                 });
             });

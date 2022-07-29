@@ -1,12 +1,13 @@
 var express = require('express');
+const fileupload = require("express-fileupload");
 var router = express.Router();
 const fetch = require("isomorphic-fetch");
 const cookieParser = require("cookie-parser");
-const atob = require("atob");
 const multer  = require('multer');
 const auth = require('./../middleware/auth');
 const authMenu = require("../middleware/auth-menu");
 var send = require("../middleware/mail");
+var userData = require("../middleware/auth-data");
 const app = express();
 var dotenv = require("dotenv");
 const Models = require('./../models');
@@ -17,6 +18,7 @@ dotenv.config();
 var title = process.env.TITLE;
 
 app.use(cookieParser())
+app.use(fileupload());
 
 //--------------------------------
 const upload = multer(
@@ -31,21 +33,13 @@ const upload = multer(
 
 router.get('/', auth, function(req, res, next) 
 {
-    let jwt = req.cookies.authorization;
-    var base64Url = jwt.split('.')[1];
-    var d = JSON.parse(atob(base64Url))
-
-    authMenu(req,res,next,'kyc',title+" | "+"KYC");
-
+    authMenu(req,res,next,'kyc',"KYC","","","","","","","","");
 });
 
-router.post('/', auth, upload, function(req,res,next)
+router.post('/', auth, async(req,res,next) =>
 {
-    let jwt = req.cookies.authorization;
-    var base64Url = jwt.split('.')[1];
-    var d = JSON.parse(atob(base64Url))
     
-
+    var authData = await userData(req);
 
     const resKey = req.body['g-recaptcha-response']
     const secretKey = process.env.CAPTCHA_SECRET_KEY;
@@ -54,35 +48,49 @@ router.post('/', auth, upload, function(req,res,next)
     var from = 'Tech Team';
     var subject = 'KYC Documents';
     var html = 'Welcome&nbsp;<b>' 
-               + d.name + 
+               + authData.name + 
               '</b><br/><p>We have received your documents.</p></br><p>You will be nofified once we get you approved.</p>';
     
-    fetch(url, {method: 'post',})
-                .then((response) => response.json())
-                .then((google_response) => 
-                {
-                    if (google_response.success == true)
-                    {
-                        User.update(
+        fetch(url, {method: 'post',})
+        .then(async(response) => await response.json())
+        .then(async(google_response) => 
+        {
+            if (google_response.success == true)
+            {
+                upload(req,res,next)
+                 
+                    if(req.files != "")
+                    { 
+                        await User.update(
                             { 
-                               isKYCDone: 'PENDING', 
+                            isKYCDone: 'PENDING', 
                             },
                             {
-                               where: {email: d.email}    
+                            where: {email: authData.email}    
                             });
                         
-                        
-                        
-                        send(from,d.email,subject,html);
-
-                        authMenu(req,res,next,'kyc',title+" | "+"KYC","success","We have received your documents, you will get notified once we review them!");
-                    }
+                        send(from,authData.email,subject,html);
     
+                        res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
+                        res.end();
+                    }
+
                     else
                     {
-                        authMenu(req,res,next,'kyc',title+" | "+"KYC","error","Captcha verification failed!");
+                        res.status(401).json({"msg":"Both images are required!"})
+                        res.end();
                     }
-                });       
+                
+                
+            }
+
+            else
+            {
+                res.status(401).json({"msg":"Captcha verification failed!"})
+                res.end();
+            }
+        });
+    
 })
 
 

@@ -13,7 +13,7 @@ var authMenu = require("../middleware/auth-menu")
 
 var KYCChecker = require("../middleware/KYChecker");
 
-var getOrders = require("../middleware/orders");
+var getOrders = require("../middleware/ordersByCoin");
 
 const dotenv = require('dotenv');
 const { parse } = require('path');
@@ -55,7 +55,8 @@ router.get('/', auth, authMenu, KYCChecker , async function(req, res, next)
                     await getOrders(req,res,asset,"serial"),
                     await getOrders(req,res,asset,"amount"),
                     await getOrders(req,res,asset,"coin"),
-                    await getOrders(req,res,asset,"date"))
+                    await getOrders(req,res,asset,"price"),
+                    await getOrders(req,res,asset,"time"))
             }
             
             else
@@ -131,7 +132,7 @@ router.post('/:coin', auth, authMenu, KYCChecker , async function(req, res, next
 
     if(amount != "")
     {
-        if(!Math.sign(amount) === -1)
+        if(amount > 0)
         {
             if(amount <= authData.USDT_balance)
             {
@@ -162,7 +163,8 @@ router.post('/:coin', auth, authMenu, KYCChecker , async function(req, res, next
                                         f_key: authData.id,
                                         serial: token,
                                         amount: parseFloat(amount/liveCoinPrice).toFixed(5),
-                                        coin: coin
+                                        coin: coin,
+                                        price:liveCoinPrice
                                     }
     
                                     await Orders.create(orderData)

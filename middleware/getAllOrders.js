@@ -3,7 +3,7 @@ var userData = require('./auth-data');
 const Models = require('../models');
 const Orders = Models.orders;
 
-module.exports = async function getOrders(req,res,_asset,_param)
+module.exports = async function getOrders(req,res,_param)
 {
    var authData = await userData(req);
 
@@ -17,7 +17,6 @@ module.exports = async function getOrders(req,res,_asset,_param)
        where: 
        { 
          f_key: authData.id,
-         coin: _asset
        }   
     }).then((results) => 
     {

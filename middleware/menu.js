@@ -57,7 +57,7 @@ async function menu(req, res, next,_route,_title)
 
       var getCoinBalance = await getWalletBalance(req,res);
       
-      /* var getCoinPrices = async(_coin) =>
+      var getCoinPrices = async(_coin) =>
         {
                 var price = await fetch('https://api.binance.com/api/v3/ticker/price?symbol='+_coin+'USDT', 
                 {
@@ -66,7 +66,7 @@ async function menu(req, res, next,_route,_title)
                 .then(async(response) => response.json())
                 .then(async(data) => 
                 {
-                    return (parseFloat(data['price']));
+                  return ((parseFloat(data['price'])/100)*70);
                 })
     
                 return price;
@@ -75,18 +75,18 @@ async function menu(req, res, next,_route,_title)
     
         var finalBalance =
     
-        (parseFloat((await getCoinPrices("BTC")).toFixed(1))*getCoinBalance.BTC.toFixed(1))+
-        (parseFloat((await getCoinPrices("ETH")).toFixed(1))*getCoinBalance.ETH.toFixed(1))+
-        (parseFloat((await getCoinPrices("BNB")).toFixed(1))*getCoinBalance.BNB.toFixed(1))+
-        (parseFloat((await getCoinPrices("SOL")).toFixed(1))*getCoinBalance.SOL.toFixed(1))+
-        (parseFloat((await getCoinPrices("DOT")).toFixed(1))*getCoinBalance.DOT.toFixed(1)) */
+        (parseFloat((await getCoinPrices("BTC")))*getCoinBalance.BTC)+
+        (parseFloat((await getCoinPrices("ETH")))*getCoinBalance.ETH)+
+        (parseFloat((await getCoinPrices("BNB")))*getCoinBalance.BNB)+
+        (parseFloat((await getCoinPrices("SOL")))*getCoinBalance.SOL)+
+        (parseFloat((await getCoinPrices("DOT")))*getCoinBalance.DOT)
     
-        var finalBalance = 
+        /* var finalBalance = 
         getCoinBalance.BTC+
         getCoinBalance.ETH+
         getCoinBalance.BNB+
         getCoinBalance.SOL+
-        getCoinBalance.DOT
+        getCoinBalance.DOT */
 
     res.render(
       _route,
@@ -96,7 +96,7 @@ async function menu(req, res, next,_route,_title)
         email: d.email,
         status:"loggedIn",
         balance:balance,
-        wallet_bal:finalBalance
+        wallet_bal:finalBalance.toFixed(2)
       });
     
     next();

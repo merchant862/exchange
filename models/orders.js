@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     f_key: DataTypes.INTEGER,
     serial: DataTypes.STRING,
     amount: DataTypes.FLOAT,
-    coin: DataTypes.STRING
+    coin: DataTypes.STRING,
+    price: DataTypes.FLOAT
   }, {
     sequelize,
     modelName: 'orders',

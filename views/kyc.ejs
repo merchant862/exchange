@@ -27,7 +27,10 @@
         </form>
       <% } %>
       <% if (state == "NO") { %>
-        <form action="/kyc" method="post" enctype="multipart/form-data">
+        <div id="kycRes" style="display: all;">
+
+        </div>
+        <form id="kycForm" method="post" enctype="multipart/form-data">
           <span>KYC</span>
           <div class="form-group">
             <h2>Status: Not Applied</h2>
@@ -52,6 +55,8 @@
 <script src="https://www.google.com/recaptcha/api.js"></script>
   
   <%- include('./partials/scripts.ejs') %>
+
+  <script src="assets/js/ajax/kyc.js"></script>
   
 </body>
 

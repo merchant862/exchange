@@ -5,14 +5,14 @@
   <div class="container-fluid mtb15 no-fluid">
     <div class="row sm-gutters">
       <div class="col-md-3">
-        <div class="market-pairs h-25">
+        <div class="market-pairs" style="height:550px;">
           <!-- <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text" id="inputGroup-sizing-sm"><i class="icon ion-md-search"></i></span>
             </div>
             <input type="text" class="form-control" placeholder="Search" aria-describedby="inputGroup-sizing-sm">
           </div> -->
-          <ul class="nav nav-pills" role="tablist">
+          <ul class="nav nav-pills justify-content-center" role="tablist">
             <li class="nav-item">
               <a class="nav-link active" href="/exchange?asset=BTC" role="tab" aria-selected="true"><img src="assets/img/icon/18.png" width="25" height="25"></a>
             </li>
@@ -41,6 +41,17 @@
                     <th>Pairs</th>
                     <th>Last Price</th>
                     <th>Change</th>
+                  </tr>
+                  <tr>
+                      <div id="note" class="m-1 my-2 p-3">
+                         <p class="text-danger"><b>Note:</b><br/>
+                          
+                            Prices shown on this exchange are 30% off. 
+                            Please do not mix these prices with real ones.
+                            These prices are only valid till the timer ends. 
+                          
+                        </p>
+                      </div>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,11 +87,12 @@
                   </tr>
                 </tbody>
               </table>
+              <!-- s -->
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-9">
         <div class="main-chart mb15">
           <!-- TradingView Widget BEGIN -->
           <div class="tradingview-widget-container">
@@ -112,17 +124,32 @@
           </div>
           <!-- TradingView Widget END -->
         </div>
-        <div class="market-trade">
+      </div>
+      <div class="col-md-6">
+        <div class="market-trade" style="height:550px;">
           <ul class="nav nav-pills" role="tablist">
             <li class="nav-item">
               <a class="nav-link active" data-toggle="pill" href="" role="tab"
                 aria-selected="true">Market Order</a>
+                <ul class="nav nav-pills" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#market-trade-buy" role="tab" aria-selected="true">
+                      BUY
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#market-trade-sell" role="tab" aria-selected="false">
+                      SELL
+                    </a>
+                  </li>
+                </ul>
             </li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane fade show active" id="pills-trade-limit" role="tabpanel">
               <div class="d-flex justify-content-between">
-                <div class="market-trade-buy">
+
+                <div class="market-trade-buy tab-pane fade show active align-items-center" id="market-trade-buy" role="tabpanel">
                   <div id="buyRes" style="display: all;">
 
                   </div>                 
@@ -152,30 +179,79 @@
                   <button class="btn buy">Buy</button>
                  </form>
                 </div>
-                <div class="market-trade-sell" style="opacity: 35%;">
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Price" disabled>
-                    <div class="input-group-append">
-                      <span class="input-group-text"><%= asset%></span>
+                <div class="market-trade-sell tab-pane fade align-items-center" id="market-trade-sell" role="tabpanel">
+                  <div style="opacity: 35%;">
+                    <div class="input-group">
+                      <input type="number" class="form-control" placeholder="Price" disabled>
+                      <div class="input-group-append">
+                        <span class="input-group-text"><%= asset%></span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Amount" disabled>
-                    <div class="input-group-append">
-                      <span class="input-group-text">USDT</span>
+                    <div class="input-group">
+                      <input type="number" class="form-control" placeholder="Amount" disabled>
+                      <div class="input-group-append">
+                        <span class="input-group-text">USDT</span>
+                      </div>
                     </div>
+                    <ul class="market-trade-list" style="pointer-events:none ;">
+                      <li><a href="#!">25%</a></li>
+                      <li><a href="#!">50%</a></li>
+                      <li><a href="#!">75%</a></li>
+                      <li><a href="#!">100%</a></li>
+                    </ul>
+                    <p>Available: <span>0 BTC = 0 USD</span></p>
+                    <p>Volume: <span>0 BTC = 0 USD</span></p>
+                    <p>Margin: <span>0 BTC = 0 USD</span></p>
+                    <p>Fee: <span>0 BTC = 0 USD</span></p>
+                    <button class="btn sell" disabled>Sell</button>
                   </div>
-                  <ul class="market-trade-list" style="pointer-events:none ;">
-                    <li><a href="#!">25%</a></li>
-                    <li><a href="#!">50%</a></li>
-                    <li><a href="#!">75%</a></li>
-                    <li><a href="#!">100%</a></li>
-                  </ul>
-                  <p>Available: <span>0 BTC = 0 USD</span></p>
-                  <p>Volume: <span>0 BTC = 0 USD</span></p>
-                  <p>Margin: <span>0 BTC = 0 USD</span></p>
-                  <p>Fee: <span>0 BTC = 0 USD</span></p>
-                  <button class="btn sell" disabled>Sell</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="market-history" style="height:550px;">
+          <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="pill" href="#recent-trades" role="tab" aria-selected="true">Recent
+                Trades</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="pill" href="#market-depth" role="tab" aria-selected="false">Market
+                Depth</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="recent-trades" role="tabpanel">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Price($)</th>
+                    <th>Time</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(i = 0; i < order_no.length; i++) { %>
+                    <tr>  
+                      <% if(price[i] > price[i-1]) { %>
+                        <td class="green"><%= price[i] %></td>
+                      <% } else { %>
+                        <td class="red"><%= price[i] %></td>
+                      <% } %>
+                      <td><%= date[i] %></td>
+                      <td><%= amount[i]%>&nbsp;<%= asset %></td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade" id="market-depth" role="tabpanel">
+              <div class="depth-chart-container">
+                <div class="depth-chart-inner">
+                  <div id="darkDepthChart"></div>
                 </div>
               </div>
             </div>
@@ -295,111 +371,60 @@
             </tbody>
           </table>
         </div>
-        <div class="market-history">
+      </div>
+      <div class="col-md-12">
+        <div class="market-history market-order mt15">
           <ul class="nav nav-pills" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" data-toggle="pill" href="#recent-trades" role="tab" aria-selected="true">Recent
-                Trades</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="pill" href="#market-depth" role="tab" aria-selected="false">Market
-                Depth</a>
+              <a class="nav-link" data-toggle="pill" href="#order-history" role="tab" aria-selected="true">
+                Order history
+              </a>
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane fade show active" id="recent-trades" role="tabpanel">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Price(BTC)</th>
-                    <th>Amount(ETH)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="red">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="red">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="red">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="red">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="red">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="green">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                  <tr>
-                    <td>13:03:53</td>
-                    <td class="red">0.020191</td>
-                    <td>0.2155045</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="tab-pane fade" id="market-depth" role="tabpanel">
-              <div class="depth-chart-container">
-                <div class="depth-chart-inner">
-                  <div id="darkDepthChart"></div>
-                </div>
-              </div>
+            <div class="tab-pane fade active show" id="order-history">
+                
+                <ul class="d-flex justify-content-between market-order-item">
+                  <!-- <li><b>S. No.</b></li> -->
+                  <li><b>Order ID.</b></li>
+                  <li><b>Time</b></li>
+                  <li><b>Pair</b></li>
+                  <li><b>Buy/Sell</b></li>
+                  <li><b>Price</b></li>
+                  <li><b>Amount</b></li>
+                  <!-- <li><b>Executed</b></li> -->
+                </ul>
+                    <% if(typeof order_no != undefined &&
+                    typeof amount != undefined &&
+                    typeof coin != undefined &&
+                    typeof date != undefined &&
+                    order_no != "" &&
+                    amount != "" &&
+                    coin != "" &&
+                    amount != "") { %>
+                      <% for(i = 0; i < order_no.length; i++) { %>
+                          <ul class="d-flex justify-content-between market-order-item">    
+                            <!-- <li><%= i+1 %></li> -->
+                            <li><%= order_no[i] %></li>
+                            <li><%= date[i] %></li>
+                            <li><%= coin[i]%>/USDT</li>
+                            <li class="text-success"><b>BUY</b></li>
+                            <li><%= price[i] %></li>
+                            <li><%= amount[i]%> <%= asset%></li>
+                            <!-- <li>100%</li> -->
+                          </ul>
+                      <% } %>
+                <% } else { %>
+                      <span class="no-data">
+                        <i class="icon ion-md-document"></i>
+                        No data
+                      </span>
+                <% } %>
             </div>
           </div>
         </div>
       </div>
+      
       <!-- <div class="col-md-3">
         <div class="market-news mt15">
           <h2 class="heading">Market News</h2>
@@ -437,56 +462,6 @@
           </ul>
         </div>
       </div> -->
-      <div class="col-md-12">
-        <div class="market-history market-order mt15">
-          <ul class="nav nav-pills" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="pill" href="#order-history" role="tab" aria-selected="true">
-                Order history
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane fade active show" id="order-history">
-                
-                <ul class="d-flex justify-content-between market-order-item">
-                  <li><b>S. No.</b></li>
-                  <li><b>Order ID.</b></li>
-                  <li><b>Time</b></li>
-                  <li><b>Pair</b></li>
-                  <li><b>Buy/Sell</b></li>
-                  <li><b>Amount</b></li>
-                  <li><b>Executed</b></li>
-                </ul>
-                    <% if(typeof order_no != undefined &&
-                    typeof amount != undefined &&
-                    typeof coin != undefined &&
-                    typeof date != undefined &&
-                    order_no != "" &&
-                    amount != "" &&
-                    coin != "" &&
-                    amount != "") { %>
-                      <% for(i = 0; i < order_no.length; i++) { %>
-                          <ul class="d-flex justify-content-between market-order-item">    
-                            <li><%= i+1 %></li>
-                            <li><%= order_no[i] %></li>
-                            <li><%= date[i] %></li>
-                            <li><%= coin[i]%>/USDT</li>
-                            <li class="text-success"><b>BUY</b></li>
-                            <li><%= amount[i]%> <%= asset%></li>
-                            <li>100%</li>
-                          </ul>
-                      <% } %>
-                <% } else { %>
-                      <span class="no-data">
-                        <i class="icon ion-md-document"></i>
-                        No data
-                      </span>
-                <% } %>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   

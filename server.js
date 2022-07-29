@@ -6,6 +6,16 @@ var helmet = require('helmet');
 var bodyParser = require('body-parser');
 var cors = require('cors')
 
+//-------------HTTPS----------------------
+const fs = require('fs');
+
+const https = require('https');
+
+const key = fs.readFileSync('./ssl/key.pem');
+
+const cert = fs.readFileSync('./ssl/cert.pem');
+//-------------HTTPS----------------------
+
 var indexRouter = require('./routes/index');
 var signinRouter = require('./routes/login');
 var signupRouter = require('./routes/registration');
@@ -28,6 +38,8 @@ var menu = require("./middleware/menu");
 const { NONE } = require('sequelize');
 
 var app = express();
+
+const server = https.createServer({key: key, cert: cert }, app);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -129,9 +141,14 @@ app.use((req, res, next) => {
   menu(req,res,next,"404","Not Found (404)");;
 })
 
-app.listen(process.env.PORT, () =>
+/* app.listen(process.env.PORT, () =>
 {
   console.log(`App running on : http://localhost:${process.env.PORT}`)
+}); */
+
+server.listen(process.env.PORT, () => 
+{ 
+  console.log(`App running on : https://localhost:${process.env.PORT}`) 
 });
 
 module.exports = app;

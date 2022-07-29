@@ -87,7 +87,7 @@ router.post('/', deauth, async function(req, res, next)
                                             where: {email: user.email}    
                                         });
                                 
-                                        res.status(200).json({"msg":"Password updated!"});
+                                        res.status(200).json({"msg":"Password updated, redirecting to login!"});
                                         res.end();
                                     }
 

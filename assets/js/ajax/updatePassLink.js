@@ -21,7 +21,10 @@ $(document).ready(function()
                   {
                     console.log(data,textStatus,token);
                     $("#updateRes").html('<div class="alert btn-success"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
-                    $("#updateRes").show().delay(5000).fadeOut();
+                    $("#updateRes").show().delay(5000).fadeOut(5000,function()
+                    {
+                      window.location.assign("/login")
+                    });
                   },
                   error: function(jqXHR, textStatus, errorThrown) 
                   {
