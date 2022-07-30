@@ -230,7 +230,7 @@
                   <tr>
                     <th>Price($)</th>
                     <th>Time</th>
-                    <th>Amount</th>
+                    <th>Amount&nbsp;<%= asset %></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -242,7 +242,7 @@
                         <td class="red"><%= price[i] %></td>
                       <% } %>
                       <td><%= date[i] %></td>
-                      <td><%= amount[i]%>&nbsp;<%= asset %></td>
+                      <td><%= amount[i]%></td>
                     </tr>
                   <% } %>
                 </tbody>

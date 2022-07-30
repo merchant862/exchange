@@ -141,14 +141,14 @@ app.use((req, res, next) => {
   menu(req,res,next,"404","Not Found (404)");;
 })
 
-/* app.listen(process.env.PORT, () =>
+app.listen(process.env.PORT, () =>
 {
   console.log(`App running on : http://localhost:${process.env.PORT}`)
-}); */
+});
 
-server.listen(process.env.PORT, () => 
+/* server.listen(process.env.PORT, () => 
 { 
   console.log(`App running on : https://localhost:${process.env.PORT}`) 
-});
+}); */
 
 module.exports = app;

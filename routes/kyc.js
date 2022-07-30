@@ -1,9 +1,9 @@
 var express = require('express');
-const fileupload = require("express-fileupload");
 var router = express.Router();
 const fetch = require("isomorphic-fetch");
 const cookieParser = require("cookie-parser");
-const multer  = require('multer');
+const bodyParser = require('body-parser');
+const multer = require('multer');
 const auth = require('./../middleware/auth');
 const authMenu = require("../middleware/auth-menu");
 var send = require("../middleware/mail");
@@ -15,28 +15,53 @@ const User = Models.User;
 
 dotenv.config();
 
-var title = process.env.TITLE;
-
 app.use(cookieParser())
-app.use(fileupload());
 
-//--------------------------------
-const upload = multer(
-{
-    limits : {fileSize : 10000000}
-}).fields(
-    [
-    { name: "id", maxCount: 1 },
-    { name: "face", maxCount: 1 },
-]);
-//--------------------------------
+app.use(bodyParser.urlencoded({ extended: false }));
 
-router.get('/', auth, function(req, res, next) 
+var storage = multer.memoryStorage({})
+    
+var upload = multer(
+    { 
+        storage: storage,
+        limits:(req,file,cb)=>
+        {
+            if(file.fileSize > 5242880)
+            {
+                cb(null, false);
+                return cb(new Error('Files other than .png, .jpg and .jpeg is not allowed!'));
+            }
+
+            else
+            {
+                cb(null,true);
+            }
+        },
+        fileFilter: (req, file, cb) => 
+        {
+            if (
+                file.mimetype == "image/png" || 
+                file.mimetype == "image/jpg" || 
+                file.mimetype == "image/jpeg"
+                ) 
+            {
+              cb(null, true);
+            } 
+            
+            else 
+            {
+              cb(null, false);
+              return cb(new Error('Files other than .png, .jpg and .jpeg is not allowed!'));
+            }
+        }
+    })
+
+router.get('/', auth, async(req, res, next) =>
 {
     authMenu(req,res,next,'kyc',"KYC","","","","","","","","");
 });
 
-router.post('/', auth, async(req,res,next) =>
+router.post('/', auth, upload.array("docs", 2), async(req,res,next) =>
 {
     
     var authData = await userData(req);
@@ -48,49 +73,69 @@ router.post('/', auth, async(req,res,next) =>
     var from = 'Tech Team';
     var subject = 'KYC Documents';
     var html = 'Welcome&nbsp;<b>' 
-               + authData.name + 
+               + authData.full_name + 
               '</b><br/><p>We have received your documents.</p></br><p>You will be nofified once we get you approved.</p>';
-    
-        fetch(url, {method: 'post',})
-        .then(async(response) => await response.json())
-        .then(async(google_response) => 
+        
+        try
         {
-            if (google_response.success == true)
+            if(req.files == "")
             {
-                upload(req,res,next)
-                 
-                    if(req.files != "")
-                    { 
-                        await User.update(
-                            { 
-                            isKYCDone: 'PENDING', 
-                            },
-                            {
-                            where: {email: authData.email}    
-                            });
-                        
-                        send(from,authData.email,subject,html);
-    
-                        res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
-                        res.end();
-                    }
+                throw new Error("Please choose files!");
+            }
 
-                    else
-                    {
-                        res.status(401).json({"msg":"Both images are required!"})
-                        res.end();
-                    }
-                
-                
+            else if(req.files < 2)
+            {
+                throw new Error("Both documents are required!");
+            }
+
+            else if(req.files > 2)
+            {
+                throw new Error("Something went wrong!");
             }
 
             else
             {
-                res.status(401).json({"msg":"Captcha verification failed!"})
-                res.end();
-            }
-        });
+                await fetch(url, {method: 'post',})
+                .then(async(response) => await response.json())
+                .then(async(google_response) => 
+                {
+                    if (google_response.success == true)
+                    {
+                        await User.update(
+                            { 
+                                isKYCDone: 'PENDING', 
+                            },
+                            {
+                                where: {email: authData.email}    
+                            })
+                            .then(async() => 
+                            { 
+                                send(from,authData.email,subject,html);
     
+                                res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
+                                res.end();
+                                next();
+                            })
+                            .catch(async()=>
+                            {
+                                throw new Error("Something went wrong!");
+                            });
+                    }
+
+                    else
+                    {
+                        throw new Error("Captcha verification failed!");
+                    }
+                            
+                });
+            }
+        }
+        catch(e)
+        {
+            console.log(req.files)
+            res.status(401).json({"msg":e.message})
+            res.end();
+        }
 })
 
 
