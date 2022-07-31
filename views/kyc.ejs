@@ -27,6 +27,11 @@
         </form>
       <% } %>
       <% if (state == "NO") { %>
+        <% if(KYCtries >= 3) { %>
+          <form>
+            <span>Locked for 3 Hours</span>
+          </form>
+        <% } else {%>
         <div id="kycRes" style="display: all;">
 
         </div>
@@ -38,17 +43,15 @@
             <input 
             type="file" 
             class="form-control" 
-            name="docs"
+            name="docs[]"
             id="docs" 
             accept="image/jpeg, image/jpg, image/png" 
             multiple 
             required>
           </div>
-          <div class="col-12 mt-3">
-            <div class="g-recaptcha" data-sitekey="6LcWUO4gAAAAAJkJU1LnabFUbDbn-nN5-cOHUd1w"></div>
-          </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+        <% } %>
       <% } %>
       <% if(state == "YES") { %>
         <script type="text/javascript">

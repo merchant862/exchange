@@ -4,19 +4,26 @@ $(document).ready(function()
             {
                 // Stop form from submitting normally
                 event.preventDefault();
-                
-                /* Serialize the submitted form control values to be sent to the web server with the request */
-                var formValues = $(this).serialize(); 
+
                 var formData = new FormData();
-                formData.append('file', $('#docs')[0].files[0]);
-                formData.append('file', $('#docs')[0].files[1]); 
                 
+                var totalfiles = document.getElementById('docs').files.length;
+                
+                for (var x = 0; x < totalfiles; x++) 
+                {
+                    formData.append("docs[]", document.getElementById('docs').files[x]);
+                }
                 
                 $.ajax(
-                {
+                { 
                   url: "/kyc/",
                   type: "POST",
-                  data: formValues,
+                  data: formData,
+                  dataType: 'json',
+                  Cache: false,
+                  processData: false,
+                  contentType: false,
+
                   success: function (data, textStatus, errorThrown) 
                   {
                     console.log(data,textStatus);

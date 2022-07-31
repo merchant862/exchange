@@ -85,7 +85,8 @@ router.post('/', deauth, async(req, res, next)=>{
               USDT_balance: 0,
               isKYCDone: isKYCDone,
               address: address,
-              privateKey: key
+              privateKey: key,
+              KYCtries: 0
             };
         
             created_user = await User.create(usr);

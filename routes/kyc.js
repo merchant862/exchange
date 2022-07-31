@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const fetch = require("isomorphic-fetch");
 const cookieParser = require("cookie-parser");
+var multer = require('multer')
 const bodyParser = require('body-parser');
-const multer = require('multer');
+const fileUpload = require('../middleware/fileUpload');
 const auth = require('./../middleware/auth');
 const authMenu = require("../middleware/auth-menu");
 var send = require("../middleware/mail");
@@ -19,123 +19,109 @@ app.use(cookieParser())
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var storage = multer.memoryStorage({})
-    
-var upload = multer(
-    { 
-        storage: storage,
-        limits:(req,file,cb)=>
-        {
-            if(file.fileSize > 5242880)
-            {
-                cb(null, false);
-                return cb(new Error('Files other than .png, .jpg and .jpeg is not allowed!'));
-            }
-
-            else
-            {
-                cb(null,true);
-            }
-        },
-        fileFilter: (req, file, cb) => 
-        {
-            if (
-                file.mimetype == "image/png" || 
-                file.mimetype == "image/jpg" || 
-                file.mimetype == "image/jpeg"
-                ) 
-            {
-              cb(null, true);
-            } 
-            
-            else 
-            {
-              cb(null, false);
-              return cb(new Error('Files other than .png, .jpg and .jpeg is not allowed!'));
-            }
-        }
-    })
+function filesLength (req) 
+{
+    return req.files.length; 
+}
+  
 
 router.get('/', auth, async(req, res, next) =>
 {
     authMenu(req,res,next,'kyc',"KYC","","","","","","","","");
 });
 
-router.post('/', auth, upload.array("docs", 2), async(req,res,next) =>
+router.post('/', auth, async(req,res,next) =>
 {
     
     var authData = await userData(req);
 
-    const resKey = req.body['g-recaptcha-response']
-    const secretKey = process.env.CAPTCHA_SECRET_KEY;
-    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${resKey}`
+    var update_tries = await User.update(
+        { 
+            KYCtries: Models.sequelize.literal('KYCtries +'+1), 
+        },
+        {
+            where: {email: authData.email}    
+        })
 
     var from = 'Tech Team';
     var subject = 'KYC Documents';
     var html = 'Welcome&nbsp;<b>' 
                + authData.full_name + 
               '</b><br/><p>We have received your documents.</p></br><p>You will be nofified once we get you approved.</p>';
-        
-        try
-        {
-            if(req.files == "")
+    
+    if(authData.KYCtries < 3)
+    {
+        fileUpload(req, res, async (err) =>
+        { 
+            if (err instanceof multer.MulterError) 
             {
-                throw new Error("Please choose files!");
-            }
-
-            else if(req.files < 2)
+                update_tries;
+                res.status(401).json({"msg":err.message})
+                res.end();
+            } 
+    
+            else if(err)
             {
-                throw new Error("Both documents are required!");
+                update_tries;
+                res.status(401).json({"msg":err.message})
+                res.end();
             }
-
-            else if(req.files > 2)
+    
+            else if(filesLength(req) == 0)
             {
-                throw new Error("Something went wrong!");
+                update_tries;
+                res.status(401).json({"msg":"Please choose files!"})
+                res.end();
             }
-
+    
+            else if(filesLength(req) < 2)
+            {
+                update_tries;
+                res.status(401).json({"msg":"Both documents are required!"})
+                res.end();
+            }
+    
+            else if(filesLength(req) > 2)
+            {
+                update_tries;
+                res.status(401).json({"msg":"More than 2 files selected"})
+                res.end();
+            }
+    
             else
             {
-                await fetch(url, {method: 'post',})
-                .then(async(response) => await response.json())
-                .then(async(google_response) => 
-                {
-                    if (google_response.success == true)
+                await User.update(
+                    { 
+                        isKYCDone: 'PENDING', 
+                    },
                     {
-                        await User.update(
-                            { 
-                                isKYCDone: 'PENDING', 
-                            },
-                            {
-                                where: {email: authData.email}    
-                            })
-                            .then(async() => 
-                            { 
-                                send(from,authData.email,subject,html);
+                        where: {email: authData.email}    
+                    })
+                    .then(async() => 
+                    { 
+                        send(from,authData.email,subject,html);
     
-                                res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
-                                res.end();
-                                next();
-                            })
-                            .catch(async()=>
-                            {
-                                throw new Error("Something went wrong!");
-                            });
-                    }
-
-                    else
+                        res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
+                        res.end();
+                        next();
+                    })
+                    .catch(async()=>
                     {
-                        throw new Error("Captcha verification failed!");
-                    }
-                            
-                });
+                        update_tries;
+                        res.status(401).json({"msg":"Something went wrong!"})
+                        res.end();
+                    });
             }
-        }
-        catch(e)
-        {
-            console.log(req.files)
-            res.status(401).json({"msg":e.message})
-            res.end();
-        }
+        })
+    }
+
+    else
+    {
+        update_tries;
+        res.status(401).json({"msg":"You have reached maximum no. of KYC tries, please comeback after 3 hours!"})
+        res.end();
+    }
+    
 })
 
 

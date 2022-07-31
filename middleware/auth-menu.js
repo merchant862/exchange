@@ -94,7 +94,8 @@ module.exports =  async function authMenu(
       amount:_amount,
       coin:_coin,
       price:_price,
-      date:_date
+      date:_date,
+      KYCtries:data.KYCtries
     });
 
     next();

@@ -36,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     USDT_balance: DataTypes.FLOAT,
     address: DataTypes.TEXT,
     privateKey: DataTypes.TEXT,
-    isKYCDone: DataTypes.STRING
+    isKYCDone: DataTypes.STRING,
+    KYCtries: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User',
