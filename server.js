@@ -28,14 +28,20 @@ var resetPassRouter = require('./routes/reset-pass');
 var updatePassRouter = require('./routes/update-pass')
 var verifyUserRouter = require('./routes/verify-user');
 var logoutRouter = require('./routes/logout');
-var kycRouter = require("./routes/kyc");
+var kycLevel1Router = require("./routes/kycLevel1");
+var kycLevel2Router = require("./routes/kycLevel2");
 var depositRouter = require("./routes/deposit");
 var walletRouter = require("./routes/wallet");
 var BinanceAPI = require("./routes/BinanceAPI");
 
-var menu = require("./middleware/menu");
+/*Update User KYC Data*/
 
-const { NONE } = require('sequelize');
+var userKYCUpdateLevel1 = require("./async_funcs/updateUserKYCLevel1");
+var userKYCUpdateLevel2 = require("./async_funcs/updateUserKYCLevel2");
+
+/*Update User KYC Data*/
+
+var menu = require("./middleware/menu");
 
 var app = express();
 
@@ -45,7 +51,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 var corsOptions = {
-  origin: 'http://localhost:3000/',
+  origin: ['http://localhost:3000/','https://poloniex.com/'],
   optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions));
@@ -132,7 +138,8 @@ app.use('/indices', indicesRouter);
 app.use('/heatmap', heatmapRouter);
 app.use('/verify', verifyUserRouter);
 app.use('/logout', logoutRouter);
-app.use('/kyc', kycRouter);
+app.use('/kycLevel1', kycLevel1Router);
+app.use('/kycLevel2', kycLevel2Router);
 app.use('/deposit', depositRouter);
 app.use('/wallet', walletRouter);
 app.use('/price', BinanceAPI);
@@ -140,6 +147,19 @@ app.use('/price', BinanceAPI);
 app.use((req, res, next) => {
   menu(req,res,next,"404","Not Found (404)");;
 })
+
+var UpdateUserKYCLevel1Data = async()=> 
+    {
+      await userKYCUpdateLevel1();
+    };
+
+var UpdateUserKYCLevel2Data = async()=> 
+    {
+      await userKYCUpdateLevel2();
+    };
+    
+    setInterval(UpdateUserKYCLevel1Data,3600000);
+    setInterval(UpdateUserKYCLevel2Data,3600000);
 
 app.listen(process.env.PORT, () =>
 {

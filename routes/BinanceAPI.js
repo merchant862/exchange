@@ -5,7 +5,8 @@ var fetch = require("isomorphic-fetch")
 
 var auth = require('../middleware/auth')
 
-var KYCChecker = require("../middleware/KYChecker");
+var KYCCheckerLevel1 = require("../middleware/KYCheckerLevel1");
+var KYCCheckerLevel2 = require("../middleware/KYCheckerLevel2");
 
 const dotenv = require('dotenv');
 
@@ -15,7 +16,7 @@ var app = express();
 
 app.use(cookieParser())
 
-router.get('/', auth, KYCChecker, async function(req,res,next)
+router.get('/', auth, KYCCheckerLevel1, KYCCheckerLevel2, async function(req,res,next)
 {
     var asset = req.query.asset;
 

@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
           {
             foreignKey:'id'
           });
+      User.hasMany(models.user_kyc,
+        {
+          foreignKey:'id'
+        });
     }
   }
   User.init({
@@ -36,8 +40,6 @@ module.exports = (sequelize, DataTypes) => {
     USDT_balance: DataTypes.FLOAT,
     address: DataTypes.TEXT,
     privateKey: DataTypes.TEXT,
-    isKYCDone: DataTypes.STRING,
-    KYCtries: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User',

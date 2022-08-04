@@ -4,14 +4,17 @@ const cookieParser = require("cookie-parser");
 var multer = require('multer')
 const bodyParser = require('body-parser');
 const fileUpload = require('../middleware/fileUpload');
-const auth = require('./../middleware/auth');
+const auth = require('../middleware/auth');
+var KYCData = require('../middleware/KYCdata');
 const authMenu = require("../middleware/auth-menu");
 var send = require("../middleware/mail");
 var userData = require("../middleware/auth-data");
+var KYCCheckerLevel1 = require("../middleware/KYCheckerLevel1");
 const app = express();
 var dotenv = require("dotenv");
-const Models = require('./../models');
+const Models = require('../models');
 const User = Models.User;
+const userKYC = Models.user_kyc
 
 dotenv.config();
 
@@ -25,22 +28,22 @@ function filesLength (req)
 }
   
 
-router.get('/', auth, async(req, res, next) =>
+router.get('/', auth, KYCCheckerLevel1, async(req, res, next) =>
 {
-    authMenu(req,res,next,'kyc',"KYC","","","","","","","","");
+    authMenu(req,res,next,'kyc-level-2',"KYC","","","","","","","","");
 });
 
-router.post('/', auth, async(req,res,next) =>
+router.post('/', auth, KYCCheckerLevel1, async(req,res,next) =>
 {
-    
     var authData = await userData(req);
+    var KYC = await KYCData(req);
 
-    var update_tries = await User.update(
+    var update_tries = await userKYC.update(
         { 
-            KYCtries: Models.sequelize.literal('KYCtries +'+1), 
+            no_of_tries: Models.sequelize.literal('no_of_tries +'+1), 
         },
         {
-            where: {email: authData.email}    
+            where: {f_key: KYC.f_key}    
         })
 
     var from = 'Tech Team';
@@ -49,7 +52,7 @@ router.post('/', auth, async(req,res,next) =>
                + authData.full_name + 
               '</b><br/><p>We have received your documents.</p></br><p>You will be nofified once we get you approved.</p>';
     
-    if(authData.KYCtries < 3)
+    if(KYC.no_of_tries < 3)
     {
         fileUpload(req, res, async (err) =>
         { 
@@ -74,28 +77,30 @@ router.post('/', auth, async(req,res,next) =>
                 res.end();
             }
     
-            else if(filesLength(req) < 2)
+            else if(filesLength(req) < 1)
             {
                 update_tries;
                 res.status(401).json({"msg":"Both documents are required!"})
                 res.end();
             }
     
-            else if(filesLength(req) > 2)
+            else if(filesLength(req) > 1)
             {
                 update_tries;
-                res.status(401).json({"msg":"More than 2 files selected"})
+                res.status(401).json({"msg":"More than 1 file selected"})
                 res.end();
             }
     
             else
             {
-                await User.update(
+                var imgsrc = 'assets/uploads/';
+                await userKYC.update(
                     { 
-                        isKYCDone: 'PENDING', 
+                        KYC_LEVEL_2: 'PENDING', 
+                        no_of_tries:0,
                     },
                     {
-                        where: {email: authData.email}    
+                        where: {f_key: KYC.f_key}    
                     })
                     .then(async() => 
                     { 

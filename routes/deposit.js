@@ -3,11 +3,11 @@ var router = express.Router();
 var dotenv = require("dotenv");
 var auth = require('../middleware/auth')
 var authMenu = require("../middleware/auth-menu")
-var KYCChecker = require("../middleware/KYChecker");
+var KYCCheckerLevel1 = require("../middleware/KYCheckerLevel1");
 
 dotenv.config();
 
-router.get('/', auth, KYCChecker, authMenu, async function(req, res, next) 
+router.get('/', auth, KYCCheckerLevel1, authMenu, async function(req, res, next) 
 {   
     authMenu(req,res,next,"deposit","Deposit Funds");
 });

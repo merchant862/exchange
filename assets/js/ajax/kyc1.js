@@ -16,7 +16,7 @@ $(document).ready(function()
                 
                 $.ajax(
                 { 
-                  url: "/kyc/",
+                  url: "/kycLevel1/",
                   type: "POST",
                   data: formData,
                   dataType: 'json',

@@ -11,7 +11,8 @@ var auth = require('../middleware/auth')
 
 var authMenu = require("../middleware/auth-menu")
 
-var KYCChecker = require("../middleware/KYChecker");
+var KYCCheckerLevel1 = require("../middleware/KYCheckerLevel1");
+var KYCCheckerLevel2 = require("../middleware/KYCheckerLevel2");
 
 var getOrders = require("../middleware/ordersByCoin");
 
@@ -27,7 +28,7 @@ app.use(cookieParser())
 let title = process.env.TITLE;
 
 /* GET home page. */
-router.get('/', auth, authMenu, KYCChecker , async function(req, res, next) 
+router.get('/', auth, authMenu, KYCCheckerLevel1, KYCCheckerLevel2, async function(req, res, next) 
 {
     var asset = req.query.asset;
 
@@ -78,7 +79,7 @@ router.get('/', auth, authMenu, KYCChecker , async function(req, res, next)
 
 });
 
-router.post('/:coin', auth, authMenu, KYCChecker , async function(req, res, next) {
+router.post('/:coin', auth, authMenu, KYCCheckerLevel1 , KYCCheckerLevel2, async function(req, res, next) {
     
     var authData = await userData(req);
 

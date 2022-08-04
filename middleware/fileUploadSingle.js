@@ -17,7 +17,7 @@ module.exports =  upload = multer(
         limits: 
         {
           fileSize : 5242880,
-          files : 2,
+          files : 1,
         },
         fileFilter: (req, file, cb) => 
         {
@@ -36,4 +36,4 @@ module.exports =  upload = multer(
               return cb(new Error('Files other than .png, .jpg and .jpeg are not allowed!'));
             }
         },
-    }).array("docs[]", 2);
+    }).array("docs[]", 1);

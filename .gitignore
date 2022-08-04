@@ -2,3 +2,4 @@
 node_modules
 .env
 /config/email-config.json
+/assets/uploads

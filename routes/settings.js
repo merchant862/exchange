@@ -4,7 +4,7 @@ var dotenv = require("dotenv");
 var auth = require('../middleware/auth')
 var authMenu = require("../middleware/auth-menu")
 var bcrypt = require("bcrypt");
-var KYCChecker = require("../middleware/KYChecker");
+var KYCCheckerLevel1 = require("../middleware/KYCheckerLevel1");
 var authData = require("../middleware/auth-data");
 let bodyParser = require('body-parser');
 var Models = require("../models");
@@ -18,12 +18,12 @@ router.use(bodyParser.json());
 
 /* GET home page. */
 
-router.get('/', auth, authMenu, KYCChecker, async function(req, res, next) 
+router.get('/', auth, authMenu, KYCCheckerLevel1, async function(req, res, next) 
 {
     authMenu(req,res,next,"settings","Settings");
 });
 
-router.post('/mob',auth, authMenu, KYCChecker, async function(req, res, next) 
+router.post('/mob',auth, authMenu, KYCCheckerLevel1, async function(req, res, next) 
 {
     var data = await authData(req);
 
@@ -57,7 +57,7 @@ router.post('/mob',auth, authMenu, KYCChecker, async function(req, res, next)
     }
 })
 
-router.post('/pass', auth, authMenu, KYCChecker, async(req,res,next) => 
+router.post('/pass', auth, authMenu, KYCCheckerLevel1, async(req,res,next) => 
 {
     var data = await authData(req);
 

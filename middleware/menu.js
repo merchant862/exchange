@@ -5,6 +5,7 @@ const atob = require("atob");
 const Models = require('./../models');
 var getWalletBalance = require('./walletBalance');
 const User = Models.User;
+const KYCdata = require('./KYCdata');
 
 //var auth = require('./auth');
 const app = express();
@@ -16,7 +17,7 @@ app.use(cookieParser())
 var title = process.env.TITLE;
 
 /* GET users listing. */
-async function menu(req, res, next,_route,_title)
+module.exports = async function menu(req, res, next,_route,_title)
 {   
   let jwt = req.cookies.authorization;
 
@@ -55,6 +56,8 @@ async function menu(req, res, next,_route,_title)
   
       });
 
+      var KYC = await KYCdata(req);
+
       var getCoinBalance = await getWalletBalance(req,res);
       
       var getCoinPrices = async(_coin) =>
@@ -87,8 +90,9 @@ async function menu(req, res, next,_route,_title)
         getCoinBalance.BNB+
         getCoinBalance.SOL+
         getCoinBalance.DOT */
+        var f_b = Number(finalBalance.toFixed(2))+Number(parseFloat(balance).toFixed(2))
 
-    res.render(
+    return res.render(
       _route,
       {
         title: title+" | "+_title,
@@ -96,21 +100,19 @@ async function menu(req, res, next,_route,_title)
         email: d.email,
         status:"loggedIn",
         balance:balance,
-        wallet_bal:finalBalance.toFixed(2)
+        wallet_bal:f_b,
+        stateLevel1: KYC.KYC_LEVEL_1,
+        stateLevel2: KYC.KYC_LEVEL_2,
       });
     
-    next();
   }
 
   else
   {
     res.render(_route,{title: title+" | "+_title,status:"loggedOut",page:"login"});
 
-    next();
+    return next();
   }
 
     /* res.render('partials/authenticated-menu', { name:d.name,email: d.email}); */
 };
-
-
-module.exports = menu;

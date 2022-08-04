@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
 const atob = require("atob");
 const Models = require('./../models');
-const User = Models.User;
+const userKYC = Models.user_kyc;
 
 //var auth = require('./auth');
 const app = express();
@@ -22,12 +22,12 @@ async function getdata(req, res, next)
 
     var d = JSON.parse(atob(base64Url));
 
-    var isDone = await User.findAll(
+    var isDone = await userKYC.findAll(
             
             {
                 where: 
                 {
-                    email: d.email,
+                    f_key: d.id,
                 }
             }).then((results) => 
             {
@@ -44,9 +44,9 @@ async function getdata(req, res, next)
         
             });
 
-            if(isDone.isKYCDone == "NO" || isDone.isKYCDone == "PENDING")
+            if(isDone.KYC_LEVEL_2 == "NO" || isDone.KYC_LEVEL_2 == "PENDING")
             {
-            res.redirect("/kyc");
+                res.redirect("/kycLevel2");
             }
 
             else

@@ -14,23 +14,38 @@
           </div> -->
           <ul class="nav nav-pills justify-content-center" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="/exchange?asset=BTC" role="tab" aria-selected="true"><img src="assets/img/icon/18.png" width="25" height="25"></a>
+              <a class="nav-link active" href="/exchange?asset=BTC" role="tab" aria-selected="true">
+                <img src="assets/img/icon/18.png" width="25" height="25">
+                <p class="my-1"><b>BTC</b></p>
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/exchange?asset=ETH" role="tab" aria-selected="false"><img src="assets/img/icon/1.png" width="25" height="25"></a>
+              <a class="nav-link active" href="/exchange?asset=ETH" role="tab" aria-selected="true">
+                <img src="assets/img/icon/1.png" width="25" height="25">
+                <p class="my-1"><b>ETH</b></p>
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/exchange?asset=BNB" role="tab" aria-selected="false"><img src="assets/img/icon/9.png" width="25" height="25"></a>
+              <a class="nav-link active" href="/exchange?asset=BNB" role="tab" aria-selected="true">
+                <img src="assets/img/icon/9.png" width="25" height="25">
+                <p class="my-1"><b>BNB</b></p>
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/exchange?asset=SOL" role="tab" aria-selected="false"><img src="assets/img/icon/sol.png" width="25" height="25"></a>
+              <a class="nav-link active" href="/exchange?asset=SOL" role="tab" aria-selected="true">
+                <img src="assets/img/icon/sol.png" width="25" height="25">
+                <p class="my-1"><b>SOL</b></p>
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/exchange?asset=DOT" role="tab" aria-selected="false"><img src="assets/img/icon/dot.png" width="25" height="25"></a>
+              <a class="nav-link active" href="/exchange?asset=DOT" role="tab" aria-selected="true">
+                <img src="assets/img/icon/dot.png" width="25" height="25">
+                <p class="my-1"><b>DOT</b></p>
+              </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="/exchange?asset=USDT" role="tab" aria-selected="false"><img src="assets/img/icon/usdt.png" width="25" height="25"></a>
-            </li> 
+            </li>  -->
           </ul>
           <div class="tab-content">
             <div class="tab-pane fade show active" id="BTC" role="tabpanel">
@@ -56,34 +71,29 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td> BTC/<%= asset %></td>
-                    <td>0.00020255</td>
+                    <td> BTC/USDT</td>
+                    <td id="btcusdt"></td>
                     <td class="red">-2.58%</td>
                   </tr>
                   <tr>
-                    <td> ETH/<%= asset %></td>
-                    <td>0.00020255</td>
+                    <td> ETH/USDT</td>
+                    <td id="ethusdt"></td>
                     <td class="red">-2.58%</td>
                   </tr>
                   <tr>
-                    <td> BNB/<%= asset %></td>
-                    <td>0.00013192</td>
+                    <td> BNB/USDT</td>
+                    <td id="bnbusdt"></td>
                     <td class="green">+5.6%</td>
                   </tr>
                   <tr>
-                    <td> SOL/<%= asset %></td>
-                    <td>0.00002996</td>
+                    <td> SOL/USDT</td>
+                    <td id="solusdt"></td>
                     <td class="red">-1.55%</td>
                   </tr>
                   <tr>
-                    <td> DOT/<%= asset %></td>
-                    <td>0.00000103</td>
+                    <td> DOT/USDT</td>
+                    <td id="dotusdt"></td>
                     <td class="green">+1.8%</td>
-                  </tr>
-                  <tr>
-                    <td> USDT/<%= asset %></td>
-                    <td>0.00000103</td>
-                    <td class="red">-2.05%</td>
                   </tr>
                 </tbody>
               </table>
@@ -131,7 +141,7 @@
             <li class="nav-item">
               <a class="nav-link active" data-toggle="pill" href="" role="tab"
                 aria-selected="true">Market Order</a>
-                <ul class="nav nav-pills" role="tablist">
+                <!-- <ul class="nav nav-pills" role="tablist">
                   <li class="nav-item">
                     <a class="nav-link active" data-toggle="pill" href="#market-trade-buy" role="tab" aria-selected="true">
                       BUY
@@ -142,7 +152,7 @@
                       SELL
                     </a>
                   </li>
-                </ul>
+                </ul> -->
             </li>
           </ul>
           <div class="tab-content">
@@ -179,7 +189,7 @@
                   <button class="btn buy">Buy</button>
                  </form>
                 </div>
-                <div class="market-trade-sell tab-pane fade align-items-center" id="market-trade-sell" role="tabpanel">
+                <div class="market-trade-sell tab-pane fade show active align-items-center" id="market-trade-sell" role="tabpanel">
                   <div style="opacity: 35%;">
                     <div class="input-group">
                       <input type="number" class="form-control" placeholder="Price" disabled>
@@ -470,6 +480,7 @@
   <script src="assets/js/ajax/buyCoin.js"></script>
   <script src="assets/js/ajax/buyCoinAmount.js"></script>
   <script src="assets/js/ajax/buyCoinPerAmount.js"></script>
+  <script src="assets/js/ajax/liveCoinPrices.js"></script>
 
   <script>
     $('tbody, .market-news ul').mCustomScrollbar({

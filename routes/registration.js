@@ -15,8 +15,7 @@ var deauth = require('../middleware/deauth');
 var web3 = require('../config/web3');
 
 const User = Models.User;
-const Keys = Models.Keys;
-
+const userkYC = Models.user_kyc;
 dotenv.config();
 
 var title = process.env.TITLE;
@@ -83,13 +82,38 @@ router.post('/', deauth, async(req, res, next)=>{
               verification_token:token,
               phone: phone,
               USDT_balance: 0,
-              isKYCDone: isKYCDone,
               address: address,
-              privateKey: key,
-              KYCtries: 0
+              privateKey: key
             };
         
             created_user = await User.create(usr);
+
+            var userID = await User.findAll(
+              {
+                where:
+                {
+                  email: email
+                }
+              }).then((results) => 
+              {
+                  var json =  JSON.stringify(results);
+            
+                  var jsonParsedData = JSON.parse(json);
+                  for(var i = 0; i < jsonParsedData.length; i++)
+                  {
+                      return jsonParsedData[i]["id"] 
+                  }
+          
+              });
+            
+            var kycData = 
+            {
+              f_key: userID,
+              KYC_LEVEL_1: 'NO',
+              KYC_LEVEL_2: 'NO',
+            }
+            
+            var add_KYC_data = await userkYC.create(kycData);
         
             send(from,email,subject,html);
 

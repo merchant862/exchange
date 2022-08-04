@@ -33,6 +33,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
+    "node-cron": "^3.0.1",
     "node-email-validation": "^1.0.4",
     "node-email-validator": "^1.1.1",
     "nodemailer": "^6.7.7",

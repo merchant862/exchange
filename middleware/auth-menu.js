@@ -5,6 +5,7 @@ var userData = require("./auth-data");
 var asyncUpdateData = require('./asyncUpdateData');
 var getWalletBalance = require('./walletBalance');
 var createWallet = require("./createWallet");
+const KYCdata = require('./KYCdata');
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ module.exports =  async function authMenu(
 {   
   
   var data = await userData(req)
+
+  var KYC = await KYCdata(req);
 
   var AsyncUpdateData = async()=> {await asyncUpdateData(req,res)};
 
@@ -69,16 +72,16 @@ module.exports =  async function authMenu(
     getCoinBalance.BNB+
     getCoinBalance.SOL+
     getCoinBalance.DOT */ 
-  
 
-  res.render(_route,
+    var f_b = Number(finalBalance.toFixed(2))+Number(parseFloat(balance).toFixed(2))
+    
+  return res.render(_route,
     {
       title: title+" | "+_title,
-      name: data.name,
+      name: data.full_name,
       email: data.email,
       balance: balance,
       address: data.address,
-      state: data.isKYCDone,
       _msg_type,_msg,
       code:await getQRCode(req,res,data.address),
       data: await callTxData(req,res,"data",data.address),
@@ -89,15 +92,16 @@ module.exports =  async function authMenu(
       SOL:getCoinBalance.SOL,
       DOT:getCoinBalance.DOT,
       asset:_asset,
-      wallet_bal:finalBalance.toFixed(2),
+      wallet_bal:f_b,
       order_no:_order_no,
       amount:_amount,
       coin:_coin,
       price:_price,
       date:_date,
-      KYCtries:data.KYCtries
+      KYCtries:KYC.no_of_tries,
+      stateLevel1: KYC.KYC_LEVEL_1,
+      stateLevel2: KYC.KYC_LEVEL_2,
     });
 
-    next();
 
 };

@@ -1,0 +1,57 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/kyc-level1-menu.ejs') %>
+
+<div class="vh-100 d-flex justify-content-center">
+  <div class="form-access my-auto">
+    <% if (typeof stateLevel1 != "undefined") { %>
+      <% if (stateLevel1 == "PENDING") { %>
+        <form>
+          <span>KYC Status:&nbsp;<%= stateLevel1 %></span>
+        </form>
+      <% } %>
+      <% if (stateLevel1 == "NO") { %>
+        <% if(KYCtries >= 3) { %>
+          <form>
+            <span>Locked for 3 Hours</span>
+          </form>
+        <% } else {%>
+        <div id="kycRes" style="display: all;">
+
+        </div>
+        <form id="kycForm" method="post" enctype="multipart/form-data">
+          <span>KYC</span>
+          <div class="form-group">
+            <h2>Status: Not Applied</h2>
+            <label for="file">Upload Documents:</label>
+            <input 
+            type="file" 
+            class="form-control" 
+            name="docs[]"
+            id="docs" 
+            accept="image/jpeg, image/jpg, image/png" 
+            multiple 
+            required>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <% } %>
+      <% } %>
+      <% if(stateLevel1 == "YES") { %>
+        <script type="text/javascript">
+            window.location.assign("/deposit");
+        </script>
+      <% } %>
+    <% } %>
+  </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+  
+  <%- include('./partials/scripts.ejs') %>
+
+  <script src="assets/js/ajax/kyc1.js"></script>
+  
+</body>
+
+</html>
