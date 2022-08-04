@@ -6,7 +6,7 @@ $(document).ready(function()
 
     function url(_asset)
     {
-        var url = "/price?asset="+_asset;
+        var url = "/price?asset="+asset;
         return url;
     }
 
