@@ -3,6 +3,8 @@ var router = express.Router();
 const Models = require('./../models');
 const dotenv = require('dotenv');
 var deauth = require('../middleware/deauth');
+var randtoken = require('rand-token');
+
 
 const User = Models.User;
 dotenv.config();
@@ -23,7 +25,7 @@ router.get('/', deauth, async function(req, res, next)
         if (!user) return res.status(400).render("verify-user",{title:title+" | "+"User Verification",page:"login",error:"Invalid link"});
     
         await User.update({ 
-          verification_token: '', verified: 'YES' 
+          verification_token: null, verified: 'YES' 
           },
           {
             where: {email: user.email}    

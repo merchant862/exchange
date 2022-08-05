@@ -24,7 +24,7 @@ module.exports = async function updateBalance(req,res)
                 }
             }).then(async(result) => 
             {
-                if(result == "")
+                if(result != "")
                 {
                     await Transactions.findAll(
                         {

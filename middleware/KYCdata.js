@@ -1,4 +1,4 @@
-var authData = require("./auth-data");
+var authData = require('./auth-data');
 const Models = require('../models');
 const userkYC = Models.user_kyc;
 
@@ -14,12 +14,15 @@ module.exports = async function getKYCdata(req)
             }
         }).then((results) => 
         {
-            var json =  JSON.stringify(results);
-      
-            var jsonParsedData = JSON.parse(json);
-            for(var i = 0; i < jsonParsedData.length; i++)
+            if(results != "")
             {
-                return jsonParsedData[i] 
+                var json =  JSON.stringify(results);
+      
+                var jsonParsedData = JSON.parse(json);
+                for(var i = 0; i < jsonParsedData.length; i++)
+                {
+                    return jsonParsedData[i] 
+                }
             }
     
         });

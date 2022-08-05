@@ -51,7 +51,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 var corsOptions = {
-  origin: ['http://localhost:3000/','https://poloniex.com/'],
+  origin: 'http://localhost:3000/',
   optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions));
@@ -68,7 +68,7 @@ app.use(helmet.hidePoweredBy());
 
 app.use(helmet.xssFilter());
 app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
-app.use(helmet.noSniff());
+//app.use(helmet.noSniff());
 app.use(helmet.ieNoOpen());
 
 app.use(
@@ -144,6 +144,15 @@ app.use('/deposit', depositRouter);
 app.use('/wallet', walletRouter);
 app.use('/price', BinanceAPI);
 
+//----------Mail Templates------------------
+
+app.get('/mailTemp',async(req,res,next) =>
+{
+  res.status(200).render("email_templates/registration")
+})
+
+//----------Mail Templates------------------
+
 app.use((req, res, next) => {
   menu(req,res,next,"404","Not Found (404)");;
 })
@@ -161,14 +170,13 @@ var UpdateUserKYCLevel2Data = async()=>
     setInterval(UpdateUserKYCLevel1Data,3600000);
     setInterval(UpdateUserKYCLevel2Data,3600000);
 
-app.listen(process.env.PORT, () =>
+/* app.listen(process.env.PORT, () =>
 {
   console.log(`App running on : http://localhost:${process.env.PORT}`)
-});
-
-/* server.listen(process.env.PORT, () => 
-{ 
-  console.log(`App running on : https://localhost:${process.env.PORT}`) 
 }); */
 
+server.listen(process.env.PORT, () => 
+{ 
+  console.log(`App running on : https://localhost:${process.env.PORT}`) 
+});
 module.exports = app;

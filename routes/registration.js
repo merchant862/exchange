@@ -4,6 +4,9 @@ const Models = require('./../models');
 const bcrypt = require("bcrypt");
 var validator = require("node-email-validation");
 var randtoken = require('rand-token');
+var phone_validator = require('libphonenumber-js');
+var path = require('path');
+var ejs = require('ejs');
 
 var send = require("../middleware/mail");
 
@@ -42,8 +45,8 @@ router.post('/', deauth, async(req, res, next)=>{
    var password = req.body.password;
    var password2 = req.body.password2;
    var phone = req.body.phone;
+   var country = req.body.country;
    var verified = "NO";
-   var isKYCDone = "NO";
    var key = await web3.eth.accounts.create(seed).privateKey;
    var address = await web3.eth.accounts.privateKeyToAccount(key).address;
 
@@ -55,17 +58,17 @@ router.post('/', deauth, async(req, res, next)=>{
    
    var from = 'Tech Team';
    var subject = 'Account Confirmation';
-   var html = 'Welcome&nbsp;<b>' 
+   /* var html = 'Welcome&nbsp;<b>' 
                + name + 
               '</b><br/><p>Your account has been created!</p></br>Please verify your email here: <a href="http://localhost:3000/verify?token='+token+'">This Link!</a>';
-
+ */
    //-------------
 
   var checkEmail = await User.count({where: {email: email}});
   
   const salt = await bcrypt.genSalt(10);
   
-  if(name != "" && email != "" && password != "" && phone != "")
+  if(name != "" && email != "" && password != "" && phone != "" && country != "")
   {
     if(checkEmail == 0 )
     {
@@ -73,70 +76,99 @@ router.post('/', deauth, async(req, res, next)=>{
        {
           if(validator.is_email_valid(email))
           {
-            var usr = 
+            try
             {
-              full_name : name,
-              email : email,
-              password : await bcrypt.hash(password,salt),
-              verified: verified,
-              verification_token:token,
-              phone: phone,
-              USDT_balance: 0,
-              address: address,
-              privateKey: key
-            };
-        
-            created_user = await User.create(usr);
+              var num = phone_validator.parsePhoneNumber(phone,country).formatInternational();
 
-            var userID = await User.findAll(
+              if(!num && !phone_validator.isValidNumber(num) && !phone_validator.isPossibleNumber(num))
               {
-                where:
+                res.status(403).json({"msg":"Invalid Mobile Number!"});
+                res.end();
+              }
+  
+              else
+              {
+                var usr = 
                 {
-                  email: email
-                }
-              }).then((results) => 
-              {
-                  var json =  JSON.stringify(results);
+                  full_name : name,
+                  email : email,
+                  password : await bcrypt.hash(password,salt),
+                  verified: verified,
+                  verification_token:token,
+                  phone: num,
+                  country: country,
+                  USDT_balance: 0,
+                  address: address,
+                  privateKey: key
+                };
             
-                  var jsonParsedData = JSON.parse(json);
-                  for(var i = 0; i < jsonParsedData.length; i++)
+                created_user = await User.create(usr);
+    
+                var userID = await User.findAll(
                   {
-                      return jsonParsedData[i]["id"] 
-                  }
-          
-              });
-            
-            var kycData = 
-            {
-              f_key: userID,
-              KYC_LEVEL_1: 'NO',
-              KYC_LEVEL_2: 'NO',
+                    where:
+                    {
+                      email: email
+                    }
+                  }).then((results) => 
+                  {
+                      var json =  JSON.stringify(results);
+                
+                      var jsonParsedData = JSON.parse(json);
+                      for(var i = 0; i < jsonParsedData.length; i++)
+                      {
+                          return jsonParsedData[i]["id"] 
+                      }
+              
+                  });
+                
+                var kycData = 
+                {
+                  f_key: userID,
+                  KYC_LEVEL_1: 'NO',
+                  KYC_LEVEL_2: 'NO',
+                }
+                
+                var add_KYC_data = await userkYC.create(kycData);
+
+                ejs.renderFile(path.join(__dirname, '../views/email_templates/registration.ejs'), 
+                {
+                  name: name,
+                  link: 'http://localhost:3000/verify?token='+token,
+                  imagePath:path.join(__dirname, '../assets/img/logo-light.svg')
+                })
+                .then(async(template) =>
+                {
+                   send(from,email,subject,template);
+
+                   fetch(url, {
+                    method: 'post',
+                  })
+                    .then((response) => response.json())
+                    .then((google_response) => {
+                        if (google_response.success == true)
+                        {
+                          res.status(200).json({"msg":"Registration done, check your Email for verification code!"});
+                          res.end();
+                        }
+      
+                        else
+                        {
+                          res.status(401).json({"msg":"Captcha verification failed!"});
+                          res.end();
+                        }
+      
+                      });
+                })
+
+              }
             }
             
-            var add_KYC_data = await userkYC.create(kycData);
-        
-            send(from,email,subject,html);
-
-            fetch(url, {
-              method: 'post',
-            })
-              .then((response) => response.json())
-              .then((google_response) => {
-                  if (google_response.success == true)
-                  {
-                    res.status(200).json({"msg":"Registration done, check your Email for verification code!"});
-                    res.end();
-                  }
-
-                  else
-                  {
-                    res.status(401).json({"msg":"Captcha verification failed!"});
-                    res.end();
-                  }
-
-                });
-            
-            
+            catch(e)
+            {
+                res.status(403).json({"msg":e.message});
+                res.end();
+            }
           }
 
           else

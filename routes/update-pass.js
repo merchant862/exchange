@@ -80,7 +80,7 @@ router.post('/', deauth, async function(req, res, next)
                                         var hashed_pass = bcrypt.hashSync(pass1.toString(),parseInt(salt));
                                         
                                         User.update({ 
-                                            password_reset_token: '',
+                                            password_reset_token: null,
                                             password: hashed_pass 
                                         },
                                         {
