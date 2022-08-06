@@ -2,13 +2,11 @@ const Models = require("../models");
 const User = Models.User;
 const userkYC = Models.user_kyc;
 var mail = require('../middleware/mail');
+var ejs = require('ejs');
+var path = require('path');
 
 var from = 'Tech Team';
-var subject = 'KYC Approval';
-var html = (user)=>
-{
-    return "Dear&nbsp;"+user+"<br/><p>Your Level 2 KYC has been approved.&nbsp;</p>";
-}
+var subject = 'KYC Approval Level 2';
 
 module.exports = async function updateUserKYCLevel2()
 { 
@@ -49,7 +47,15 @@ module.exports = async function updateUserKYCLevel2()
                         }).
                         then(async => 
                             {
-                                mail(from,jsonParsedData[i].User.email,subject,html(jsonParsedData[i].User.full_name))
+                                ejs.renderFile(path.join(__dirname, '../views/email_templates/kyc_approval.ejs'), 
+                                {
+                                    name: jsonParsedData[i].User.full_name,
+                                    level: "2",
+                                    message: "trading assets",
+                                }).then(async(template) => 
+                                {
+                                    mail(from,jsonParsedData[i].User.email,subject,template)
+                                })
                             })
                 }
 

@@ -4,13 +4,12 @@ var mail = require('./mail');
 const Models = require('../models');
 const Transactions = Models.transactionIds;
 const User = Models.User;
+var ejs = require('ejs');
+var path = require('path');
 
 var from = 'Tech Team';
 var subject = 'New Deposit';
-var html = (user,amount)=>
-{
-    return "Hi&nbsp;<b>"+user+"</b><br/><p>Your account has been deposited by&nbsp;$"+amount+"</p>";
-}
+
 
 module.exports = async function updateBalance(req,res)
 {
@@ -58,8 +57,16 @@ module.exports = async function updateBalance(req,res)
                                     {
                                         where: {f_key: authData.id}    
                                     }); 
-            
-                                    mail(from,authData.email,subject,html(authData.full_name,jsonParsedData[i].amount));
+
+                                    ejs.renderFile(path.join(__dirname, '../views/email_templates/deposit.ejs'), 
+                                    {
+                                      name: authData.full_name,
+                                      amount: jsonParsedData[i].amount,
+                                    })
+                                    .then(async(template) => 
+                                    {
+                                        mail(from,authData.email,subject,template);
+                                    })
                                 }
             
                             }

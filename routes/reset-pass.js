@@ -8,6 +8,8 @@ const dotenv = require('dotenv');
 const fetch = require("isomorphic-fetch");
 var randtoken = require('rand-token');
 var deauth = require('../middleware/deauth');
+var ejs = require("ejs");
+var path = require("path");
 
 var send = require("../middleware/mail");
 
@@ -62,7 +64,6 @@ router.post('/', deauth, async(req, res, next)=>{
 
                         var from = 'Tech Team';
                         var subject = 'Reset Password';
-                        var html = 'Dear&nbsp;User<br/><p>We received your request to change the password!</p></br>Please visit this <a href="http://localhost:3000/update-pass?token='+final_token+'">Link to reset your password.</a><p>';
                         
                         User.update(
                           { 
@@ -72,10 +73,19 @@ router.post('/', deauth, async(req, res, next)=>{
                             where: {email: user.email}    
                           });
                           
-                          send(from,email,subject,html);
+                          ejs.renderFile(path.join(__dirname, '../views/email_templates/reset-pass.ejs'), 
+                                    {
+                                      name: user.full_name,
+                                      link: 'http://localhost:3000/update-pass?token='+final_token,
+                                    })
+                                    .then(async(template) =>
+                                    {
+                                      send(from,email,subject,template);
 
-                          res.status(200).json({"msg":"Email sent, please check your inbox for password reset link!"});
-                          res.end();
+                                      res.status(200).json({"msg":"Email sent, please check your inbox for password reset link!"});
+                                      res.end();
+                                    })
+
                     }
 
                     else

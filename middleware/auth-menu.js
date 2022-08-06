@@ -74,7 +74,7 @@ module.exports =  async function authMenu(
     getCoinBalance.DOT */ 
 
     var f_b = Number(finalBalance.toFixed(2))+Number(parseFloat(balance).toFixed(2))
-    
+
   return res.render(_route,
     {
       title: title+" | "+_title,
@@ -102,6 +102,5 @@ module.exports =  async function authMenu(
       stateLevel1: KYC.KYC_LEVEL_1,
       stateLevel2: KYC.KYC_LEVEL_2,
     });
-
 
 };

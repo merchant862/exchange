@@ -7,8 +7,12 @@ var bcrypt = require("bcrypt");
 var KYCCheckerLevel1 = require("../middleware/KYCheckerLevel1");
 var authData = require("../middleware/auth-data");
 let bodyParser = require('body-parser');
+var phone_validator = require('libphonenumber-js');
+var send = require('../middleware/mail')
+var path = require('path');
+var ejs = require('ejs');
 var Models = require("../models");
-var User = Models.User;;
+var User = Models.User;
 
 dotenv.config();
 
@@ -27,27 +31,59 @@ router.post('/mob',auth, authMenu, KYCCheckerLevel1, async function(req, res, ne
 {
     var data = await authData(req);
 
-    
     var mobile = req.body.mobile;
     
     
     if(mobile != "")
     {
-       await User.update(
-        {
-            phone: mobile,
-        },
-        {
-            where: 
+       try
+       {
+            var num = phone_validator.parsePhoneNumber(mobile,data.country).formatInternational();
+
+            if(!num && !phone_validator.isValidNumber(num) && !phone_validator.isPossibleNumber(num))
             {
-                email: data.email,
+                res.status(403).json({"msg":"Invalid Mobile Number!"});
+                res.end();
             }
-        }
-       ).then(()=>
-        {
-            res.status(200).json({"msg":"Mobile No. updated!"});
+
+            else
+            {
+                var from = "Tech Team";
+                var subject = "Mobile no. Update";
+
+                ejs.renderFile(path.join(__dirname, '../views/email_templates/dataUpdateInternal.ejs'), 
+                {
+                  name: data.full_name,
+                  data: 'mobile no.',
+                })
+                .then(async(template)=>
+                {
+                    send(from,data.email,subject,template);
+
+                    await User.update(
+                        {
+                            phone: num,
+                        },
+                        {
+                            where: 
+                            {
+                                email: data.email,
+                            }
+                        }
+                       ).then(()=>
+                        {
+                            res.status(200).json({"msg":"Mobile No. updated!"});
+                            res.end();
+                        })
+                })
+            }
+       }
+       
+       catch(e)
+       {
+            res.status(403).json({"msg":e.message});
             res.end();
-        })
+       }
     }
 
     else
@@ -90,8 +126,21 @@ router.post('/pass', auth, authMenu, KYCCheckerLevel1, async(req,res,next) =>
                         })
                         .then(async(e)=>
                         {
-                            res.status(200).json({"msg":"Password updated!"});
-                            res.end();
+                            var from = "Tech Team";
+                            var subject = "Password Update";
+
+                            ejs.renderFile(path.join(__dirname, '../views/email_templates/dataUpdateInternal.ejs'), 
+                            {
+                                name: data.full_name,
+                                data: 'password',
+                            })
+                            .then(async(template) =>
+                            {
+                                send(from,data.email,subject,template);
+
+                                res.status(200).json({"msg":"Password updated!"});
+                                res.end();
+                            })
                         })
                         .catch((e)=>
                         {

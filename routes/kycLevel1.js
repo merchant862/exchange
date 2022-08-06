@@ -14,6 +14,8 @@ var dotenv = require("dotenv");
 const Models = require('../models');
 const User = Models.User;
 const userKYC = Models.user_kyc
+var path = require('path');
+var ejs = require('ejs');
 
 dotenv.config();
 
@@ -46,10 +48,7 @@ router.post('/', auth, async(req,res,next) =>
         })
 
     var from = 'Tech Team';
-    var subject = 'KYC Documents';
-    var html = 'Welcome&nbsp;<b>' 
-               + authData.full_name + 
-              '</b><br/><p>We have received your documents.</p></br><p>You will be nofified once we get you approved.</p>';
+    var subject = 'KYC Documents Level 1';
     
     if(KYC.no_of_tries < 3)
     {
@@ -103,11 +102,19 @@ router.post('/', auth, async(req,res,next) =>
                     })
                     .then(async() => 
                     { 
-                        send(from,authData.email,subject,html);
+                        ejs.renderFile(path.join(__dirname, '../views/email_templates/kyc.ejs'), 
+                        {
+                            name: authData.full_name,
+                            level: "1",
+                        })
+                        .then(async(template) => 
+                        {
+                            send(from,authData.email,subject,template);
     
-                        res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
-                        res.end();
-                        next();
+                            res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
+                            res.end();
+                            next();
+                        })
                     })
                     .catch(async()=>
                     {

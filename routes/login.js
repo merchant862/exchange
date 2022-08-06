@@ -7,8 +7,14 @@ var validator = require("node-email-validation");
 const dotenv = require('dotenv');
 const fetch = require("isomorphic-fetch");
 var randToken = require('rand-token');
+var requestIp = require('request-ip');
+var deviceDetector = require('device-detector-js');
+var ejs = require('ejs');
+var path = require('path')
+var send = require("../middleware/mail");
 
 var deauth = require('../middleware/deauth');
+const { Template } = require('ejs');
 
 const User = Models.User;
 dotenv.config();
@@ -31,6 +37,8 @@ router.post('/', deauth, async(req, res, next)=>{
 
    var email = req.body.email;
    var password = req.body.password;
+   var from = 'Tech Team';
+   var subject = 'Login Attempt';
    
    var user = await User.findOne(
       {
@@ -54,27 +62,47 @@ router.post('/', deauth, async(req, res, next)=>{
                 expiresIn: '30d'
               });
 
-              fetch(url, {
-                method: 'post',
-              })
-                .then(async(response) => response.json())
-                .then(async(google_response) => {
-                    if (google_response.success == true)
-                    {
-                      res.cookie('authorization',token,
-                        {sameSite:'lax',httpOnly: true}
-                        )
-                        .status(200);
-                        res.json({"msg":"/home"});
-                    }
+              var clientIp = requestIp.getClientIp(req);
+              var devicedetector = new deviceDetector();
+              var useragent = req.get('user-agent');
+              var device = devicedetector.parse(useragent);
+              var userAgent = JSON.stringify(device); 
+              var finalAgent = JSON.parse(userAgent);
 
-                    else
-                    {
-                      res.status(403).json({"msg":"Captcha verification failed!"});
-                      res.end();
-                    }
+              ejs.renderFile(path.join(__dirname, '../views/email_templates/login.ejs'), 
+                {
+                  name: user.full_name,
+                  ip: clientIp,
+                  agent: finalAgent.client.name,
+                  os: finalAgent.os.name,
+                  device: finalAgent.device.type,
+                })
+                .then(async(template) =>
+                {
+                  send(from,user.email,subject,template);
 
-                  });
+                  fetch(url, {
+                    method: 'post',
+                  })
+                    .then(async(response) => response.json())
+                    .then(async(google_response) => {
+                        if (google_response.success == true)
+                        {
+                          res.cookie('authorization',token,
+                            {sameSite:'lax',httpOnly: true}
+                            )
+                            .status(200);
+                            res.json({"msg":"/home"});
+                        }
+    
+                        else
+                        {
+                          res.status(403).json({"msg":"Captcha verification failed!"});
+                          res.end();
+                        }
+    
+                      });
+                })
 
             }
 

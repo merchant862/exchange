@@ -8,6 +8,7 @@ const Models = require('../models');
 const Wallets = Models.wallet;
 const Orders = Models.orders;
 var auth = require('../middleware/auth')
+var send = require('../middleware/mail');
 
 var authMenu = require("../middleware/auth-menu")
 
@@ -17,7 +18,8 @@ var KYCCheckerLevel2 = require("../middleware/KYCheckerLevel2");
 var getOrders = require("../middleware/ordersByCoin");
 
 const dotenv = require('dotenv');
-const { parse } = require('path');
+const ejs = require('ejs')
+const path = require('path');
 
 dotenv.config();
 
@@ -58,6 +60,8 @@ router.get('/', auth, authMenu, KYCCheckerLevel1, KYCCheckerLevel2, async functi
                     await getOrders(req,res,asset,"coin"),
                     await getOrders(req,res,asset,"price"),
                     await getOrders(req,res,asset,"time"))
+
+                    
             }
             
             else
@@ -171,11 +175,26 @@ router.post('/:coin', auth, authMenu, KYCCheckerLevel1 , KYCCheckerLevel2, async
                                     await Orders.create(orderData)
                                     .then(async()=>
                                     {
-                                        res.status(200).json(
+                                        var from = "Tech Team";
+                                        var subject = "Order Type: Coin Purchase";
+
+                                        ejs.renderFile(path.join(__dirname, '../views/email_templates/order.ejs'), 
                                         {
-                                            "msg":parseFloat(amount/liveCoinPrice).toFixed(5)+"  "+coin+" purchased! with OrderID: "+token
-                                        });
-                                        res.end;
+                                            name: authData.full_name,
+                                            orderID: token,
+                                            coin: coin,
+                                            amount: parseFloat(amount/liveCoinPrice).toFixed(5),
+                                        })
+                                        .then(async(template) =>
+                                        {
+                                            send(from,authData.email,subject,template);
+
+                                            res.status(200).json(
+                                                {
+                                                    "msg":parseFloat(amount/liveCoinPrice).toFixed(5)+"  "+coin+" purchased! with OrderID: "+token
+                                                });
+                                                res.end;
+                                        })
                                     })
                                     .catch(async()=>
                                     {

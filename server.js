@@ -33,6 +33,7 @@ var kycLevel2Router = require("./routes/kycLevel2");
 var depositRouter = require("./routes/deposit");
 var walletRouter = require("./routes/wallet");
 var BinanceAPI = require("./routes/BinanceAPI");
+var depthRouter = require('./routes/depth');
 
 /*Update User KYC Data*/
 
@@ -52,7 +53,9 @@ app.set('view engine', 'ejs');
 
 var corsOptions = {
   origin: 'http://localhost:3000/',
-  optionsSuccessStatus: 200
+  credentials:true,            //access-control-allow-credentials:true
+  optionsSuccessStatus: 200,
+  
 }
 app.use(cors(corsOptions));
 
@@ -68,7 +71,7 @@ app.use(helmet.hidePoweredBy());
 
 app.use(helmet.xssFilter());
 app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
-//app.use(helmet.noSniff());
+app.use(helmet.noSniff());
 app.use(helmet.ieNoOpen());
 
 app.use(
@@ -89,7 +92,7 @@ app.use(helmet.contentSecurityPolicy({
     {
       'script-src-attr': null,
       defaultSrc: ["'self'","http: 'unsafe-inline'"],
-      imgSrc:["'self'","data:","https://cdnjs.cloudflare.com"],
+      imgSrc:["'self'","data:","https://cdnjs.cloudflare.com","https://i.ibb.co"],
       scriptSrc: ["'self'","http: 'unsafe-inline'","https://s3.tradingview.com"],
       objectSrc: ["'none'"],
       childSrc: ["'self'","https://s.tradingview.com","https://www.google.com"],
@@ -143,13 +146,16 @@ app.use('/kycLevel2', kycLevel2Router);
 app.use('/deposit', depositRouter);
 app.use('/wallet', walletRouter);
 app.use('/price', BinanceAPI);
+app.use('/depth', depthRouter)
+
 
 //----------Mail Templates------------------
 
-app.get('/mailTemp',async(req,res,next) =>
+
+/* app.get('/kyc',async(req,res,next) =>
 {
-  res.status(200).render("email_templates/registration")
-})
+  res.status(200).render("email_templates/order")
+}) */
 
 //----------Mail Templates------------------
 
@@ -170,13 +176,14 @@ var UpdateUserKYCLevel2Data = async()=>
     setInterval(UpdateUserKYCLevel1Data,3600000);
     setInterval(UpdateUserKYCLevel2Data,3600000);
 
-/* app.listen(process.env.PORT, () =>
+app.listen(process.env.PORT, () =>
 {
   console.log(`App running on : http://localhost:${process.env.PORT}`)
-}); */
+});
 
-server.listen(process.env.PORT, () => 
+/* server.listen(process.env.PORT, () => 
 { 
   console.log(`App running on : https://localhost:${process.env.PORT}`) 
-});
+}); */
+
 module.exports = app;

@@ -58,10 +58,7 @@ router.post('/', deauth, async(req, res, next)=>{
    
    var from = 'Tech Team';
    var subject = 'Account Confirmation';
-   /* var html = 'Welcome&nbsp;<b>' 
-               + name + 
-              '</b><br/><p>Your account has been created!</p></br>Please verify your email here: <a href="http://localhost:3000/verify?token='+token+'">This Link!</a>';
- */
+   
    //-------------
 
   var checkEmail = await User.count({where: {email: email}});
@@ -135,7 +132,6 @@ router.post('/', deauth, async(req, res, next)=>{
                 {
                   name: name,
                   link: 'http://localhost:3000/verify?token='+token,
-                  imagePath:path.join(__dirname, '../assets/img/logo-light.svg')
                 })
                 .then(async(template) =>
                 {
