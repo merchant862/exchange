@@ -8,7 +8,7 @@
 
   function DepthChart() {
     // Add data
-    chart.dataSource.url ='http://localhost:3000/depth?asset='+asset;
+    chart.dataSource.url ='/depth?asset='+asset;
     chart.dataSource.reloadFrequency = 30000;
     chart.dataSource.adapter.add('parsedData', function (data) {
       // Function to process (sort and calculate cummulative volume)
