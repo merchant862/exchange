@@ -18,9 +18,11 @@ const userKYC = Models.user_kyc
 var path = require('path');
 var ejs = require('ejs');
 
-dotenv.config();
 
 app.use(cookieParser())
+
+dotenv.config();
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -32,7 +34,7 @@ function filesLength (req)
 
 router.get('/', auth, KYCCheckerLevel1, async(req, res, next) =>
 {
-    authMenu(req,res,next,'kyc-level-2',"KYC","","","","","","","","");
+    authMenu(req,res,next,'kyc-level-2',"KYC","","","","","","","","","");
 });
 
 router.post('/', auth, KYCCheckerLevel1, async(req,res,next) =>
@@ -40,99 +42,91 @@ router.post('/', auth, KYCCheckerLevel1, async(req,res,next) =>
     var authData = await userData(req);
     var KYC = await KYCData(req);
 
-    var update_tries = await userKYC.update(
-        { 
-            no_of_tries: Models.sequelize.literal('no_of_tries +'+1), 
-        },
-        {
-            where: {f_key: KYC.f_key}    
-        })
-
     var from = 'Tech Team';
     var subject = 'KYC Documents Level 2';
 
-    if(KYC.no_of_tries < 3)
-    {
-        fileUpload(req, res, async (err) =>
-        { 
-            if (err instanceof multer.MulterError) 
-            {
-                update_tries;
-                res.status(401).json({"msg":err.message})
-                res.end();
-            } 
-    
-            else if(err)
-            {
-                update_tries;
-                res.status(401).json({"msg":err.message})
-                res.end();
-            }
-    
-            else if(filesLength(req) == 0)
-            {
-                update_tries;
-                res.status(401).json({"msg":"Please choose files!"})
-                res.end();
-            }
-    
-            else if(filesLength(req) < 1)
-            {
-                update_tries;
-                res.status(401).json({"msg":"Both documents are required!"})
-                res.end();
-            }
-    
-            else if(filesLength(req) > 1)
-            {
-                update_tries;
-                res.status(401).json({"msg":"More than 1 file selected"})
-                res.end();
-            }
-    
-            else
-            {
-                var imgsrc = 'assets/uploads/';
-                await userKYC.update(
-                    { 
-                        KYC_LEVEL_2: 'PENDING', 
-                        no_of_tries:0,
-                    },
-                    {
-                        where: {f_key: KYC.f_key}    
-                    })
-                    .then(async() => 
-                    { 
-                        ejs.renderFile(path.join(__dirname, '../views/email_templates/kyc.ejs'), 
+    if(KYC.KYC_LEVEL_2 != "PENDING" && KYC.KYC_LEVEL_2 != "YES")
+        {
+            fileUpload(req, res, async (err) =>
+            { 
+                if (err instanceof multer.MulterError) 
+                {
+                    
+                    res.status(401).json({"msg":err.message})
+                    res.end();
+                } 
+        
+                else if(err)
+                {
+                    
+                    res.status(401).json({"msg":err.message})
+                    res.end();
+                }
+        
+                else if(filesLength(req) == 0)
+                {
+                    
+                    res.status(401).json({"msg":"Please choose files!"})
+                    res.end();
+                }
+        
+                else if(filesLength(req) < 1)
+                {
+                    
+                    res.status(401).json({"msg":"Both documents are required!"})
+                    res.end();
+                }
+        
+                else if(filesLength(req) > 1)
+                {
+                    
+                    res.status(401).json({"msg":"More than 1 file selected"})
+                    res.end();
+                }
+        
+                else
+                {
+                    var imgsrc = 'assets/uploads/';
+                    await userKYC.update(
+                        { 
+                            KYC_LEVEL_2: 'PENDING', 
+                            KYC_LEVEL_2_TRY : Models.sequelize.literal('KYC_LEVEL_2_TRY +'+1), 
+                        },
                         {
-                            name: authData.full_name,
-                            level: "2",
+                            where: {f_key: KYC.f_key}    
                         })
-                        .then(async(template) => 
+                        .then(async() => 
+                        { 
+                            ejs.renderFile(path.join(__dirname, '../views/email_templates/kyc.ejs'), 
+                            {
+                                name: authData.full_name,
+                                level: "2",
+                            })
+                            .then(async(template) => 
+                            {
+                                send(from,authData.email,subject,template);
+        
+                                res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
+                                res.end();
+                                next();
+                            })
+                        })
+                        .catch(async()=>
                         {
-                            send(from,authData.email,subject,template);
-    
-                            res.status(200).json({"msg":"We have received your documents, you will get notified once we review them!"})
+                            
+                            res.status(401).json({"msg":"Something went wrong!"})
                             res.end();
-                            next();
-                        })
-                    })
-                    .catch(async()=>
-                    {
-                        update_tries;
-                        res.status(401).json({"msg":"Something went wrong!"})
-                        res.end();
-                    });
-            }
-        })
-    }
+                        });
+                }
+            })
+        }
 
-    else
-    {
-        update_tries;
-        res.status(401).json({"msg":"You have reached maximum no. of KYC tries, please comeback after 3 hours!"})
-        res.end();
-    }
+        else
+        {
+            
+            res.status(401).json({"msg":"You have already applied for KYC"})
+            res.end();
+        }
     
 })
 

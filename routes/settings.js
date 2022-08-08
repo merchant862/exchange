@@ -1,4 +1,6 @@
 var express = require('express');
+var app = express();
+var cookieParser = require('cookie-parser');    
 var router = express.Router();
 var dotenv = require("dotenv");
 var auth = require('../middleware/auth')
@@ -20,68 +22,91 @@ var title = process.env.TITLE;
 
 router.use(bodyParser.json());
 
+const csrfProtection = require('../middleware/check_csrf');
+  
+app.use(cookieParser())
+
+function csrfToken(req,res)
+{
+    var token = req.csrfToken();
+    /* res.cookie('XSRF-TOKEN', token);
+    res.locals.csrfToken = token; */
+    
+    return token;
+}
 /* GET home page. */
 
-router.get('/', auth, authMenu, KYCCheckerLevel1, async function(req, res, next) 
+router.get('/', auth, authMenu, KYCCheckerLevel1, csrfProtection, async function(req, res, next) 
 {
-    authMenu(req,res,next,"settings","Settings");
+    res.cookie('XSRF', csrfToken(req,res),{secure:false, sameSite:'lax',httpOnly: true});
+    authMenu(req,res,next,"settings","Settings","","","","","","","","",csrfToken(req,res));
 });
 
-router.post('/mob',auth, authMenu, KYCCheckerLevel1, async function(req, res, next) 
+router.post('/mob',auth, authMenu, KYCCheckerLevel1, csrfProtection, async function(req, res, next) 
 {
     var data = await authData(req);
 
     var mobile = req.body.mobile;
+
+    var _csrf = req.cookies.XSRF;
     
-    
-    if(mobile != "")
+    if(mobile != "" && req.body._csrf !="")
     {
-       try
+       if(req.body._csrf == _csrf)
        {
-            var num = phone_validator.parsePhoneNumber(mobile,data.country).formatInternational();
-
-            if(!num && !phone_validator.isValidNumber(num) && !phone_validator.isPossibleNumber(num))
-            {
-                res.status(403).json({"msg":"Invalid Mobile Number!"});
-                res.end();
-            }
-
-            else
-            {
-                var from = "Tech Team";
-                var subject = "Mobile no. Update";
-
-                ejs.renderFile(path.join(__dirname, '../views/email_templates/dataUpdateInternal.ejs'), 
-                {
-                  name: data.full_name,
-                  data: 'mobile no.',
-                })
-                .then(async(template)=>
-                {
-                    send(from,data.email,subject,template);
-
-                    await User.update(
-                        {
-                            phone: num,
-                        },
-                        {
-                            where: 
-                            {
-                                email: data.email,
-                            }
-                        }
-                       ).then(()=>
-                        {
-                            res.status(200).json({"msg":"Mobile No. updated!"});
-                            res.end();
-                        })
-                })
-            }
+        try
+        {
+             var num = phone_validator.parsePhoneNumber(mobile,data.country).formatInternational();
+ 
+             if(!num && !phone_validator.isValidNumber(num) && !phone_validator.isPossibleNumber(num))
+             {
+                 res.status(403).json({"msg":"Invalid Mobile Number!"});
+                 res.end();
+             }
+ 
+             else
+             {
+                 var from = "Tech Team";
+                 var subject = "Mobile no. Update";
+ 
+                 ejs.renderFile(path.join(__dirname, '../views/email_templates/dataUpdateInternal.ejs'), 
+                 {
+                   name: data.full_name,
+                   data: 'mobile no.',
+                 })
+                 .then(async(template)=>
+                 {
+                     send(from,data.email,subject,template);
+ 
+                     await User.update(
+                         {
+                             phone: num,
+                         },
+                         {
+                             where: 
+                             {
+                                 email: data.email,
+                             }
+                         }
+                        ).then(()=>
+                         {
+                             res.status(200).json({"msg":"Mobile No. updated!"});
+                             res.end();
+                         })
+                 })
+             }
+        }
+        
+        catch(e)
+        {
+             res.status(403).json({"msg":e.message});
+             res.end();
+        }
        }
-       
-       catch(e)
+
+       else
        {
-            res.status(403).json({"msg":e.message});
+            res.status(403).json({"msg":"Request was tampered"});
             res.end();
        }
     }
@@ -110,48 +135,56 @@ router.post('/pass', auth, authMenu, KYCCheckerLevel1, async(req,res,next) =>
         {
             if(e)
             {
-                if(newPass == newPass2)
+                if(newPass.length > 8 && newPass2.length > 8)
                 {
-                    var hash = await bcrypt.hash(newPass,salt);
-
-                    await User.update(
-                        {
-                            password: hash
-                        },
-                        {
-                            where:
+                    if(newPass == newPass2)
+                    {
+                        var hash = await bcrypt.hash(newPass,salt);
+    
+                        await User.update(
                             {
-                                email: data.email,
-                            }
-                        })
-                        .then(async(e)=>
-                        {
-                            var from = "Tech Team";
-                            var subject = "Password Update";
-
-                            ejs.renderFile(path.join(__dirname, '../views/email_templates/dataUpdateInternal.ejs'), 
+                                password: hash
+                            },
                             {
-                                name: data.full_name,
-                                data: 'password',
+                                where:
+                                {
+                                    email: data.email,
+                                }
                             })
-                            .then(async(template) =>
+                            .then(async(e)=>
                             {
-                                send(from,data.email,subject,template);
-
-                                res.status(200).json({"msg":"Password updated!"});
+                                var from = "Tech Team";
+                                var subject = "Password Update";
+    
+                                ejs.renderFile(path.join(__dirname, '../views/email_templates/dataUpdateInternal.ejs'), 
+                                {
+                                    name: data.full_name,
+                                    data: 'password',
+                                })
+                                .then(async(template) =>
+                                {
+                                    send(from,data.email,subject,template);
+    
+                                    res.status(200).json({"msg":"Password updated!"});
+                                    res.end();
+                                })
+                            })
+                            .catch((e)=>
+                            {
+                                res.status(400).json({"msg":"Password was not updated!"});
                                 res.end();
                             })
-                        })
-                        .catch((e)=>
-                        {
-                            res.status(400).json({"msg":"Password was not updated!"});
-                            res.end();
-                        })
+                    }
+    
+                    else
+                    {
+                        res.status(400).json({"msg":"Passwords don't match!"});
+                        res.end();
+                    }
                 }
-
                 else
                 {
-                    res.status(400).json({"msg":"Passwords don't match!"});
+                    res.status(400).json({"msg":"Password length should be greater 8 characters!"});
                     res.end();
                 }
             }

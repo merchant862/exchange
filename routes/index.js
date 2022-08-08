@@ -11,7 +11,7 @@ let title = process.env.TITLE;
 
 /* GET home page. */
 router.get('/', menu, function(req, res, next) {
-  menu(req,res,next,"index","");
+  menu(req,res,next,"index","Home");
 });
 
 module.exports =  router;

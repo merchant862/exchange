@@ -4,7 +4,7 @@ $(document).ready(function()
             {
                 // Stop form from submitting normally
                 event.preventDefault();
-
+                
                 var formData = new FormData();
                 
                 var totalfiles = document.getElementById('docs').files.length;
@@ -13,6 +13,8 @@ $(document).ready(function()
                 {
                     formData.append("docs[]", document.getElementById('docs').files[x]);
                 }
+
+                
                 
                 $.ajax(
                 { 
@@ -20,6 +22,7 @@ $(document).ready(function()
                   type: "POST",
                   data: formData,
                   dataType: 'json',
+                  
                   Cache: false,
                   processData: false,
                   contentType: false,

@@ -69,116 +69,128 @@ router.post('/', deauth, async(req, res, next)=>{
   {
     if(checkEmail == 0 )
     {
-       if(password == password2)
+       if(password.length > 8)
        {
-          if(validator.is_email_valid(email))
-          {
-            try
-            {
-              var num = phone_validator.parsePhoneNumber(phone,country).formatInternational();
-
-              if(!num && !phone_validator.isValidNumber(num) && !phone_validator.isPossibleNumber(num))
-              {
-                res.status(403).json({"msg":"Invalid Mobile Number!"});
-                res.end();
-              }
-  
-              else
-              {
-                var usr = 
-                {
-                  full_name : name,
-                  email : email,
-                  password : await bcrypt.hash(password,salt),
-                  verified: verified,
-                  verification_token:token,
-                  phone: num,
-                  country: country,
-                  USDT_balance: 0,
-                  address: address,
-                  privateKey: key
-                };
-            
-                created_user = await User.create(usr);
-    
-                var userID = await User.findAll(
-                  {
-                    where:
-                    {
-                      email: email
-                    }
-                  }).then((results) => 
-                  {
-                      var json =  JSON.stringify(results);
-                
-                      var jsonParsedData = JSON.parse(json);
-                      for(var i = 0; i < jsonParsedData.length; i++)
-                      {
-                          return jsonParsedData[i]["id"] 
-                      }
-              
-                  });
-                
-                var kycData = 
-                {
-                  f_key: userID,
-                  KYC_LEVEL_1: 'NO',
-                  KYC_LEVEL_2: 'NO',
-                }
-                
-                var add_KYC_data = await userkYC.create(kycData);
-
-                ejs.renderFile(path.join(__dirname, '../views/email_templates/registration.ejs'), 
-                {
-                  name: name,
-                  link: 'http://localhost:3000/verify?token='+token,
-                })
-                .then(async(template) =>
-                {
-                   send(from,email,subject,template);
-
-                   fetch(url, {
-                    method: 'post',
-                  })
-                    .then((response) => response.json())
-                    .then((google_response) => {
-                        if (google_response.success == true)
-                        {
-                          res.status(200).json({"msg":"Registration done, check your Email for verification code!"});
-                          res.end();
-                        }
-      
-                        else
-                        {
-                          res.status(401).json({"msg":"Captcha verification failed!"});
-                          res.end();
-                        }
-      
-                      });
-                })
-
-              }
-            }
-            
-            catch(e)
-            {
-                res.status(403).json({"msg":e.message});
-                res.end();
-            }
-          }
-
-          else
-          {
-            res.status(403).json({"msg":"Wrong Email format!"});
-            res.end();
-          }
+        if(password == password2)
+        {
+           if(validator.is_email_valid(email))
+           {
+             try
+             {
+               var num = phone_validator.parsePhoneNumber(phone,country).formatInternational();
+ 
+               if(!num && !phone_validator.isValidNumber(num) && !phone_validator.isPossibleNumber(num))
+               {
+                 res.status(403).json({"msg":"Invalid Mobile Number!"});
+                 res.end();
+               }
+   
+               else
+               {
+                 var usr = 
+                 {
+                   full_name : name,
+                   email : email,
+                   password : await bcrypt.hash(password,salt),
+                   verified: verified,
+                   verification_token:token,
+                   phone: num,
+                   country: country,
+                   USDT_balance: 0,
+                   address: address,
+                   privateKey: key
+                 };
+             
+                 created_user = await User.create(usr);
+     
+                 var userID = await User.findAll(
+                   {
+                     where:
+                     {
+                       email: email
+                     }
+                   }).then((results) => 
+                   {
+                       var json =  JSON.stringify(results);
+                 
+                       var jsonParsedData = JSON.parse(json);
+                       for(var i = 0; i < jsonParsedData.length; i++)
+                       {
+                           return jsonParsedData[i]["id"] 
+                       }
+               
+                   });
+                 
+                 var kycData = 
+                 {
+                   f_key: userID,
+                   KYC_LEVEL_1: 'NO',
+                   KYC_LEVEL_2: 'NO',
+                   KYC_LEVEL_1_TRY: 0,
+                   KYC_LEVEL_2_TRY: 0,
+                 }
+                 
+                 var add_KYC_data = await userkYC.create(kycData);
+ 
+                 ejs.renderFile(path.join(__dirname, '../views/email_templates/registration.ejs'), 
+                 {
+                   name: name,
+                   link: 'http://localhost:3000/verify?token='+token,
+                 })
+                 .then(async(template) =>
+                 {
+                    send(from,email,subject,template);
+ 
+                    fetch(url, {
+                     method: 'post',
+                   })
+                     .then((response) => response.json())
+                     .then((google_response) => {
+                         if (google_response.success == true)
+                         {
+                           res.status(200).json({"msg":"Registration done, check your Email for verification code!"});
+                           res.end();
+                         }
+       
+                         else
+                         {
+                           res.status(401).json({"msg":"Captcha verification failed!"});
+                           res.end();
+                         }
+       
+                       });
+                 })
+ 
+               }
+             }
+             
+             catch(e)
+             {
+                 res.status(403).json({"msg":e.message});
+                 res.end();
+             }
+           }
+ 
+           else
+           {
+             res.status(403).json({"msg":"Wrong Email format!"});
+             res.end();
+           }
+        }
+ 
+        else
+        {
+           res.status(401).json({"msg":"Passwords don't match!"});
+           res.end();
+        }
        }
 
        else
        {
-          res.status(401).json({"msg":"Passwords don't match!"});
+          res.status(401).json({"msg":"Password length should be greater than 8 characters!"});
           res.end();
        }
+       
     }
 
     else

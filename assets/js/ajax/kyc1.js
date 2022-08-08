@@ -14,12 +14,15 @@ $(document).ready(function()
                     formData.append("docs[]", document.getElementById('docs').files[x]);
                 }
                 
+                
+
                 $.ajax(
                 { 
                   url: "/kycLevel1/",
                   type: "POST",
                   data: formData,
                   dataType: 'json',
+            
                   Cache: false,
                   processData: false,
                   contentType: false,

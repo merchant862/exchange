@@ -19,6 +19,7 @@ router.get('/', async (req, res) =>
     if(token!="")
     {
         res.clearCookie('authorization');
+        res.clearCookie('_csrf');
         res.redirect('/login');
     }
 

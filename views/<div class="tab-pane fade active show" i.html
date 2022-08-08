@@ -1,0 +1,39 @@
+<div class="tab-pane fade active show" id="order-history">
+                
+    <ul class="d-flex justify-content-between market-order-item">
+      <!-- <li><b>S. No.</b></li> -->
+      <li><b>Order ID.</b></li>
+      <li><b>Time</b></li>
+      <li><b>Pair</b></li>
+      <li><b>Buy/Sell</b></li>
+      <li><b>Price</b></li>
+      <li><b>Amount</b></li>
+      <!-- <li><b>Executed</b></li> -->
+    </ul>
+        <% if(typeof order_no != undefined &&
+        typeof amount != undefined &&
+        typeof coin != undefined &&
+        typeof date != undefined &&
+        order_no != "" &&
+        amount != "" &&
+        coin != "" &&
+        amount != "") { %>
+          <% for(i = 0; i < order_no.length; i++) { %>
+              <ul class="d-flex justify-content-between market-order-item">    
+                <!-- <li><%= i+1 %></li> -->
+                <li><%= order_no[i] %></li>
+                <li><%= date[i] %></li>
+                <li><%= coin[i]%>/USDT</li>
+                <li class="text-success"><b>BUY</b></li>
+                <li><%= price[i] %></li>
+                <li><%= amount[i]%> <%= asset%></li>
+                <!-- <li>100%</li> -->
+              </ul>
+          <% } %>
+    <% } else { %>
+          <span class="no-data">
+            <i class="icon ion-md-document"></i>
+            No data
+          </span>
+    <% } %>
+</div>

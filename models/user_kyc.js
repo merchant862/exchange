@@ -21,6 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     no_of_tries: DataTypes.INTEGER,
     KYC_LEVEL_1: DataTypes.STRING,
     KYC_LEVEL_2: DataTypes.STRING,
+    KYC_LEVEL_1_TRY: DataTypes.INTEGER,
+    KYC_LEVEL_2_TRY: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'user_kyc',

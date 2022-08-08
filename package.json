@@ -19,6 +19,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "csurf": "^1.11.0",
     "device-detector-js": "^3.0.3",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",

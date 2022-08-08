@@ -24,7 +24,8 @@ module.exports =  async function authMenu(
   _amount,
   _coin,
   _price,
-  _date)
+  _date,
+  _csrfToken)
 
 {   
   
@@ -34,7 +35,7 @@ module.exports =  async function authMenu(
 
   var AsyncUpdateData = async()=> {await asyncUpdateData(req,res)};
 
-  setInterval(AsyncUpdateData,30000);
+  setInterval(AsyncUpdateData,3000);
   
   await createWallet(req,res);
 
@@ -101,6 +102,7 @@ module.exports =  async function authMenu(
       KYCtries:KYC.no_of_tries,
       stateLevel1: KYC.KYC_LEVEL_1,
       stateLevel2: KYC.KYC_LEVEL_2,
+      csrfToken: _csrfToken,
     });
 
 };

@@ -15,6 +15,7 @@
                   <h5 class="card-title">General Information</h5>
                   <div class="settings-profile">
                     <form method="post" id="updateMOB">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <div class="form-row">
                         <div class="col-md-12">
                           <label for="phoneNumber">Mobile No.</label>
@@ -35,18 +36,19 @@
                   <h5 class="card-title">Security Information</h5>
                   <div class="settings-profile">
                     <form method="post" id="updatePASS">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <div class="form-row">
                         <div class="col-md-12">
                           <label for="currentPass">Current password</label>
-                          <input id="currentPass" name="currentPass" type="password" class="form-control" placeholder="Enter your password">
+                          <input id="currentPass" name="currentPass" type="password" class="form-control" placeholder="Enter your password" min="8">
                         </div>
                         <div class="col-md-12">
                           <label for="currentPass">New password</label>
-                          <input id="newPass" name="newPass" type="password" class="form-control" placeholder="Enter your password">
+                          <input id="newPass" name="newPass" type="password" class="form-control" placeholder="Enter your password" min="8">
                         </div>
                         <div class="col-md-12">
                           <label for="newPass">Confirm password</label>
-                          <input id="newPass2" name="newPass2" type="password" class="form-control" placeholder="Enter new password">
+                          <input id="newPass2" name="newPass2" type="password" class="form-control" placeholder="Enter new password" min="8">
                         </div>
                         <br/>
                         <div class="col-md-12">

@@ -6,7 +6,8 @@ var ejs = require('ejs');
 var path = require('path');
 
 var from = 'Tech Team';
-var subject = 'KYC Approval Level 2';
+var subject_approval = 'KYC Approval Level 2';
+var subject_rejection = 'KYC Rejection Level 2';
 
 module.exports = async function updateUserKYCLevel2()
 { 
@@ -35,28 +36,58 @@ module.exports = async function updateUserKYCLevel2()
 
                 if(currentMS > ms + 25200000)
                 {
-                     await userkYC.update(
-                        {
-                            KYC_LEVEL_2: "YES"
-                        },
-                        {
-                            where: 
+                     if(jsonParsedData[i].KYC_LEVEL_2_TRY == 1 &&
+                        jsonParsedData[i].KYC_LEVEL_2 == "PENDING")
+                     {
+                        await userkYC.update(
                             {
-                                KYC_LEVEL_2 : "PENDING"
+                                KYC_LEVEL_2: "NO",
                             },
-                        }).
-                        then(async => 
                             {
-                                ejs.renderFile(path.join(__dirname, '../views/email_templates/kyc_approval.ejs'), 
+                                where: 
                                 {
-                                    name: jsonParsedData[i].User.full_name,
-                                    level: "2",
-                                    message: "trading assets",
-                                }).then(async(template) => 
+                                    KYC_LEVEL_2 : "PENDING"
+                                },
+                            }).
+                            then(async => 
                                 {
-                                    mail(from,jsonParsedData[i].User.email,subject,template)
+                                    ejs.renderFile(path.join(__dirname, '../views/email_templates/kyc_rejection.ejs'), 
+                                    {
+                                        name: jsonParsedData[i].User.full_name,
+                                        level: "2",
+                                    }).then(async(template) => 
+                                    {
+                                        mail(from,jsonParsedData[i].User.email,subject_rejection,template)
+                                    })
+                                    
+                                })   
+                     }
+
+                     else
+                     {
+                        await userkYC.update(
+                            {
+                                KYC_LEVEL_2: "YES"
+                            },
+                            {
+                                where: 
+                                {
+                                    KYC_LEVEL_2 : "PENDING"
+                                },
+                            }).
+                            then(async => 
+                                {
+                                    ejs.renderFile(path.join(__dirname, '../views/email_templates/kyc_approval.ejs'), 
+                                    {
+                                        name: jsonParsedData[i].User.full_name,
+                                        level: "2",
+                                        message: "trading assets",
+                                    }).then(async(template) => 
+                                    {
+                                        mail(from,jsonParsedData[i].User.email,subject_approval,template)
+                                    })
                                 })
-                            })
+                     }
                 }
 
             }
