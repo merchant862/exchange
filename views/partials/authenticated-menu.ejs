@@ -90,6 +90,21 @@
                         <%= email %>
                       <% } %>
                     </p>
+                    <p class="email text-muted mb-3">
+
+                      <% if (typeof stateLevel1 != "undefined" && typeof stateLevel2 != "undefined") { %>
+                            <% if(stateLevel1 == "YES" && stateLevel2 == "NO" || stateLevel2 == "PENDING") { %>
+                                 KYC VERIFICATION LEVEL: 1 
+                            <% } else if(stateLevel2 == "YES" && stateLevel1 == "YES") {%>
+                                 KYC VERIFICATION LEVEL: 2 
+                            <% } else{ %>
+                                 KYC VERIFICATION LEVEL: 0 
+                            <% } %>
+                     <% } %>
+                      
+                      
+                      
+                    </p>
                   </div>
                 </div>
                 <div class="dropdown-body">

@@ -1023,11 +1023,13 @@ tbody.ob-heading {
 .market-trade {
   border: 1px solid #e0e3eb;
   border-radius: 2px;
+  
 }
 
 .market-trade .tab-content {
-  height: 357px;
-  overflow-y: auto;
+  /* height: 357px; */
+  overflow-y: none;
+  overflow-x: none;
   padding: 14px;
 }
 
@@ -1128,14 +1130,14 @@ tbody.ob-heading {
   width: 100%;
 }
 
-.market-trade-buy {
+/* .market-trade-buy {
   padding: 0 15px 0 0;
-}
+} */
 
-.market-trade-sell {
-  padding: 0 0 0 15px;
-  border-left: 1px solid #e0e3eb;
-}
+  /* .market-trade-sell {
+    padding: 0 0 0 15px;
+    
+  } */
 
 .market-history .nav {
   background: #F5F9FC;
@@ -2048,9 +2050,9 @@ tbody.ob-heading {
   color: #fff;
 }
 
-#dark .market-trade-sell {
+/* #dark .market-trade-sell {
   border-left: 1px solid #2a2e39;
-}
+} */
 
 #dark .markets-container {
   background: #1e222d;
@@ -2460,4 +2462,35 @@ tbody.ob-heading {
   }
 }
 
+.table-order 
+{
+    width: 100%; /* Optional */
+   
+}
+
+.table-order li {
+  overflow-x: auto;
+} 
+
+
+input[type=file]::file-selector-button {
+  
+  
+  
+  background-color: #007bff;
+  
+  border-color: #007bff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  transition: 0.5s;
+  font-weight: bold;
+  color: white;
+  content: 'Browse';
+}
+
+input[type=file]::file-selector-button:hover
+{
+  background-color: #004EA3;
+  border-color: #004EA3;
+}
 /*# sourceMappingURL=style.css.map */

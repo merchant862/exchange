@@ -28,13 +28,16 @@ var resetPassRouter = require('./routes/reset-pass');
 var updatePassRouter = require('./routes/update-pass')
 var verifyUserRouter = require('./routes/verify-user');
 var logoutRouter = require('./routes/logout');
-var kycLevel1Router = require("./routes/kycLevel1");
-var kycLevel2Router = require("./routes/kycLevel2");
 var depositRouter = require("./routes/deposit");
 var walletRouter = require("./routes/wallet");
 var BinanceAPI = require("./routes/BinanceAPI");
 var depthRouter = require('./routes/depth');
-
+var kycmethod1 = require("./routes/kyc_choose_method_1");
+var kycLevel1CardRouter = require("./routes/kycLevel1Card");
+var kycLevel1PassportRouter = require("./routes/kycLevel1Passport");
+var kycLevel2UBillRouter = require("./routes/kycUBill");
+var kycLevel2BStatementRouter = require("./routes/kycBStatement");
+var kycmethod2 = require("./routes/kyc_choose_method_2");
 /*Update User KYC Data*/
 
 var userKYCUpdateLevel1 = require("./async_funcs/updateUserKYCLevel1");
@@ -95,7 +98,7 @@ app.use(helmet.contentSecurityPolicy({
       imgSrc:["'self'","data:","https://cdnjs.cloudflare.com","https://i.ibb.co"],
       scriptSrc: ["'self'","http: 'unsafe-inline'","https://s3.tradingview.com"],
       objectSrc: ["'none'"],
-      childSrc: ["'self'","https://s.tradingview.com","https://www.google.com"],
+      childSrc: ["'self'","https://s.tradingview.com","https://www.google.com","https://www.tradingview-widget.com"],
       styleSrc:["'self'","http://fonts.googleapis.com","http: 'unsafe-inline'"],
       fontSrc:["'self'","https://fonts.gstatic.com","http: 'unsafe-inline'"],
       formAction: ["'self'"],
@@ -141,13 +144,16 @@ app.use('/indices', indicesRouter);
 app.use('/heatmap', heatmapRouter);
 app.use('/verify', verifyUserRouter);
 app.use('/logout', logoutRouter);
-app.use('/kycLevel1', kycLevel1Router);
-app.use('/kycLevel2', kycLevel2Router);
 app.use('/deposit', depositRouter);
 app.use('/wallet', walletRouter);
 app.use('/price', BinanceAPI);
 app.use('/depth', depthRouter)
-
+app.use('/chooseMethodLevel1', kycmethod1)
+app.use('/chooseMethodLevel2', kycmethod2)
+app.use('/kycCard', kycLevel1CardRouter);
+app.use('/kycPassport', kycLevel1PassportRouter);
+app.use('/kycUBill', kycLevel2UBillRouter);
+app.use('/kycBStatement', kycLevel2BStatementRouter);
 
 //----------Mail Templates------------------
 

@@ -1,0 +1,58 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/authenticated-menu.ejs') %>
+
+<% if (typeof stateLevel2 != "undefined") { %>
+  <% if (stateLevel2 == "PENDING") { %>
+    <script type="text/javascript">
+      window.location.assign("/chooseMethodLevel2");
+    </script>
+  <% } else if (stateLevel2 == "NO") { %>
+    
+    <div class="vh-100 d-flex justify-content-center">
+ 
+      <div class="form-access my-auto">
+        
+            <div id="kycRes" style="display: all;">
+    
+            </div>
+            <form id="kycForm" method="post" enctype="multipart/form-data">
+              <span><h1>KYC</h1></span>
+              <div class="form-group">  
+                <ul id="kyc-ins">
+                  <li><h5>1) Choose 1 photo for the front side of your address document.</h5></li>
+                  <br>
+                  <li><h5>2) Photo format should be JPG, JPEG, or PNG.</h5></li>
+                  <br>
+                  <li><h5>3) Photo should be less than 5 MB.</h5></li>
+                  <br>
+                </ul>
+                <label for="file">Upload Document:</label>
+                <input 
+                type="file" 
+                class="form-control" 
+                name="docs[]"
+                id="docs" 
+                accept="image/jpeg, image/jpg, image/png"  
+                required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+      </div>
+    </div>
+
+  <% } else if(stateLevel2 == "YES") { %>
+    <script type="text/javascript">
+      window.location.assign("/exchange?asset=BTC");
+    </script>
+  <% } %>
+<% } %>
+
+  
+  <%- include('./partials/scripts.ejs') %>
+  
+  <script src="assets/js/ajax/kycBStatement.js"></script>
+  
+</body>
+
+</html>

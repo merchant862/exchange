@@ -34,7 +34,7 @@ function filesLength (req)
 
 router.get('/', auth, KYCCheckerLevel1, async(req, res, next) =>
 {
-    authMenu(req,res,next,'kyc-level-2',"KYC","","","","","","","","","");
+    authMenu(req,res,next,'kycUBill',"KYC","","","","","","","","","");
 });
 
 router.post('/', auth, KYCCheckerLevel1, async(req,res,next) =>

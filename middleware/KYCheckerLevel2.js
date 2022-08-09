@@ -46,7 +46,7 @@ async function getdata(req, res, next)
 
             if(isDone.KYC_LEVEL_2 == "NO" || isDone.KYC_LEVEL_2 == "PENDING")
             {
-                res.redirect("/kycLevel2");
+                res.redirect("/chooseMethodLevel2");
             }
 
             else

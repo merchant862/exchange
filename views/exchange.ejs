@@ -135,8 +135,8 @@
           <!-- TradingView Widget END -->
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="market-trade" style="height:550px;">
+      <div class="col-lg-12 mb-3 justify-content-center">
+        <div class="market-trade" >
           <ul class="nav nav-pills" role="tablist">
             <li class="nav-item">
               <a class="nav-link active" data-toggle="pill" href="" role="tab"
@@ -157,64 +157,83 @@
           </ul>
           <div class="tab-content">
             <div class="tab-pane fade show active" id="pills-trade-limit" role="tabpanel">
-              <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-center">
 
-                <div class="market-trade-buy tab-pane fade show active align-items-center" id="market-trade-buy" role="tabpanel">
-                  <div id="buyRes" style="display: all;">
+                <div class="row ">
+                  <div class="col-lg-6 col-md-12 mb-4 ">
+                    <div class="market-trade-buy tab-pane fade show active align-items-center" id="market-trade-buy" role="tabpanel">
+                      <div id="buyRes" style="display: all;">
+    
+                      </div>                 
+                      <form id="buyCoin" method="POST" action="">
+                      <div class="input-group">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="text" class="form-control" placeholder="Price" name="amount" id="balance">
+                        <div class="input-group-append">
+                          <span class="input-group-text">USDT</span>
+                        </div>
+                      </div>
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Amount" id="coin">
+                        <div class="input-group-append">
+                          <span class="input-group-text" id="asset"><%= asset %></span>
+                        </div>
+                      </div>
+                      <ul class="market-trade-list">
+                        <li onclick="amount('<%= balance %>',25)"><a>25%</a></li>
+                        <li onclick="amount('<%= balance %>',50)"><a>50%</a></li>
+                        <li onclick="amount('<%= balance %>',75)"><a>75%</a></li>
+                        <li onclick="amount('<%= balance %>',100)"><a>100%</a></li>
+                      </ul>
+                      <div id="note" class="m-1 my-2 p-3">
+                        <p class="text-danger"><b>Note:</b><br/>
+                         
+                           Prices shown on this exchange are 30% off. 
+                           Please do not mix these prices with real ones.
+                           These prices are only valid till the timer ends. 
+                         
+                       </p>
+                     </div>
+                      <button class="btn buy">Buy</button>
+                     </form>
+                    </div>
+                    
+                    
+                  </div>
 
-                  </div>                 
-                  <form id="buyCoin" method="POST" action="">
-                  <div class="input-group">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <input type="text" class="form-control" placeholder="Price" name="amount" id="balance">
-                    <div class="input-group-append">
-                      <span class="input-group-text">USDT</span>
-                    </div>
-                  </div>
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Amount" id="coin">
-                    <div class="input-group-append">
-                      <span class="input-group-text" id="asset"><%= asset %></span>
-                    </div>
-                  </div>
-                  <ul class="market-trade-list">
-                    <li onclick="amount('<%= balance %>',25)"><a>25%</a></li>
-                    <li onclick="amount('<%= balance %>',50)"><a>50%</a></li>
-                    <li onclick="amount('<%= balance %>',75)"><a>75%</a></li>
-                    <li onclick="amount('<%= balance %>',100)"><a>100%</a></li>
-                  </ul>
-                  <p>Available: <span>0 BTC = 0 USD</span></p>
-                  <p>Volume: <span>0 BTC = 0 USD</span></p>
-                  <p>Margin: <span>0 BTC = 0 USD</span></p>
-                  <p>Fee: <span>0 BTC = 0 USD</span></p>
-                  <button class="btn buy">Buy</button>
-                 </form>
-                </div>
-                <div class="market-trade-sell tab-pane fade show active align-items-center" id="market-trade-sell" role="tabpanel">
-                  <div style="opacity: 35%;">
-                    <div class="input-group">
-                      <input type="number" class="form-control" placeholder="Price" disabled>
-                      <div class="input-group-append">
-                        <span class="input-group-text"><%= asset%></span>
+                  <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="market-trade-sell tab-pane fade show active align-items-center" id="market-trade-sell" role="tabpanel">
+                      <div style="opacity: 35%;">
+                        <div class="input-group">
+                          <input type="number" class="form-control" placeholder="Price" disabled>
+                          <div class="input-group-append">
+                            <span class="input-group-text"><%= asset%></span>
+                          </div>
+                        </div>
+                        <div class="input-group">
+                          <input type="number" class="form-control" placeholder="Amount" disabled>
+                          <div class="input-group-append">
+                            <span class="input-group-text">USDT</span>
+                          </div>
+                        </div>
+                        <ul class="market-trade-list" style="pointer-events:none ;">
+                          <li><a href="#!">25%</a></li>
+                          <li><a href="#!">50%</a></li>
+                          <li><a href="#!">75%</a></li>
+                          <li><a href="#!">100%</a></li>
+                        </ul>
+                        <div id="note" class="m-1 my-2 p-3">
+                          <p class="text-danger"><b>Note:</b><br/>
+                           
+                             Prices shown on this exchange are 30% off. 
+                             Please do not mix these prices with real ones.
+                             These prices are only valid till the timer ends. 
+                           
+                         </p>
+                       </div>
+                        <button class="btn sell" disabled>Sell</button>
                       </div>
                     </div>
-                    <div class="input-group">
-                      <input type="number" class="form-control" placeholder="Amount" disabled>
-                      <div class="input-group-append">
-                        <span class="input-group-text">USDT</span>
-                      </div>
-                    </div>
-                    <ul class="market-trade-list" style="pointer-events:none ;">
-                      <li><a href="#!">25%</a></li>
-                      <li><a href="#!">50%</a></li>
-                      <li><a href="#!">75%</a></li>
-                      <li><a href="#!">100%</a></li>
-                    </ul>
-                    <p>Available: <span>0 BTC = 0 USD</span></p>
-                    <p>Volume: <span>0 BTC = 0 USD</span></p>
-                    <p>Margin: <span>0 BTC = 0 USD</span></p>
-                    <p>Fee: <span>0 BTC = 0 USD</span></p>
-                    <button class="btn sell" disabled>Sell</button>
                   </div>
                 </div>
               </div>
@@ -269,6 +288,117 @@
           </div>
         </div>
       </div>
+      <div class="col-md-6" id="order_history">
+        <!-- <div class="market-history market-order mt15">
+          <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="pill" href="#order-history" role="tab" aria-selected="true">
+                Order history
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade active show" id="order-history">
+              
+               <table>
+                  <tr class="d-flex justify-content-between market-order-item">
+                    
+                    <th><b>Order ID.</b></th>
+                    <th><b>Time</b></th>
+                    <th><b>Pair</b></th>
+                    <th><b>Buy/Sell</b></th>
+                    <th><b>Price</b></th>
+                    <th><b>Amount</b></th>
+                    
+                  </tr>
+                      <% if(typeof order_no != undefined &&
+                      typeof amount != undefined &&
+                      typeof coin != undefined &&
+                      typeof date != undefined &&
+                      order_no != "" &&
+                      amount != "" &&
+                      coin != "" &&
+                      amount != "") { %>
+                        <% for(i = 0; i < order_no.length; i++) { %>
+                            <tr class="d-flex justify-content-between market-order-item">    
+                              
+                              <td><%= order_no[i] %></td>
+                              <td><%= date[i] %></td>
+                              <td><%= coin[i]%>/USDT</td>
+                              <td class="text-success"><b>BUY</b></td>
+                              <td><%= price[i] %></td>
+                              <td><%= amount[i]%> <%= asset%></td>
+                              
+                            </tr>
+              </table>
+
+                    <% } %>
+              <% } else { %>
+                    <span class="no-data">
+                      <i class="icon ion-md-document"></i>
+                      No data
+                    </span>
+              <% } %>
+          
+              
+
+          </div>
+          </div>
+        </div> -->
+       
+        <div class="market-history market-order mt15" style="height: 550px;">
+          <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="pill" role="tab" aria-selected="true">
+                Order History
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="open-orders" role="tabpanel" style=" overflow-x: auto;">
+              <ul class="d-flex justify-content-between market-order-item" id="table-order">
+                <!-- <li><b>S. No.</b></li> -->
+               
+                <!-- <li><b>Time</b></li> -->
+                <li style="width: 15%;"><b>Pair</b></li>
+                <!-- <li><b>Buy/Sell</b></li> -->
+                <li><b>Price</b></li>
+                <li><b>Amount</b></li>
+                <li style="width: 25%;" class=""><b>Order ID.</b></li>
+                <!-- <li><b>Executed</b></li> -->
+              </ul>
+                  <% if(typeof order_no != undefined &&
+                  typeof amount != undefined &&
+                  typeof coin != undefined &&
+                  typeof date != undefined &&
+                  order_no != "" &&
+                  amount != "" &&
+                  coin != "" &&
+                  amount != "") { %>
+                    <% for(i = 0; i < order_no.length; i++) { %>
+                        <ul class="d-flex justify-content-between market-order-item table-order" >    
+                          <!-- <li><%= i+1 %></li> -->
+                          
+                          <!-- <li><%= date[i] %></li> -->
+                          <li style="width: 15%;"><%= coin[i]%>/USDT</li>
+                          <!-- <li class="text-success"><b>BUY</b></li> -->
+                          <li><%= price[i] %></li>
+                          <li><%= amount[i]%> <%= asset%></li>
+                          <li style="width: 25%;"><%= order_no[i] %></li>
+                          <!-- <li>100%</li> -->
+                        </ul>
+                    <% } %>
+              <% } else { %>
+                    <span class="no-data">
+                      <i class="icon ion-md-document"></i>
+                      No data
+                    </span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        
+      </div>
       <div class="col-md-3">
         <div class="order-book mb15">
           <h2 class="heading">Order Book</h2>
@@ -276,7 +406,7 @@
             <thead class="ob-heading" align="center">
               <tr>
                 <th>
-                    <img src="assets/img/logo-light.svg" width="100" height="100">
+                    <img src="assets/img/icon.png" width="60" height="60">
                 </th>
               </tr>
             </thead>
@@ -290,60 +420,6 @@
               
             </tbody>
           </table>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="market-history market-order mt15">
-          <ul class="nav nav-pills" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="pill" href="#order-history" role="tab" aria-selected="true">
-                Order history
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane fade active show" id="order-history">
-              
-              <table>
-                  <tr class="d-flex justify-content-between market-order-item">
-                    <!-- <li><b>S. No.</b></li> -->
-                    <th><b>Order ID.</b></th>
-                    <th><b>Time</b></th>
-                    <th><b>Pair</b></th>
-                    <th><b>Buy/Sell</b></th>
-                    <th><b>Price</b></th>
-                    <th><b>Amount</b></th>
-                    <!-- <li><b>Executed</b></li> -->
-                  </tr>
-                      <% if(typeof order_no != undefined &&
-                      typeof amount != undefined &&
-                      typeof coin != undefined &&
-                      typeof date != undefined &&
-                      order_no != "" &&
-                      amount != "" &&
-                      coin != "" &&
-                      amount != "") { %>
-                        <% for(i = 0; i < order_no.length; i++) { %>
-                            <tr class="d-flex justify-content-between market-order-item">    
-                              <!-- <li><%= i+1 %></li> -->
-                              <td><%= order_no[i] %></td>
-                              <td><%= date[i] %></td>
-                              <td><%= coin[i]%>/USDT</td>
-                              <td class="text-success"><b>BUY</b></td>
-                              <td><%= price[i] %></td>
-                              <td><%= amount[i]%> <%= asset%></td>
-                              <!-- <li>100%</li> -->
-                            </tr>
-              </table>        
-                    <% } %>
-              <% } else { %>
-                    <span class="no-data">
-                      <i class="icon ion-md-document"></i>
-                      No data
-                    </span>
-              <% } %>
-          </div>
-          </div>
         </div>
       </div>
       

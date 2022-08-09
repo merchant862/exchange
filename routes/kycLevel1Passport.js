@@ -34,10 +34,10 @@ function filesLength (req)
 
 router.get('/', auth, async(req, res, next) =>
 {
-    authMenu(req,res,next,'kyc-level-1',"KYC","","","","","","","","","");
+    authMenu(req,res,next,'kycPassport',"KYC","","","","","","","","","");
 });
 
-router.post('/', auth, csrfProtection, async(req,res,next) =>
+router.post('/', auth, async(req,res,next) =>
 {
     var authData = await userData(req);
     var KYC = await KYCData(req);
@@ -45,7 +45,7 @@ router.post('/', auth, csrfProtection, async(req,res,next) =>
     var from = 'Tech Team';
     var subject = 'KYC Documents Level 1';
 
-    if(KYC.KYC_LEVEL_1 != "PENDING" && KYC.KYC_LEVEL_1 != "NO")
+    if(KYC.KYC_LEVEL_1 != "PENDING" && KYC.KYC_LEVEL_1 != "YES")
         {
             fileUpload(req, res, async (err) =>
             { 

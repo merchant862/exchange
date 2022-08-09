@@ -1,0 +1,60 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/kyc-level1-menu.ejs') %>
+
+<% if (typeof stateLevel1 != "undefined") { %>
+    <% if (stateLevel1 == "PENDING") { %>
+      <div class="landing-feature">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+                <h2>KYC Level 1 Verification</h2>
+            </div>
+            <div class="col-md-12">
+                <div class="landing-feature-item">
+                        <img src="assets/img/landing/pending.svg" alt="">
+                        <h3 class="text-white">KYC PENDING</h3>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } else if (stateLevel1 == "NO") { %>
+      
+        <div class="landing-feature">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                    <h2>KYC Level 1 Verification</h2><h2>Choose ID type</h2>
+                </div>
+                <div class="col-md-6">
+                    <a href="/kycCard">
+                        <div class="landing-feature-item">
+                            <img src="assets/img/landing/card.svg" alt="">
+                            <h3 class="text-white">National ID Card</h3>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="/kycPassport">
+                        <div class="landing-feature-item">
+                            <img src="assets/img/landing/passport.svg" alt="">
+                            <h3 class="text-white">Passport</h3>
+                        </div>
+                    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    <% } else if(stateLevel1 == "YES") { %>
+      <script type="text/javascript">
+          window.location.assign("/deposit");
+      </script>
+    <% } %>
+  <% } %>
+
+  <%- include('./partials/scripts.ejs') %>
+</body>
+
+</html>

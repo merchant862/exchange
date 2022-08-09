@@ -1,0 +1,61 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/kyc-level1-menu.ejs') %>
+
+<% if (typeof stateLevel1 != "undefined") { %>
+  <% if (stateLevel1 == "PENDING") { %>
+    <script type="text/javascript">
+      window.location.assign("/chooseMethodLevel1");
+    </script>
+  <% } else if (stateLevel1 == "NO") { %>
+    
+    <div class="vh-100 d-flex justify-content-center">
+ 
+      <div class="form-access my-auto">
+        
+            <div id="kycRes" style="display: all;">
+    
+            </div>
+            <form id="kycForm" method="post" enctype="multipart/form-data">
+              <span><h1>KYC</h1></span>
+              <div class="form-group">  
+                <ul id="kyc-ins">
+                  <li><h5>1) Choose 3 photos, one for the face, one for the front side of your ID and other for the backside.</h5></li>
+                  <br>
+                  <li><h5>2) Photos format should be JPG, JPEG, or PNG.</h5></li>
+                  <br>
+                  <li><h5>3) Photos should be less than 5 MB.</h5></li>
+                  <br>
+                  <li><h5>4) Please select all photos together.</h5></li>
+                  <br>
+                </ul>
+                <label for="file">Upload Documents:</label>
+                <input 
+                type="file" 
+                class="form-control" 
+                name="docs[]"
+                id="docs" 
+                accept="image/jpeg, image/jpg, image/png" 
+                multiple 
+                required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+      </div>
+    </div>
+
+  <% } else if(stateLevel1 == "YES") { %>
+    <script type="text/javascript">
+      window.location.assign("/deposit");
+    </script>
+  <% } %>
+<% } %>
+
+  
+  <%- include('./partials/scripts.ejs') %>
+
+  <script src="assets/js/ajax/kycCard.js"></script>
+  
+</body>
+
+</html>

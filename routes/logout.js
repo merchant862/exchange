@@ -20,6 +20,7 @@ router.get('/', async (req, res) =>
     {
         res.clearCookie('authorization');
         res.clearCookie('_csrf');
+        res.clearCookie('XSRF');
         res.redirect('/login');
     }
 

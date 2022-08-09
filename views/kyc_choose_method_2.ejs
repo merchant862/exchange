@@ -1,0 +1,60 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/authenticated-menu.ejs') %>
+
+<% if (typeof stateLevel2 != "undefined") { %>
+    <% if (stateLevel2 == "PENDING") { %>
+      <div class="landing-feature">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+                <h2>KYC Level 2 Verification</h2>
+            </div>
+            <div class="col-md-12">
+                <div class="landing-feature-item">
+                        <img src="assets/img/landing/pending.svg" alt="">
+                        <h3 class="text-white">KYC PENDING</h3>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } else if (stateLevel2 == "NO") { %>
+      
+        <div class="landing-feature">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                    <h2>KYC Level 2 Verification</h2><h2>Choose Address Verification type</h2>
+                </div>
+                <div class="col-md-6">
+                    <a href="/kycUBill">
+                        <div class="landing-feature-item">
+                            <img src="assets/img/landing/bill.svg" alt="">
+                            <h3 class="text-white">Utility Bill</h3>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="/kycBStatement">
+                        <div class="landing-feature-item">
+                            <img src="assets/img/landing/statement.svg" alt="">
+                            <h3 class="text-white">Bank Statement</h3>
+                        </div>
+                    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    <% } else if(stateLevel2 == "YES") { %>
+      <script type="text/javascript">
+          window.location.assign("/exchange?asset=BTC");
+      </script>
+    <% } %>
+  <% } %>
+
+  <%- include('./partials/scripts.ejs') %>
+</body>
+
+</html>

@@ -35,7 +35,7 @@ module.exports =  async function authMenu(
 
   var AsyncUpdateData = async()=> {await asyncUpdateData(req,res)};
 
-  setInterval(AsyncUpdateData,3000);
+  setInterval(AsyncUpdateData,30000);
   
   await createWallet(req,res);
 
