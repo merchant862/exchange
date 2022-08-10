@@ -7,7 +7,7 @@ function amount(_amount,_percentage)
         
         $.ajax({
             type: "GET",
-            url: "/price?asset="+asset,
+            url: "/price?asset="+asset+"&percentage=70",
             success: function (data, textStatus, errorThrown) 
             { 
                 var percentage = (_amount/100)*_percentage

@@ -45,25 +45,6 @@
                 <% } %>
               </a>
             </li>
-            <% if (typeof stateLevel1 != "undefined" && typeof stateLevel2 != "undefined") { %>
-              <li class="nav-item header-custom-icon">
-                <a class="nav-link">
-                  <% if(stateLevel1 == "YES" && stateLevel2 == "NO" || stateLevel2 == "PENDING") { %>
-                      <span>
-                        <i class="icon ion-md-checkmark-circle-outline green">KYC VERIFIED : LEVEL 1</i>
-                      </span>   
-                  <% } else if(stateLevel2 == "YES" && stateLevel1 == "YES") {%>
-                      <span>
-                        <i class="icon ion-md-checkmark-circle-outline green">KYC VERIFIED : LEVEL 2</i>
-                      </span> 
-                  <% } else{ %>
-                    <span>
-                      <i class="icon ion-md-checkmark-circle-outline red">KYC VERIFIED : NONE</i>
-                    </span> 
-                  <% } %>
-                </a>
-              </li>
-           <% } %>
             <li class="nav-item header-custom-icon">
               <a class="nav-link" href="#" id="clickFullscreen">
                 <i class="icon ion-md-expand"></i>
@@ -72,12 +53,28 @@
             <li class="nav-item dropdown header-img-icon">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
-                <img src="assets/img/avatar.svg" alt="avatar">
+                <% if (typeof stateLevel1 != "undefined" && typeof stateLevel2 != "undefined") { %>
+                  <% if(stateLevel1 == "YES" && stateLevel2 == "NO" || stateLevel2 == "PENDING") { %>
+                    <img src="assets/img/var1.png" alt="avatar"> 
+                  <% } else if(stateLevel2 == "YES" && stateLevel1 == "YES") {%>
+                    <img src="assets/img/var2.png" alt="avatar">
+                  <% } else{ %>
+                    <img src="assets/img/var0.png" alt="avatar">
+                  <% } %>
+                <% } %>
               </a>
               <div class="dropdown-menu">
                 <div class="dropdown-header d-flex flex-column align-items-center">
                   <div class="figure mb-3">
-                    <img src="assets/img/avatar.svg" alt="">
+                    <% if (typeof stateLevel1 != "undefined" && typeof stateLevel2 != "undefined") { %>
+                      <% if(stateLevel1 == "YES" && stateLevel2 == "NO" || stateLevel2 == "PENDING") { %>
+                        <img src="assets/img/var1.png" alt="avatar"> 
+                      <% } else if(stateLevel2 == "YES" && stateLevel1 == "YES") {%>
+                        <img src="assets/img/var2.png" alt="avatar">
+                      <% } else{ %>
+                        <img src="assets/img/var0.png" alt="avatar">
+                      <% } %>
+                    <% } %>
                   </div>
                   <div class="info text-center"
                     <p class="name font-weight-bold mb-0">

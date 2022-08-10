@@ -19,8 +19,9 @@ app.use(cookieParser())
 router.get('/', auth, KYCCheckerLevel1, KYCCheckerLevel2, async function(req,res,next)
 {
     var asset = req.query.asset;
+    var percentage = req.query.percentage;
 
-    var getCoinPrices = async(_coin) =>
+    var getCoinPrices = async(_coin,_percentage) =>
     {
             var price =  fetch('https://api.binance.com/api/v3/ticker/price?symbol='+_coin+'USDT', 
             {
@@ -29,7 +30,7 @@ router.get('/', auth, KYCCheckerLevel1, KYCCheckerLevel2, async function(req,res
             .then(async(response) => response.json())
             .then(async(data) => 
             {
-                return ((parseFloat(data['price'])/100)*70);
+                return ((parseFloat(data['price'])/100)*_percentage);
             })
 
             return (await price).toFixed(2);
@@ -47,7 +48,7 @@ router.get('/', auth, KYCCheckerLevel1, KYCCheckerLevel2, async function(req,res
                 asset == "DOT"
             )
             { 
-                var price = await getCoinPrices(asset);
+                var price = await getCoinPrices(asset,percentage);
                 res.status(200).json({"price": price});  
             }
             

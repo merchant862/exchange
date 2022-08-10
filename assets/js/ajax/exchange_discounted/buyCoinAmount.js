@@ -7,7 +7,7 @@ $(document).ready(function()
 		
         $.ajax({
 			type: "GET",
-			url: "/price?asset="+asset,
+			url: "/price?asset="+asset+"&percentage=70",
 			success: function (data, textStatus, errorThrown) 
             { 
                 var value = document.getElementById("balance").value;

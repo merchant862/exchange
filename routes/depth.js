@@ -20,7 +20,7 @@ router.get('/', auth, KYCCheckerLevel1, KYCCheckerLevel2, async function(req,res
 {
     var asset = req.query.asset;
 
-    var getCoinPrices = async(_coin) =>
+    var getCoinPrices = async(_coin,_percentage) =>
     {
             var price = await fetch('https://poloniex.com/public?command=returnOrderBook&currencyPair=USDT_'+_coin+'&depth=8', 
             {

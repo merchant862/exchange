@@ -8,6 +8,7 @@
      
       </div>
       <form method="post" id="signupForm">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <span>Create Account</span>
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Full Name" name="name">
@@ -283,7 +284,7 @@
         </div>
         
         <div class="col-12 mt-3">
-          <div class="g-recaptcha" data-sitekey="6LcWUO4gAAAAAJkJU1LnabFUbDbn-nN5-cOHUd1w"></div>
+          <div class="g-recaptcha" data-sitekey="6LcRP2QhAAAAAF1iqFFPs_vxA5LZZ59BhryM5oyU"></div>
         </div>
         <button type="submit" class="btn btn-primary">Create Account</button>
       </form>

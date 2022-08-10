@@ -22,6 +22,7 @@ $(document).ready(function()
                     console.log(data,textStatus);
                     $("#buyRes").html('<div class="alert btn-success"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
                     $("#buyRes").show().delay(5000).fadeOut();
+                    window.location.assign('/exchange/?asset='+asset)
                   },
                   error: function(jqXHR, textStatus, errorThrown) 
                   {

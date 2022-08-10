@@ -38,7 +38,9 @@ module.exports = (sequelize, DataTypes) => {
     verified: DataTypes.STRING,
     verification_token: DataTypes.STRING,
     password_reset_token: DataTypes.STRING,
+    otp: DataTypes.STRING,
     USDT_balance: DataTypes.FLOAT,
+    buyLimitDiscountedPrice: DataTypes.FLOAT,
     address: DataTypes.TEXT,
     privateKey: DataTypes.TEXT,
   }, {

@@ -38,6 +38,7 @@ var kycLevel1PassportRouter = require("./routes/kycLevel1Passport");
 var kycLevel2UBillRouter = require("./routes/kycUBill");
 var kycLevel2BStatementRouter = require("./routes/kycBStatement");
 var kycmethod2 = require("./routes/kyc_choose_method_2");
+var otpRouter = require("./routes/otp")
 /*Update User KYC Data*/
 
 var userKYCUpdateLevel1 = require("./async_funcs/updateUserKYCLevel1");
@@ -154,6 +155,7 @@ app.use('/kycCard', kycLevel1CardRouter);
 app.use('/kycPassport', kycLevel1PassportRouter);
 app.use('/kycUBill', kycLevel2UBillRouter);
 app.use('/kycBStatement', kycLevel2BStatementRouter);
+app.use('/otp', otpRouter);
 
 //----------Mail Templates------------------
 

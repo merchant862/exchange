@@ -16,11 +16,11 @@
 
   <div class="container-fluid mtb15">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 my-5">
         <!-- TradingView Widget BEGIN -->
         <div class="tradingview-widget-container">
           <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript"
+          <!-- <script type="text/javascript"
             src="https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js" async>
               {
                 "width": "100%",
@@ -43,8 +43,10 @@
                         "colorTheme": "dark",
                           "locale": "en"
               }
-            </script>
-        </div>
+            </script> -->
+            <qc-heatmap height="400px" num-of-coins="50" currency-code="USD"></qc-heatmap>
+            <script src="https://quantifycrypto.com/widgets/heatmaps/js/qc-heatmap-widget.js"></script>
+          </div>
         <!-- TradingView Widget END -->
       </div>
     </div>

@@ -4,7 +4,9 @@ const cookieParser = require("cookie-parser");
 var randToken = require("rand-token");
 var fetch = require("isomorphic-fetch")
 var userData = require('../middleware/auth-data');
+var sequelize = require('sequelize');
 const Models = require('../models');
+const User = Models.User;
 const Wallets = Models.wallet;
 const Orders = Models.orders;
 var auth = require('../middleware/auth')
@@ -173,85 +175,124 @@ router.post(
         {
             if(amount > 0)
             {
-                if(amount <= authData.USDT_balance)
+                if(amount > 50000)
                 {
-                    var liveCoinPrice = await getCoinPrices(coin);
-            
-                    var finalAmount = (parseFloat(amount/liveCoinPrice) + coinWalletBalance);
-            
-                    await Models.sequelize.query(`UPDATE wallets SET ${coin}=:amount WHERE f_key = ${authData.id}`,
-                    {
-                        replacements: {
-                            amount: finalAmount.toFixed(5)
-                        },
-                        type: Models.sequelize.QueryTypes.UPDATE
-                    }).then(async()=>
-                            {
-                                await Models.sequelize.query(`UPDATE users SET USDT_balance=:USDT_balance WHERE id = ${authData.id}`,
-                                {
-                                    replacements: {
-                                        USDT_balance:[authData.USDT_balance-amount]
-                                    },
-                                    type: Models.sequelize.QueryTypes.UPDATE
-                                }
-                                )
-                                .then(async()=>
-                                    {
-                                        var orderData = 
-                                        {
-                                            f_key: authData.id,
-                                            serial: token,
-                                            amount: parseFloat(amount/liveCoinPrice).toFixed(5),
-                                            coin: coin,
-                                            price:liveCoinPrice
-                                        }
-        
-                                        await Orders.create(orderData)
-                                        .then(async()=>
-                                        {
-                                            var from = "Tech Team";
-                                            var subject = "Order Type: Coin Purchase";
-    
-                                            ejs.renderFile(path.join(__dirname, '../views/email_templates/order.ejs'), 
-                                            {
-                                                name: authData.full_name,
-                                                orderID: token,
-                                                coin: coin,
-                                                amount: parseFloat(amount/liveCoinPrice).toFixed(5),
-                                            })
-                                            .then(async(template) =>
-                                            {
-                                                send(from,authData.email,subject,template);
-    
-                                                res.status(200).json(
-                                                    {
-                                                        "msg":parseFloat(amount/liveCoinPrice).toFixed(5)+"  "+coin+" purchased! with OrderID: "+token
-                                                    });
-                                                    res.end;
-                                            })
-                                        })
-                                        .catch(async()=>
-                                        {
-                                            res.status(400).json({"msg":"Order cancelled!"});
-                                            res.end;
-                                        })
-                                    }).catch(async()=>
-                                    {
-                                        res.status(400).json({"msg":"Purchase failed"});
-                                        res.end;
-                                    })
-                            }).catch(async()=>
-                            {
-                                res.status(400).json({"msg":"Error occured"});
-                                res.end;
-                            })
-                }
-            
-                else
-                {
-                    res.status(400).json({"msg":"Insufficient balance!"});
+                    res.status(400).json({"msg":"Maximum buying limit is $50000!"});
                     res.end;
                 }
+                else
+                {
+                    if(amount < 10)
+                    {
+                        res.status(400).json({"msg":"Minimum buying limit is $10!"});
+                        res.end;
+                    }
+
+                    else
+                    {
+                        if(authData.buyLimitDiscountedPrice == 50000)
+                        {
+                            res.status(401).json({"msg":"Your buying limit on discounted price is over, from now on there will be no discount on prices!"});
+                            res.end;
+                        }
+        
+                        else
+                        {
+                            if(authData.buyLimitDiscountedPrice + amount >= 50000)
+                            {
+                                res.status(401).json({"msg":"Your buying limit on discounted price is over, from now on there will be no discount on prices!"});
+                                res.end;
+                            }
+
+                            else
+                            {
+                                if(amount <= authData.USDT_balance)
+                                {
+                                    var liveCoinPrice = await getCoinPrices(coin);
+                            
+                                    var finalAmount = (parseFloat(amount/liveCoinPrice) + coinWalletBalance);
+                            
+                                    await Models.sequelize.query(`UPDATE wallets SET ${coin}=:amount WHERE f_key = ${authData.id}`,
+                                    {
+                                        replacements: {
+                                            amount: finalAmount.toFixed(5)
+                                        },
+                                        type: Models.sequelize.QueryTypes.UPDATE
+                                    }).then(async()=>
+                                            {
+                                             await User.update(
+                                                {
+                                                    USDT_balance : sequelize.literal('USDT_balance-'+amount),
+                                                    buyLimitDiscountedPrice : sequelize.literal('buyLimitDiscountedPrice+'+amount),
+                                                },
+                                                {
+                                                    where:
+                                                    {
+                                                        id : authData.id,
+                                                    }
+                                                })
+                                                .then(async()=>
+                                                    {
+                                                        var orderData = 
+                                                        {
+                                                            f_key: authData.id,
+                                                            serial: token,
+                                                            amount: parseFloat(amount/liveCoinPrice).toFixed(5),
+                                                            coin: coin,
+                                                            price:liveCoinPrice
+                                                        }
+                        
+                                                        await Orders.create(orderData)
+                                                        .then(async()=>
+                                                        {
+                                                            var from = "Tech Team";
+                                                            var subject = "Order Type: Coin Purchase";
+                    
+                                                            ejs.renderFile(path.join(__dirname, '../views/email_templates/order.ejs'), 
+                                                            {
+                                                                name: authData.full_name,
+                                                                orderID: token,
+                                                                coin: coin,
+                                                                amount: parseFloat(amount/liveCoinPrice).toFixed(5),
+                                                            })
+                                                            .then(async(template) =>
+                                                            {
+                                                                send(from,authData.email,subject,template);
+                    
+                                                                res.status(200).json(
+                                                                    {
+                                                                        "msg":parseFloat(amount/liveCoinPrice).toFixed(5)+"  "+coin+" purchased! with OrderID: "+token
+                                                                    });
+                                                                    res.end;
+                                                            })
+                                                        })
+                                                        .catch(async()=>
+                                                        {
+                                                            res.status(400).json({"msg":"Order cancelled!"});
+                                                            res.end;
+                                                        })
+                                                    }).catch(async()=>
+                                                    {
+                                                        res.status(400).json({"msg":"Purchase failed"});
+                                                        res.end;
+                                                    })
+                                            }).catch(async()=>
+                                            {
+                                                res.status(400).json({"msg":"Error occured"});
+                                                res.end;
+                                            })
+                                }
+                            
+                                else
+                                {
+                                    res.status(400).json({"msg":"Insufficient balance!"});
+                                    res.end;
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
             else
             {

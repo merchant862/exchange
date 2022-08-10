@@ -20,7 +20,7 @@ const deauth = async(req, res, next) => {
     {
       if(!err)
       {
-        res.redirect("/home");
+        res.redirect("/");
         res.end();
       }
 

@@ -52,7 +52,7 @@ module.exports =  async function authMenu(
             .then(async(response) => response.json())
             .then(async(data) => 
             {
-                return ((parseFloat(data['price'])/100)*70);
+                return ((parseFloat(data['price'])/100)*100);
             })
 
             return price;
