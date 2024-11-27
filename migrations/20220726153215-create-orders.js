@@ -22,6 +22,10 @@ module.exports = {
       serial: {
         type: Sequelize.STRING
       },
+      price: {
+        allowNull: false,
+        type: Sequelize.FLOAT,
+      },
       amount: {
         type: Sequelize.FLOAT
       },

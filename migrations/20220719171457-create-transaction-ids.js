@@ -23,6 +23,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      amount: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       isUsed: {
         allowNull: false,
         type: Sequelize.STRING

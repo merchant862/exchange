@@ -31,6 +31,22 @@ module.exports = {
       no_of_tries: {
         type: Sequelize.INTEGER
       },
+      KYC_LEVEL_1: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      KYC_LEVEL_2: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      KYC_TRY_LEVEL_1: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      KYC_TRY_LEVEL_2: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -20,6 +20,28 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
+      address: {
+        allowNull: true,
+        type: Sequelize.STRING,
+        unique: true
+      },
+      privateKey: {
+        allowNull: true,
+        type: Sequelize.STRING,
+        unique: true
+      },
+      KYCtries: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      country: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      isKYCDone: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
