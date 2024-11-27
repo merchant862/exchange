@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('users', 
+    await queryInterface.addColumn('Users', 
       'address' ,{
         allowNull: true,
         type: Sequelize.TEXT,
@@ -9,7 +9,7 @@ module.exports = {
       }
     );
 
-    await queryInterface.addColumn('users',
+    await queryInterface.addColumn('Users',
       'privateKey', {
         allowNull: true,
         type: Sequelize.TEXT,
@@ -18,7 +18,7 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('users','address');
-    await queryInterface.removeColumn('users','privateKey');
+    await queryInterface.removeColumn('Users','address');
+    await queryInterface.removeColumn('Users','privateKey');
   }
 };
