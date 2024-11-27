@@ -35,6 +35,11 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
+      verification_token: {
+        allowNull: true,
+        type: Sequelize.STRING,
+        unique: true
+      },
       KYCtries: {
         allowNull: false,
         type: Sequelize.INTEGER,
