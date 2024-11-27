@@ -30,6 +30,11 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
+      verified: {
+        allowNull: true,
+        type: Sequelize.STRING,
+        unique: true
+      },
       KYCtries: {
         allowNull: false,
         type: Sequelize.INTEGER,
