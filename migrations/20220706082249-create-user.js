@@ -40,6 +40,15 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
+      password_reset_token: {
+        allowNull: true,
+        type: Sequelize.STRING,
+        unique: true
+      },
+      USDT_balance: {
+        allowNull: true,
+        type: Sequelize.FLOAT,
+      },
       KYCtries: {
         allowNull: false,
         type: Sequelize.INTEGER,
