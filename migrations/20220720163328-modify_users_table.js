@@ -4,7 +4,7 @@ module.exports = {
     await queryInterface.addColumn('Users', 
       'address' ,{
         allowNull: true,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         unique: true
       }
     );
@@ -12,7 +12,7 @@ module.exports = {
     await queryInterface.addColumn('Users',
       'privateKey', {
         allowNull: true,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         unique: true
       }
     );

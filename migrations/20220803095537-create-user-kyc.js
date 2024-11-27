@@ -20,13 +20,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       face_pic: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING
       },
       id_pic: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING
       },
       address_pic: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING
       },
       no_of_tries: {
         type: Sequelize.INTEGER

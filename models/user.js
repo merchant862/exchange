@@ -41,8 +41,8 @@ module.exports = (sequelize, DataTypes) => {
     otp: DataTypes.STRING,
     USDT_balance: DataTypes.FLOAT,
     buyLimitDiscountedPrice: DataTypes.FLOAT,
-    address: DataTypes.TEXT,
-    privateKey: DataTypes.TEXT,
+    address: DataTypes.STRING,
+    privateKey: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'User',
