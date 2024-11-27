@@ -9,6 +9,6 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('transactionids','amount');
+    //await queryInterface.removeColumn('transactionids','amount');
   }
 };
