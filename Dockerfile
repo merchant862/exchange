@@ -12,8 +12,8 @@ COPY . /zippo
 RUN npm install
 
 # Run the Sequelize CLI commands for production
-RUN NODE_ENV=production npx sequelize-cli db:create \
-    && NODE_ENV=production npx sequelize-cli db:migrate
+#RUN NODE_ENV=production npx sequelize-cli db:create \
+#&& NODE_ENV=production npx sequelize-cli db:migrate
 
 # Expose the port
 EXPOSE 3000
